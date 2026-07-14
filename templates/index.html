@@ -1,250 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenCV DRS System</title>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --background: #0f172a;
-            --surface: #1e293b;
-            --text: #f8fafc;
-            --border: #334155;
-        }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background-color: var(--background);
-            color: var(--text);
-            margin: 0;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .container {
-            max-width: 800px;
-            width: 100%;
-            background: var(--surface);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-        }
-        h1 {
-            margin-top: 0;
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-        }
-        .controls {
-            display: grid;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        select, input[type="file"], button {
-            width: 100%;
-            padding: 0.75rem;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            background: var(--background);
-            color: var(--text);
-            font-size: 1rem;
-        }
-        button {
-            background: var(--primary);
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: opacity 0.2s;
-        }
-        button:hover {
-            opacity: 0.9;
-        }
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .results {
-            display: none;
-            margin-top: 2rem;
-            border-top: 1px solid var(--border);
-            padding-top: 2rem;
-        }
-        .results.active {
-            display: block;
-        }
-        .media-container {
-            display: grid;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        video, img {
-            width: 100%;
-            border-radius: 8px;
-            background: #000;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            text-align: center;
-            margin-top: 1rem;
-        }
-        .stat-box {
-            background: var(--background);
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-        .stat-label {
-            font-size: 0.875rem;
-            color: #94a3b8;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-        }
-        .stat-value {
-            font-size: 1.25rem;
-            font-weight: bold;
-        }
-        #loading {
-            display: none;
-            text-align: center;
-            margin: 2rem 0;
-        }
-        .spinner {
-            border: 4px solid var(--border);
-            border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenCV DRS — Decision Review System</title>
+  <meta name="description" content="AI-powered cricket ball tracking and DRS decision system powered by OpenCV and Kalman filtering." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Tokens ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #050d1a;
+      --surface:   #0d1f35;
+      --card:      #112240;
+      --border:    #1e3a5f;
+      --accent:    #38bdf8;
+      --accent2:   #818cf8;
+      --green:     #22c55e;
+      --red:       #ef4444;
+      --yellow:    #facc15;
+      --text:      #e2e8f0;
+      --muted:     #64748b;
+      --radius:    14px;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #0d1f35 0%, #0f3460 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo { font-size: 2rem; }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    header p { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+    /* ── Layout ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 0;
+      min-height: calc(100vh - 80px);
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .sidebar h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+
+    label { font-size: 0.875rem; color: var(--text); margin-bottom: .4rem; display: block; }
+    select, input[type="file"] {
+      width: 100%;
+      padding: .65rem .9rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.875rem;
+    }
+    select:focus { outline: 2px solid var(--accent); }
+
+    #fileGroup { display: none; }
+
+    .btn-primary {
+      width: 100%;
+      padding: .85rem;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      color: #000;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+      letter-spacing: .02em;
+    }
+    .btn-primary:hover:not(:disabled) { opacity: .9; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    /* ── Main ── */
+    .main { padding: 2rem; overflow-y: auto; }
+
+    /* ── Loading ── */
+    #loading { display: none; flex-direction: column; align-items: center; justify-content: center; height: 60vh; gap: 1.5rem; }
+    .spinner {
+      width: 52px; height: 52px;
+      border: 4px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading p { color: var(--muted); font-size: .95rem; }
+
+    /* ── Placeholder ── */
+    #placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; gap: 1rem; }
+    #placeholder .icon { font-size: 4rem; }
+    #placeholder p { color: var(--muted); font-size: .95rem; }
+
+    /* ── Results ── */
+    #results { display: none; }
+
+    /* verdict banner */
+    .verdict-banner {
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: .03em;
+    }
+    .verdict-banner.out    { background: linear-gradient(135deg,#7f1d1d,#ef4444); }
+    .verdict-banner.notout { background: linear-gradient(135deg,#14532d,#22c55e); }
+    .verdict-banner.umpire { background: linear-gradient(135deg,#713f12,#facc15); color: #1a0a00; }
+    .verdict-icon { font-size: 2.5rem; }
+
+    /* stat grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .stat-card .label { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .5rem; }
+    .stat-card .value { font-size: 1.1rem; font-weight: 700; }
+
+    /* AI verdict card */
+    .ai-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .ai-card h3 { font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); margin-bottom: .8rem; }
+    .ai-card p  { font-size: .9rem; color: var(--text); line-height: 1.7; }
+    .confidence-bar-wrap { margin-top: 1rem; }
+    .confidence-bar-wrap .label { font-size: .75rem; color: var(--muted); margin-bottom: .3rem; }
+    .confidence-bar { background: var(--border); border-radius: 99px; height: 8px; overflow: hidden; }
+    .confidence-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .8s ease; }
+
+    /* media grid */
+    .media-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .media-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .media-card h4 { padding: .8rem 1rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); border-bottom: 1px solid var(--border); }
+    video, .media-card img { width: 100%; display: block; background: #000; }
+
+    /* tips */
+    .tips-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem 1.5rem; margin-top: 1rem; }
+    .tips-card h4 { font-size: .75rem; color: var(--accent2); text-transform: uppercase; letter-spacing: .1em; margin-bottom: .6rem; }
+    .tips-card ul { padding-left: 1.2rem; }
+    .tips-card li { font-size: .85rem; color: var(--muted); margin-bottom: .3rem; }
+
+    /* responsive */
+    @media(max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .media-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>DRS Ball Tracking</h1>
-        
-        <form id="drsForm" class="controls">
-            <div>
-                <label>Ball Color</label>
-                <select name="color">
-                    <option value="red">Red (Test Match)</option>
-                    <option value="white">White (Limited Overs)</option>
-                </select>
-            </div>
-            
-            <div>
-                <label>Action</label>
-                <select name="action" id="actionSelect">
-                    <option value="synthetic_hitting">Generate Synthetic: Hitting</option>
-                    <option value="synthetic_missing">Generate Synthetic: Missing</option>
-                    <option value="synthetic_umpires_call">Generate Synthetic: Umpire's Call</option>
-                    <option value="upload">Upload Custom Video</option>
-                </select>
-            </div>
-            
-            <div id="fileUpload" style="display: none;">
-                <label>Video File (.mp4)</label>
-                <input type="file" name="video" accept="video/mp4">
-            </div>
-            
-            <button type="submit" id="submitBtn">Process Delivery</button>
-        </form>
 
-        <div id="loading">
-            <div class="spinner"></div>
-            <p>Processing frames and calculating trajectory...</p>
-        </div>
+<header>
+  <div class="logo">🏏</div>
+  <div>
+    <h1>OpenCV DRS System</h1>
+    <p>AI-powered cricket ball tracking · Hawk-Eye style review</p>
+  </div>
+</header>
 
-        <div id="results" class="results">
-            <h2 style="text-align: center; margin-bottom: 1.5rem;">Decision: <span id="finalCall"></span></h2>
-            
-            <div class="media-container">
-                <div>
-                    <h3 style="margin-top:0">Tracking Video</h3>
-                    <video id="resultVideo" controls autoplay loop></video>
-                </div>
-                <div>
-                    <h3 style="margin-top:0">Hawk-Eye Graphic</h3>
-                    <img id="resultImage" alt="DRS Decision Graphic">
-                </div>
-            </div>
-            
-            <div class="stats">
-                <div class="stat-box">
-                    <div class="stat-label">Pitching</div>
-                    <div class="stat-value" id="statPitching">-</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Impact</div>
-                    <div class="stat-value" id="statImpact">-</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Wickets</div>
-                    <div class="stat-value" id="statWickets">-</div>
-                </div>
-            </div>
-        </div>
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div>
+      <h2>Settings</h2>
     </div>
 
-    <script>
-        const actionSelect = document.getElementById('actionSelect');
-        const fileUpload = document.getElementById('fileUpload');
-        const form = document.getElementById('drsForm');
-        const loading = document.getElementById('loading');
-        const results = document.getElementById('results');
-        const submitBtn = document.getElementById('submitBtn');
+    <form id="drsForm">
+      <div style="margin-bottom:1rem">
+        <label for="colorSelect">Ball Colour</label>
+        <select id="colorSelect" name="color">
+          <option value="red">🔴 Red (Test Match)</option>
+          <option value="white">⚪ White (Limited Overs)</option>
+        </select>
+      </div>
 
-        actionSelect.addEventListener('change', (e) => {
-            fileUpload.style.display = e.target.value === 'upload' ? 'block' : 'none';
-        });
+      <div style="margin-bottom:1rem">
+        <label for="actionSelect">Delivery Source</label>
+        <select id="actionSelect" name="action">
+          <option value="synthetic_hitting">🎯 Synthetic — Hitting Stumps</option>
+          <option value="synthetic_missing">❌ Synthetic — Missing Stumps</option>
+          <option value="synthetic_umpires_call">🟡 Synthetic — Umpire's Call</option>
+          <option value="upload">📁 Upload Your Video</option>
+        </select>
+      </div>
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            submitBtn.disabled = true;
-            loading.style.display = 'block';
-            results.classList.remove('active');
-            
-            const formData = new FormData(form);
-            
-            try {
-                const response = await fetch('/process', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) throw new Error(data.error || 'Processing failed');
-                
-                document.getElementById('resultVideo').src = `/outputs/${data.job_id}/tracked_output.mp4`;
-                document.getElementById('resultImage').src = `/outputs/${data.job_id}/drs_decision.png`;
-                
-                document.getElementById('statPitching').textContent = data.pitching_zone.replace('_', ' ');
-                document.getElementById('statImpact').textContent = data.impact_zone.replace('_', ' ');
-                document.getElementById('statWickets').textContent = data.wicket_verdict.replace('_', ' ');
-                
-                const callEl = document.getElementById('finalCall');
-                callEl.textContent = data.final_call;
-                callEl.style.color = data.final_call === 'OUT' ? '#ef4444' : 
-                                   data.final_call === 'NOT OUT' ? '#22c55e' : '#eab308';
-                
-                results.classList.add('active');
-            } catch (err) {
-                alert('Error: ' + err.message);
-            } finally {
-                submitBtn.disabled = false;
-                loading.style.display = 'none';
-            }
-        });
-    </script>
+      <div id="fileGroup" style="margin-bottom:1rem">
+        <label for="videoFile">MP4 Video File</label>
+        <input type="file" id="videoFile" name="video" accept="video/mp4" />
+      </div>
+
+      <button class="btn-primary" id="submitBtn" type="submit">▶ Run DRS Analysis</button>
+    </form>
+
+    <!-- session mini-stats -->
+    <div id="sessionBox" style="display:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem;">
+      <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.6rem;">Session</div>
+      <div style="display:flex;gap:.5rem;justify-content:space-around;text-align:center;">
+        <div><div style="font-size:1.2rem;font-weight:700;color:var(--red)" id="sOut">0</div><div style="font-size:.65rem;color:var(--muted)">OUT</div></div>
+        <div><div style="font-size:1.2rem;font-weight:700;color:var(--green)" id="sNotOut">0</div><div style="font-size:.65rem;color:var(--muted)">NOT OUT</div></div>
+        <div><div style="font-size:1.2rem;font-weight:700;color:var(--yellow)" id="sUmpire">0</div><div style="font-size:.65rem;color:var(--muted)">UC</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main class="main">
+
+    <div id="placeholder">
+      <div class="icon">🎥</div>
+      <p>Select a delivery and click <strong>Run DRS Analysis</strong> to begin.</p>
+    </div>
+
+    <div id="loading">
+      <div class="spinner"></div>
+      <p>Detecting ball · Tracking trajectory · Computing decision…</p>
+    </div>
+
+    <div id="results">
+
+      <!-- Verdict Banner -->
+      <div class="verdict-banner" id="verdictBanner">
+        <span class="verdict-icon" id="verdictIcon"></span>
+        <span id="verdictText"></span>
+      </div>
+
+      <!-- Zone Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="label">Pitching Zone</div>
+          <div class="value" id="statPitching">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Impact Zone</div>
+          <div class="value" id="statImpact">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Wickets</div>
+          <div class="value" id="statWickets">—</div>
+        </div>
+      </div>
+
+      <!-- AI Verdict -->
+      <div class="ai-card">
+        <h3>🤖 AI Verdict Explanation</h3>
+        <p id="aiSummary"></p>
+        <p id="aiReasoning" style="color:var(--muted);margin-top:.5rem;"></p>
+        <div class="confidence-bar-wrap">
+          <div class="label">Decision Confidence: <span id="confPct">—</span>%</div>
+          <div class="confidence-bar"><div class="confidence-bar-fill" id="confBar" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- Media -->
+      <div class="media-grid">
+        <div class="media-card">
+          <h4>📹 Tracking Video</h4>
+          <video id="resultVideo" controls autoplay loop muted playsinline></video>
+        </div>
+        <div class="media-card">
+          <h4>📊 Decision Graphic</h4>
+          <img id="resultImage" alt="DRS Decision Graphic" />
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="tips-card">
+        <h4>💡 Analysis Tips</h4>
+        <ul id="tipsList"></ul>
+      </div>
+
+    </div><!-- /results -->
+
+  </main>
+</div>
+
+<script>
+  // ── Counters ──
+  const sess = { OUT: 0, 'NOT OUT': 0, "UMPIRE'S CALL": 0 };
+
+  // ── Show/hide file input ──
+  const actionSel = document.getElementById('actionSelect');
+  const fileGroup = document.getElementById('fileGroup');
+  actionSel.addEventListener('change', () => {
+    fileGroup.style.display = actionSel.value === 'upload' ? 'block' : 'none';
+  });
+
+  // ── Form submit ──
+  const form      = document.getElementById('drsForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const loading   = document.getElementById('loading');
+  const results   = document.getElementById('results');
+  const ph        = document.getElementById('placeholder');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    ph.style.display      = 'none';
+    results.style.display = 'none';
+    loading.style.display = 'flex';
+
+    const fd = new FormData(form);
+    let data;
+    try {
+      const res = await fetch('/process', { method: 'POST', body: fd });
+      data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Processing failed');
+    } catch (err) {
+      loading.style.display = 'none';
+      ph.style.display      = 'flex';
+      alert('⚠ ' + err.message);
+      submitBtn.disabled = false;
+      return;
+    }
+
+    loading.style.display = 'none';
+
+    // ── Verdict Banner ──
+    const fc     = data.final_call;
+    const banner = document.getElementById('verdictBanner');
+    const icons  = { 'OUT': '🔴', 'NOT OUT': '🟢', "UMPIRE'S CALL": '🟡' };
+    banner.className = 'verdict-banner ' + (fc === 'OUT' ? 'out' : fc === 'NOT OUT' ? 'notout' : 'umpire');
+    document.getElementById('verdictIcon').textContent = icons[fc] || '⚪';
+    document.getElementById('verdictText').textContent = fc;
+
+    // ── Zone stats ──
+    const fmt = s => s.replace('_', ' ');
+    document.getElementById('statPitching').textContent = fmt(data.pitching_zone);
+    document.getElementById('statImpact').textContent   = fmt(data.impact_zone);
+    document.getElementById('statWickets').textContent  = fmt(data.wicket_verdict);
+
+    // ── AI Verdict ──
+    const ai = data.ai_verdict || {};
+    document.getElementById('aiSummary').textContent   = (ai.summary   || '').replace(/\*\*/g, '');
+    document.getElementById('aiReasoning').textContent = (ai.reasoning || '').replace(/\*\*/g, '');
+    const conf = ai.confidence || 0;
+    document.getElementById('confPct').textContent = conf;
+    setTimeout(() => {
+      document.getElementById('confBar').style.width = conf + '%';
+    }, 100);
+
+    // Tips
+    const ul = document.getElementById('tipsList');
+    ul.innerHTML = '';
+    (ai.tips || []).forEach(t => {
+      const li = document.createElement('li');
+      li.textContent = t;
+      ul.appendChild(li);
+    });
+
+    // ── Media ──
+    document.getElementById('resultVideo').src = `/outputs/${data.job_id}/tracked_output.mp4`;
+    document.getElementById('resultImage').src = `/outputs/${data.job_id}/drs_decision.png`;
+
+    // ── Session ──
+    sess[fc] = (sess[fc] || 0) + 1;
+    document.getElementById('sOut').textContent    = sess['OUT'];
+    document.getElementById('sNotOut').textContent = sess['NOT OUT'];
+    document.getElementById('sUmpire').textContent = sess["UMPIRE'S CALL"];
+    document.getElementById('sessionBox').style.display = 'block';
+
+    results.style.display = 'block';
+    submitBtn.disabled = false;
+  });
+</script>
+
 </body>
 </html>

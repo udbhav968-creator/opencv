@@ -10,11 +10,23 @@ import sys
 import datetime
 
 # Add drs_opencv to path so imports work
-sys.path.append(os.path.join(os.path.dirname(__file__), 'drs_opencv'))
-from drs_opencv.main import run_pipeline
-from drs_opencv.generate_test_video import generate_hitting, generate_missing, generate_umpires_call
-from drs_opencv.ai_verdict import generate_verdict_explanation
-from drs_opencv.stats_analyzer import DeliveryStatsAnalyzer
+root_dir = os.path.dirname(os.path.abspath(__file__))
+drs_dir = os.path.join(root_dir, 'drs_opencv')
+if root_dir not in sys.path:
+    sys.path.insert(0, root_dir)
+if drs_dir not in sys.path:
+    sys.path.insert(0, drs_dir)
+
+try:
+    from drs_opencv.main import run_pipeline
+    from drs_opencv.generate_test_video import generate_hitting, generate_missing, generate_umpires_call
+    from drs_opencv.ai_verdict import generate_verdict_explanation
+    from drs_opencv.stats_analyzer import DeliveryStatsAnalyzer
+except ImportError:
+    from main import run_pipeline
+    from generate_test_video import generate_hitting, generate_missing, generate_umpires_call
+    from ai_verdict import generate_verdict_explanation
+    from stats_analyzer import DeliveryStatsAnalyzer
 
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), 'templates'))
 app.config['UPLOAD_FOLDER'] = '/tmp/uploads'

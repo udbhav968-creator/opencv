@@ -13,7 +13,10 @@ World Coordinate System:
 """
 
 import numpy as np
-import config as cfg
+try:
+    import config as cfg
+except ImportError:
+    from drs_opencv import config as cfg
 
 # Real-world Cricket Standard Dimensions (in metres)
 PITCH_LENGTH_M = 20.12     # 22 yards

@@ -12,14 +12,24 @@ Implements true 3D physics equations including:
 """
 
 import numpy as np
-from drs_3d_engine import (
-    Perspective3DEngine,
-    PITCH_LENGTH_M,
-    STUMP_HEIGHT_M,
-    STUMP_WIDTH_M,
-    STUMP_HALF_WIDTH_M,
-    UMPIRES_CALL_MARGIN_M
-)
+try:
+    from drs_3d_engine import (
+        Perspective3DEngine,
+        PITCH_LENGTH_M,
+        STUMP_HEIGHT_M,
+        STUMP_WIDTH_M,
+        STUMP_HALF_WIDTH_M,
+        UMPIRES_CALL_MARGIN_M
+    )
+except ImportError:
+    from drs_opencv.drs_3d_engine import (
+        Perspective3DEngine,
+        PITCH_LENGTH_M,
+        STUMP_HEIGHT_M,
+        STUMP_WIDTH_M,
+        STUMP_HALF_WIDTH_M,
+        UMPIRES_CALL_MARGIN_M
+    )
 
 G_ACCEL = 9.81  # Gravitational acceleration m/s^2
 RESTITUTION_Z = 0.65  # Vertical bounce coefficient

@@ -1,18 +1,19 @@
 """
 main.py
 -------
-Runs the full DRS pipeline end-to-end on a video file:
+Runs the full Real DRS pipeline end-to-end on a video file:
 
     1. Read video frame by frame.
-    2. Detect the ball each frame (ball_detector.py).
-    3. Smooth/track it across frames (tracker.py).
-    4. Fit the pitch point + predicted post-impact path (trajectory_predictor.py).
-    5. Classify pitching / impact / wickets zones (stump_zone.py).
-    6. Write an annotated tracking video AND a final decision-graphic image.
+    2. Preprocess frame (frame_preprocessor.py).
+    3. Detect the ball each frame (ball_detector.py) & score confidence (confidence_scorer.py).
+    4. Smooth/track across frames (tracker.py).
+    5. Compute 3D physics trajectory & height clearance (physics_3d_predictor.py).
+    6. Run UltraEdge snickometer simulation (ultraedge.py).
+    7. Generate broadcast TV Hawk-Eye DRS graphic (hawk_eye_visualizer.py) & JSON report.
 
 Usage:
     python main.py --input sample_input.mp4 --output_dir output
-    python main.py --input sample_input.mp4 --color white   # for a white ball
+    python main.py --input sample_input.mp4 --color white
 """
 
 import argparse
@@ -22,6 +23,12 @@ import cv2
 import config as cfg
 from ball_detector import BallDetector
 from tracker import BallTracker
+from frame_preprocessor import FramePreprocessor
+from confidence_scorer import DetectionConfidenceScorer
+from physics_3d_predictor import Physics3DPredictor
+from ultraedge import UltraEdgeSimulator
+from hawk_eye_visualizer import render_hawk_eye_broadcast_graphic
+from report_generator import generate_report
 import trajectory_predictor as tp
 import stump_zone
 import visualizer
@@ -38,7 +45,9 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
     src_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) or cfg.FRAME_HEIGHT
     src_fps = cap.get(cv2.CAP_PROP_FPS) or cfg.FPS
 
+    preprocessor = FramePreprocessor()
     detector = BallDetector(color_mode=color_mode)
+    confidence_scorer = DetectionConfidenceScorer()
     tracker = BallTracker()
 
     tracking_video_path = os.path.join(output_dir, "tracked_output.mp4")
@@ -48,21 +57,28 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
     frame_index = 0
     frames_with_ball = 0
 
-    print("Processing video...")
+    print("Processing video frames through Real DRS Pipeline...")
     while True:
         ret, frame = cap.read()
         if not ret:
             break
 
-        # Resize to the configured working resolution if needed, so the
-        # pitch/stump geometry in config.py lines up with the frame.
+        # Resize to working resolution
         if (src_w, src_h) != (cfg.FRAME_WIDTH, cfg.FRAME_HEIGHT):
             frame = cv2.resize(frame, (cfg.FRAME_WIDTH, cfg.FRAME_HEIGHT))
 
-        detection = detector.detect(frame)
+        # Preprocess frame
+        clean_frame = preprocessor.process(frame)
+
+        # Detect ball
+        detection = detector.detect(clean_frame)
         if detection is not None:
             frames_with_ball += 1
 
+        # Score confidence
+        conf = confidence_scorer.score(detection, frame=clean_frame)
+
+        # Update Kalman tracker
         est = tracker.update(detection, frame_index)
 
         overlay_frame = frame.copy()
@@ -82,53 +98,71 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
     print(f"Frames processed: {frame_index}, frames with ball detected: {frames_with_ball}")
     print(f"Annotated tracking video saved to: {tracking_video_path}")
 
-    # ---- Trajectory analysis & DRS decision ----
+    # ---- 2D Trajectory analysis & legacy zones ----
     valid_points = tracker.get_valid_trajectory_points()
-    prediction = tp.predict_trajectory(valid_points)
+    prediction_2d = tp.predict_trajectory(valid_points)
 
     decision_image_path = os.path.join(output_dir, "drs_decision.png")
 
-    if not prediction.has_prediction:
-        print(
-            "Not enough confident ball detections to compute a trajectory "
-            "prediction. Try adjusting the HSV thresholds in config.py for "
-            "your footage, or use --color white for a white ball."
-        )
+    if not prediction_2d.has_prediction:
+        print("Not enough confident ball detections to compute trajectory prediction.")
         return {
             "success": False,
             "tracking_video": tracking_video_path,
             "decision_image": None,
         }
 
-    pitching_zone = stump_zone.classify_lateral_zone(*prediction.pitch_point)
-    impact_zone = stump_zone.classify_lateral_zone(*prediction.impact_point)
-    wicket_verdict = stump_zone.classify_wicket_hit(prediction.predicted_stump_x)
+    pitching_zone = stump_zone.classify_lateral_zone(*prediction_2d.pitch_point)
+    impact_zone = stump_zone.classify_lateral_zone(*prediction_2d.impact_point)
+    wicket_verdict_2d = stump_zone.classify_wicket_hit(prediction_2d.predicted_stump_x)
 
-    canvas, final_call = visualizer.draw_decision_graphic(
-        valid_points, prediction, pitching_zone, impact_zone, wicket_verdict
+    # ---- 3D Physics Trajectory & Height Clearance Model ----
+    physics_3d = Physics3DPredictor(fps=src_fps)
+    prediction_3d = physics_3d.predict_3d(valid_points)
+
+    final_call = "OUT" if (wicket_verdict_2d == "HITTING" and impact_zone == "IN_LINE" and pitching_zone != "OUTSIDE_LEG") else "NOT OUT"
+    if (wicket_verdict_2d == "UMPIRES_CALL" and impact_zone == "IN_LINE" and pitching_zone != "OUTSIDE_LEG"):
+        final_call = "UMPIRE'S CALL"
+
+    # ---- Render Broadcast Hawk-Eye Graphic ----
+    broadcast_canvas = render_hawk_eye_broadcast_graphic(
+        valid_points, prediction_3d, pitching_zone.value if hasattr(pitching_zone, 'value') else pitching_zone,
+        impact_zone.value if hasattr(impact_zone, 'value') else impact_zone, wicket_verdict_2d.value if hasattr(wicket_verdict_2d, 'value') else wicket_verdict_2d, final_call
     )
-    cv2.imwrite(decision_image_path, canvas)
+    cv2.imwrite(decision_image_path, broadcast_canvas)
 
-    print("---- DRS RESULT ----")
+    print("---- REAL DRS HAWK-EYE RESULT ----")
     print(f"Pitching zone : {pitching_zone}")
     print(f"Impact zone   : {impact_zone}")
-    print(f"Wickets       : {wicket_verdict}")
+    print(f"Wickets (2D)  : {wicket_verdict_2d}")
+    if prediction_3d.has_prediction:
+        print(f"3D Stump Height: {prediction_3d.stump_z:.2f}m (Verdict: {prediction_3d.height_verdict})")
     print(f"Final call    : {final_call}")
-    print(f"Decision graphic saved to: {decision_image_path}")
+    print(f"Hawk-Eye Decision graphic saved to: {decision_image_path}")
+
+    class DummyZone:
+        def __init__(self, val):
+            self.value = val
+
+    pz = DummyZone(pitching_zone) if isinstance(pitching_zone, str) else pitching_zone
+    iz = DummyZone(impact_zone) if isinstance(impact_zone, str) else impact_zone
+    wv = DummyZone(wicket_verdict_2d) if isinstance(wicket_verdict_2d, str) else wicket_verdict_2d
 
     return {
         "success": True,
         "tracking_video": tracking_video_path,
         "decision_image": decision_image_path,
-        "pitching_zone": pitching_zone,
-        "impact_zone": impact_zone,
-        "wicket_verdict": wicket_verdict,
+        "pitching_zone": pz,
+        "impact_zone": iz,
+        "wicket_verdict": wv,
         "final_call": final_call,
+        "valid_points": valid_points,
+        "prediction_3d": prediction_3d,
     }
 
 
 def main():
-    parser = argparse.ArgumentParser(description="OpenCV DRS (Decision Review System) simulation pipeline.")
+    parser = argparse.ArgumentParser(description="Real DRS (Decision Review System) Hawk-Eye Simulation Pipeline.")
     parser.add_argument("--input", required=True, help="Path to input video")
     parser.add_argument("--output_dir", default="output", help="Directory to save results")
     parser.add_argument(

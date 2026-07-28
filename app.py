@@ -1,6 +1,6 @@
 """
 app.py — OpenCV DRS Web Application
-Flask backend serving the DRS pipeline with AI verdict, stats, and health endpoints.
+Flask backend serving the DRS pipeline with AI verdict, 3D Physics metrics, UltraEdge, stats, and health endpoints.
 """
 
 from flask import Flask, request, render_template, send_file, jsonify
@@ -23,7 +23,7 @@ app.config['OUTPUT_FOLDER'] = '/tmp/outputs'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['OUTPUT_FOLDER'], exist_ok=True)
 
-# In-memory decision log (resets on cold start — use a DB for persistence)
+# In-memory decision log
 _decision_log = []
 
 
@@ -41,7 +41,7 @@ def health():
     """Health-check endpoint — returns service status and uptime info."""
     return jsonify({
         'status': 'ok',
-        'service': 'OpenCV DRS API',
+        'service': 'Real DRS Hawk-Eye 3D API',
         'timestamp': datetime.datetime.utcnow().isoformat() + 'Z',
         'total_decisions': len(_decision_log),
     })
@@ -95,7 +95,7 @@ def process():
             return jsonify({'error': f'Unknown action: {action}'}), 400
         gen_fn(input_path)
 
-    # ── 2. Run DRS pipeline ──
+    # ── 2. Run Real DRS pipeline ──
     try:
         results = run_pipeline(input_path, job_dir, color_mode=color)
     except Exception as exc:
@@ -118,7 +118,20 @@ def process():
     valid_pts  = results.get('valid_points', [])
     stats      = analyzer.analyze(valid_pts) if valid_pts else {}
 
-    # ── 5. Log decision ──
+    # ── 5. 3D Physics Info ──
+    pred_3d = results.get('prediction_3d')
+    physics_info = {}
+    if pred_3d and pred_3d.has_prediction:
+        physics_info = {
+            'pitch_3d_m': pred_3d.pitch_3d,
+            'impact_3d_m': pred_3d.impact_3d,
+            'stump_x_m': pred_3d.stump_x,
+            'stump_z_m': pred_3d.stump_z,
+            'height_verdict': pred_3d.height_verdict,
+            'lateral_verdict': pred_3d.lateral_verdict
+        }
+
+    # ── 6. Log decision ──
     record = {
         'job_id':         job_id,
         'timestamp':      datetime.datetime.utcnow().isoformat() + 'Z',
@@ -139,6 +152,7 @@ def process():
         'final_call':     results['final_call'],
         'ai_verdict':     ai_info,
         'delivery_stats': stats,
+        'physics_3d':     physics_info,
     })
 
 

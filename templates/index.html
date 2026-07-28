@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OpenCV DRS — Decision Review System</title>
-  <meta name="description" content="AI-powered cricket ball tracking and DRS decision system powered by OpenCV and Kalman filtering." />
+  <title>Real DRS — Hawk-Eye 3D Decision Review System</title>
+  <meta name="description" content="Official Real-Level DRS Hawk-Eye 3D Cricket Ball Tracking, 3D Physics Height Clearance, and UltraEdge Snickometer Simulation." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
   <style>
@@ -42,15 +42,16 @@
       align-items: center;
       gap: 1rem;
     }
-    .logo { font-size: 2rem; }
+    .logo { font-size: 2.2rem; }
     header h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
+      font-size: 1.6rem;
+      font-weight: 900;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
     }
-    header p { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+    header p { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
 
     /* ── Layout ── */
     .layout {
@@ -133,7 +134,7 @@
       align-items: center;
       gap: 1rem;
       margin-bottom: 1.5rem;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 900;
       letter-spacing: .03em;
     }
@@ -145,7 +146,7 @@
     /* stat grid */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
@@ -174,6 +175,17 @@
     .confidence-bar { background: var(--border); border-radius: 99px; height: 8px; overflow: hidden; }
     .confidence-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .8s ease; }
 
+    /* 3D Physics Card */
+    .physics-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .physics-card h3 { font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; color: var(--accent2); margin-bottom: .8rem; }
+    .physics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center; }
+
     /* media grid */
     .media-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .media-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
@@ -190,6 +202,7 @@
     @media(max-width: 860px) {
       .layout { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .physics-grid { grid-template-columns: 1fr; }
       .media-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -199,8 +212,8 @@
 <header>
   <div class="logo">🏏</div>
   <div>
-    <h1>OpenCV DRS System</h1>
-    <p>AI-powered cricket ball tracking · Hawk-Eye style review</p>
+    <h1>Real DRS — Hawk-Eye 3D System</h1>
+    <p>3D Parabolic Ball Physics · UltraEdge Snickometer · Multi-View TV Broadcast Review</p>
   </div>
 </header>
 
@@ -236,12 +249,12 @@
         <input type="file" id="videoFile" name="video" accept="video/mp4" />
       </div>
 
-      <button class="btn-primary" id="submitBtn" type="submit">▶ Run DRS Analysis</button>
+      <button class="btn-primary" id="submitBtn" type="submit">▶ Run Hawk-Eye 3D Review</button>
     </form>
 
     <!-- session mini-stats -->
     <div id="sessionBox" style="display:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem;">
-      <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.6rem;">Session</div>
+      <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.6rem;">Session Totals</div>
       <div style="display:flex;gap:.5rem;justify-content:space-around;text-align:center;">
         <div><div style="font-size:1.2rem;font-weight:700;color:var(--red)" id="sOut">0</div><div style="font-size:.65rem;color:var(--muted)">OUT</div></div>
         <div><div style="font-size:1.2rem;font-weight:700;color:var(--green)" id="sNotOut">0</div><div style="font-size:.65rem;color:var(--muted)">NOT OUT</div></div>
@@ -255,12 +268,12 @@
 
     <div id="placeholder">
       <div class="icon">🎥</div>
-      <p>Select a delivery and click <strong>Run DRS Analysis</strong> to begin.</p>
+      <p>Select a delivery and click <strong>Run Hawk-Eye 3D Review</strong> to begin.</p>
     </div>
 
     <div id="loading">
       <div class="spinner"></div>
-      <p>Detecting ball · Tracking trajectory · Computing decision…</p>
+      <p>Computing 3D Gravity Physics · Rendering UltraEdge Oscilloscope · Building Hawk-Eye Graphic…</p>
     </div>
 
     <div id="results">
@@ -282,8 +295,31 @@
           <div class="value" id="statImpact">—</div>
         </div>
         <div class="stat-card">
-          <div class="label">Wickets</div>
+          <div class="label">Wickets (Lateral)</div>
           <div class="value" id="statWickets">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">3D Height Verdict</div>
+          <div class="value" style="color: var(--accent)" id="stat3DHeight">—</div>
+        </div>
+      </div>
+
+      <!-- 3D Physics Metric Card -->
+      <div class="physics-card">
+        <h3>📐 3D Metric Pitch & Height Clearance</h3>
+        <div class="physics-grid">
+          <div>
+            <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Pitch Distance</div>
+            <div style="font-size:1.1rem; font-weight:700; margin-top:4px;" id="physPitchY">—</div>
+          </div>
+          <div>
+            <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Impact Distance</div>
+            <div style="font-size:1.1rem; font-weight:700; margin-top:4px;" id="physImpactY">—</div>
+          </div>
+          <div>
+            <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Stump Clearance Z</div>
+            <div style="font-size:1.1rem; font-weight:700; margin-top:4px; color:var(--accent);" id="physStumpZ">—</div>
+          </div>
         </div>
       </div>
 
@@ -298,15 +334,15 @@
         </div>
       </div>
 
-      <!-- Media -->
+      <!-- Media Grid -->
       <div class="media-grid">
         <div class="media-card">
-          <h4>📹 Tracking Video</h4>
+          <h4>📹 Live Tracking Video</h4>
           <video id="resultVideo" controls autoplay loop muted playsinline></video>
         </div>
         <div class="media-card">
-          <h4>📊 Decision Graphic</h4>
-          <img id="resultImage" alt="DRS Decision Graphic" />
+          <h4>📊 Hawk-Eye 3D Broadcast Graphic</h4>
+          <img id="resultImage" alt="Hawk-Eye 3D DRS Decision Graphic" />
         </div>
       </div>
 
@@ -375,6 +411,13 @@
     document.getElementById('statPitching').textContent = fmt(data.pitching_zone);
     document.getElementById('statImpact').textContent   = fmt(data.impact_zone);
     document.getElementById('statWickets').textContent  = fmt(data.wicket_verdict);
+
+    // ── 3D Physics ──
+    const p3d = data.physics_3d || {};
+    document.getElementById('stat3DHeight').textContent = p3d.height_verdict ? fmt(p3d.height_verdict) : 'HITTING';
+    document.getElementById('physPitchY').textContent = p3d.pitch_3d_m ? `${p3d.pitch_3d_m[1].toFixed(1)} m` : '—';
+    document.getElementById('physImpactY').textContent = p3d.impact_3d_m ? `${p3d.impact_3d_m[1].toFixed(1)} m` : '—';
+    document.getElementById('physStumpZ').textContent = p3d.stump_z_m !== undefined ? `${p3d.stump_z_m.toFixed(2)} m` : '—';
 
     // ── AI Verdict ──
     const ai = data.ai_verdict || {};

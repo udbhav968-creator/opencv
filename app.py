@@ -16,7 +16,7 @@ from drs_opencv.generate_test_video import generate_hitting, generate_missing, g
 from drs_opencv.ai_verdict import generate_verdict_explanation
 from drs_opencv.stats_analyzer import DeliveryStatsAnalyzer
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), 'templates'))
 app.config['UPLOAD_FOLDER'] = '/tmp/uploads'
 app.config['OUTPUT_FOLDER'] = '/tmp/outputs'
 

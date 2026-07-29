@@ -39,7 +39,20 @@ class DeliveryStatsAnalyzer:
         if not trajectory_points or len(trajectory_points) < 4:
             return self._empty()
 
-        pts = np.array([(x, y) for _, x, y in trajectory_points], dtype=float)
+        parsed = []
+        for pt in trajectory_points:
+            if len(pt) == 2:
+                parsed.append((float(pt[0]), float(pt[1])))
+            elif len(pt) == 3:
+                # If first element is frame index (usually small int < 500)
+                if pt[0] < 500 and pt[1] > 0:
+                    parsed.append((float(pt[1]), float(pt[2])))
+                else:
+                    parsed.append((float(pt[0]), float(pt[1])))
+            elif len(pt) > 3:
+                parsed.append((float(pt[1]), float(pt[2])))
+
+        pts = np.array(parsed, dtype=float)
 
         speed        = self._estimate_speed(pts)
         swing        = self._estimate_swing(pts)

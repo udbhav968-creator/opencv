@@ -7,6 +7,7 @@ import os
 import uuid
 import sys
 import datetime
+import traceback
 
 # Always expose top-level app object for Vercel Serverless Runtime
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -80,86 +81,92 @@ def process():
     if not pipeline_available:
         return jsonify({'error': f'Pipeline unavailable: {import_error_message}'}), 500
 
-    color  = request.form.get('color', 'red')
-    action = request.form.get('action', 'upload')
-
-    job_id  = str(uuid.uuid4())
-    job_dir = os.path.join(app.config['OUTPUT_FOLDER'], job_id)
-    os.makedirs(job_dir, exist_ok=True)
-
-    if action == 'upload':
-        if 'video' not in request.files:
-            return jsonify({'error': 'No video uploaded'}), 400
-        file = request.files['video']
-        if not file.filename:
-            return jsonify({'error': 'No video selected'}), 400
-        input_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{job_id}.mp4")
-        file.save(input_path)
-    else:
-        input_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{job_id}.mp4")
-        generators = {
-            'synthetic_hitting':      generate_hitting,
-            'synthetic_missing':      generate_missing,
-            'synthetic_umpires_call': generate_umpires_call,
-        }
-        gen_fn = generators.get(action)
-        if gen_fn is None:
-            return jsonify({'error': f'Unknown action: {action}'}), 400
-        gen_fn(input_path)
-
     try:
+        color  = request.form.get('color', 'red')
+        action = request.form.get('action', 'upload')
+
+        job_id  = str(uuid.uuid4())
+        job_dir = os.path.join(app.config['OUTPUT_FOLDER'], job_id)
+        os.makedirs(job_dir, exist_ok=True)
+
+        if action == 'upload':
+            if 'video' not in request.files:
+                return jsonify({'error': 'No video uploaded'}), 400
+            file = request.files['video']
+            if not file.filename:
+                return jsonify({'error': 'No video selected'}), 400
+            input_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{job_id}.mp4")
+            file.save(input_path)
+        else:
+            input_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{job_id}.mp4")
+            generators = {
+                'synthetic_hitting':      generate_hitting,
+                'synthetic_missing':      generate_missing,
+                'synthetic_umpires_call': generate_umpires_call,
+            }
+            gen_fn = generators.get(action)
+            if gen_fn is None:
+                return jsonify({'error': f'Unknown action: {action}'}), 400
+            gen_fn(input_path)
+
         results = run_pipeline(input_path, job_dir, color_mode=color)
+
+        if not results.get('success'):
+            return jsonify({'error': 'Pipeline failed — not enough ball detections.'}), 500
+
+        pz_str = results['pitching_zone'].value if hasattr(results['pitching_zone'], 'value') else str(results['pitching_zone'])
+        iz_str = results['impact_zone'].value if hasattr(results['impact_zone'], 'value') else str(results['impact_zone'])
+        wv_str = results['wicket_verdict'].value if hasattr(results['wicket_verdict'], 'value') else str(results['wicket_verdict'])
+        fc_str = str(results['final_call'])
+
+        ai_info = generate_verdict_explanation(
+            pitching_zone  = pz_str,
+            impact_zone    = iz_str,
+            wicket_verdict = wv_str,
+            final_call     = fc_str,
+        )
+
+        analyzer   = DeliveryStatsAnalyzer(fps=25.0)
+        valid_pts  = results.get('valid_points', [])
+        stats      = analyzer.analyze(valid_pts) if valid_pts else {}
+
+        pred_3d = results.get('prediction_3d')
+        physics_info = {}
+        if pred_3d and getattr(pred_3d, 'has_prediction', False):
+            physics_info = {
+                'pitch_3d_m':     [float(v) for v in pred_3d.pitch_3d] if pred_3d.pitch_3d is not None else None,
+                'impact_3d_m':    [float(v) for v in pred_3d.impact_3d] if pred_3d.impact_3d is not None else None,
+                'stump_x_m':      float(pred_3d.stump_x) if pred_3d.stump_x is not None else 0.0,
+                'stump_z_m':      float(pred_3d.stump_z) if pred_3d.stump_z is not None else 0.0,
+                'height_verdict': str(pred_3d.height_verdict),
+                'lateral_verdict':str(pred_3d.lateral_verdict)
+            }
+
+        record = {
+            'job_id':         job_id,
+            'timestamp':      datetime.datetime.utcnow().isoformat() + 'Z',
+            'color':          color,
+            'pitching_zone':  pz_str,
+            'impact_zone':    iz_str,
+            'wicket_verdict': wv_str,
+            'final_call':     fc_str,
+            'confidence':     ai_info.get('confidence', 80),
+        }
+        _decision_log.append(record)
+
+        return jsonify({
+            'job_id':         job_id,
+            'pitching_zone':  pz_str,
+            'impact_zone':    iz_str,
+            'wicket_verdict': wv_str,
+            'final_call':     fc_str,
+            'ai_verdict':     ai_info,
+            'delivery_stats': stats,
+            'physics_3d':     physics_info,
+        })
+
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
-
-    if not results['success']:
-        return jsonify({'error': 'Pipeline failed — not enough ball detections.'}), 500
-
-    ai_info = generate_verdict_explanation(
-        pitching_zone  = results['pitching_zone'].value,
-        impact_zone    = results['impact_zone'].value,
-        wicket_verdict = results['wicket_verdict'].value,
-        final_call     = results['final_call'],
-    )
-
-    analyzer   = DeliveryStatsAnalyzer(fps=25.0)
-    valid_pts  = results.get('valid_points', [])
-    stats      = analyzer.analyze(valid_pts) if valid_pts else {}
-
-    pred_3d = results.get('prediction_3d')
-    physics_info = {}
-    if pred_3d and pred_3d.has_prediction:
-        physics_info = {
-            'pitch_3d_m': pred_3d.pitch_3d,
-            'impact_3d_m': pred_3d.impact_3d,
-            'stump_x_m': pred_3d.stump_x,
-            'stump_z_m': pred_3d.stump_z,
-            'height_verdict': pred_3d.height_verdict,
-            'lateral_verdict': pred_3d.lateral_verdict
-        }
-
-    record = {
-        'job_id':         job_id,
-        'timestamp':      datetime.datetime.utcnow().isoformat() + 'Z',
-        'color':          color,
-        'pitching_zone':  results['pitching_zone'].value,
-        'impact_zone':    results['impact_zone'].value,
-        'wicket_verdict': results['wicket_verdict'].value,
-        'final_call':     results['final_call'],
-        'confidence':     ai_info['confidence'],
-    }
-    _decision_log.append(record)
-
-    return jsonify({
-        'job_id':         job_id,
-        'pitching_zone':  results['pitching_zone'].value,
-        'impact_zone':    results['impact_zone'].value,
-        'wicket_verdict': results['wicket_verdict'].value,
-        'final_call':     results['final_call'],
-        'ai_verdict':     ai_info,
-        'delivery_stats': stats,
-        'physics_3d':     physics_info,
-    })
 
 
 @app.route('/outputs/<job_id>/<filename>')

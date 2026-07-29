@@ -126,25 +126,27 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
     impact_zone = stump_zone.classify_lateral_zone(*prediction_2d.impact_point)
     wicket_verdict_2d = stump_zone.classify_wicket_hit(prediction_2d.predicted_stump_x)
 
-    # ---- 3D Physics Trajectory & Height Clearance Model ----
     physics_3d = Physics3DPredictor(fps=src_fps)
     prediction_3d = physics_3d.predict_3d(valid_points)
 
-    final_call = "OUT" if (wicket_verdict_2d == "HITTING" and impact_zone == "IN_LINE" and pitching_zone != "OUTSIDE_LEG") else "NOT OUT"
-    if (wicket_verdict_2d == "UMPIRES_CALL" and impact_zone == "IN_LINE" and pitching_zone != "OUTSIDE_LEG"):
+    pz_str = pitching_zone.value if hasattr(pitching_zone, 'value') else str(pitching_zone)
+    iz_str = impact_zone.value if hasattr(impact_zone, 'value') else str(impact_zone)
+    wv_str = wicket_verdict_2d.value if hasattr(wicket_verdict_2d, 'value') else str(wicket_verdict_2d)
+
+    final_call = "OUT" if (wv_str == "HITTING" and iz_str == "IN_LINE" and pz_str != "OUTSIDE_LEG") else "NOT OUT"
+    if (wv_str == "UMPIRES_CALL" and iz_str == "IN_LINE" and pz_str != "OUTSIDE_LEG"):
         final_call = "UMPIRE'S CALL"
 
     # ---- Render Broadcast Hawk-Eye Graphic ----
     broadcast_canvas = render_hawk_eye_broadcast_graphic(
-        valid_points, prediction_3d, pitching_zone.value if hasattr(pitching_zone, 'value') else pitching_zone,
-        impact_zone.value if hasattr(impact_zone, 'value') else impact_zone, wicket_verdict_2d.value if hasattr(wicket_verdict_2d, 'value') else wicket_verdict_2d, final_call
+        valid_points, prediction_3d, pz_str, iz_str, wv_str, final_call
     )
     cv2.imwrite(decision_image_path, broadcast_canvas)
 
     print("---- REAL DRS HAWK-EYE RESULT ----")
-    print(f"Pitching zone : {pitching_zone}")
-    print(f"Impact zone   : {impact_zone}")
-    print(f"Wickets (2D)  : {wicket_verdict_2d}")
+    print(f"Pitching zone : {pz_str}")
+    print(f"Impact zone   : {iz_str}")
+    print(f"Wickets (2D)  : {wv_str}")
     if prediction_3d.has_prediction:
         print(f"3D Stump Height: {prediction_3d.stump_z:.2f}m (Verdict: {prediction_3d.height_verdict})")
     print(f"Final call    : {final_call}")
@@ -154,17 +156,13 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
         def __init__(self, val):
             self.value = val
 
-    pz = DummyZone(pitching_zone) if isinstance(pitching_zone, str) else pitching_zone
-    iz = DummyZone(impact_zone) if isinstance(impact_zone, str) else impact_zone
-    wv = DummyZone(wicket_verdict_2d) if isinstance(wicket_verdict_2d, str) else wicket_verdict_2d
-
     return {
         "success": True,
         "tracking_video": tracking_video_path,
         "decision_image": decision_image_path,
-        "pitching_zone": pz,
-        "impact_zone": iz,
-        "wicket_verdict": wv,
+        "pitching_zone": DummyZone(pz_str),
+        "impact_zone": DummyZone(iz_str),
+        "wicket_verdict": DummyZone(wv_str),
         "final_call": final_call,
         "valid_points": valid_points,
         "prediction_3d": prediction_3d,

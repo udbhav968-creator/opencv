@@ -20,7 +20,15 @@ import argparse
 import os
 import cv2
 
-import config as cfg
+try:
+    import config as cfg
+except ImportError:
+    from drs_opencv import config as cfg
+
+try:
+    from yolo_detector import HybridBallDetector
+except ImportError:
+    from drs_opencv.yolo_detector import HybridBallDetector
 from ball_detector import BallDetector
 from tracker import BallTracker
 from frame_preprocessor import FramePreprocessor
@@ -46,7 +54,7 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
     src_fps = cap.get(cv2.CAP_PROP_FPS) or cfg.FPS
 
     preprocessor = FramePreprocessor()
-    detector = BallDetector(color_mode=color_mode)
+    detector = HybridBallDetector(color_mode=color_mode)
     confidence_scorer = DetectionConfidenceScorer()
     tracker = BallTracker()
 
@@ -71,9 +79,11 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
         clean_frame = preprocessor.process(frame)
 
         # Detect ball
-        detection = detector.detect(clean_frame)
-        if detection is not None:
+        raw_det = detector.detect(clean_frame)
+        detection = None
+        if raw_det is not None:
             frames_with_ball += 1
+            detection = (raw_det[0], raw_det[1], raw_det[2])
 
         # Score confidence
         conf = confidence_scorer.score(detection, frame=clean_frame)

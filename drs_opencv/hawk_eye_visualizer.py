@@ -46,8 +46,10 @@ def render_hawk_eye_broadcast_graphic(valid_points, prediction_3d, pitching_zone
 
     # ── Header TV Banner ──
     cv2.rectangle(canvas, (0, 0), (width, 60), (15, 23, 42), -1)
-    cv2.putText(canvas, "HAWK-EYE 3D BALL TRACKING - OFFICIAL DRS REVIEW", (25, 40),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.75, (248, 250, 252), 2, cv2.LINE_AA)
+    cv2.putText(canvas, "HAWK-EYE 3D BALL TRACKING - OFFICIAL DRS REVIEW", (25, 30),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.65, (248, 250, 252), 2, cv2.LINE_AA)
+    cv2.putText(canvas, "AI ENGINE: YOLOv8 Deep Learning + 3D Homography Physics", (25, 50),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.42, (56, 189, 248), 1, cv2.LINE_AA)
 
     # Decision Banner (Top Right)
     call_bg = (239, 68, 68) if final_call == "OUT" else (34, 197, 94) if final_call == "NOT OUT" else (234, 179, 8)

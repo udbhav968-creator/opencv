@@ -39,6 +39,16 @@ class YOLODetector:
         self.model = None
         self.is_loaded = False
 
+        import os
+        weights_dir = os.path.join(os.path.dirname(__file__), 'weights')
+        custom_onnx = os.path.join(weights_dir, 'icc_ball_detector.onnx')
+        custom_pt   = os.path.join(weights_dir, 'icc_ball_detector.pt')
+
+        if os.path.exists(custom_onnx):
+            self.model_name = custom_onnx
+        elif os.path.exists(custom_pt):
+            self.model_name = custom_pt
+
         if YOLO_AVAILABLE:
             try:
                 self.model = YOLO(self.model_name)

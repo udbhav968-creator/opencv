@@ -5,6 +5,9 @@ Central place for every tunable constant used across the DRS project.
 Change values here instead of hunting through the other files.
 """
 
+SYSTEM_VERSION = "2.5.0-ICC-PRO"
+SYSTEM_NAME = "Real DRS Hawk-Eye 3D AI System"
+
 # ---------------------------------------------------------------------------
 # Frame / video settings
 # ---------------------------------------------------------------------------

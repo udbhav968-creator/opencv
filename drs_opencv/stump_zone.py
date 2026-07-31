@@ -8,20 +8,18 @@ points into DRS-style zones:
   - Pitching:  Outside Leg / In-line / Outside Off
   - Impact:    Outside Leg / In-line / Outside Off
   - Wickets:   Hitting / Umpire's Call / Missing
-
-This is a simplified single-axis (lateral only) model -- a real system
-also reasons about height (would the ball have gone over the stumps).
-We call that out explicitly in the README as a known limitation.
 """
 
-import config as cfg
+try:
+    import config as cfg
+except ImportError:
+    from drs_opencv import config as cfg
 
 
-def stumps_half_width_at(y_depth):
+def stumps_half_width_at(y_depth: float) -> float:
     """
     Linearly interpolate the stumps' half-width (in pixels) at a given
-    y-depth, based on the configured near/far widths (simple perspective
-    approximation for a fixed camera).
+    y-depth, based on the configured near/far widths.
     """
     y0, y1 = cfg.BOWLER_END_Y, cfg.BATSMAN_END_Y
     w0, w1 = cfg.STUMPS_WIDTH_FAR, cfg.STUMPS_WIDTH_NEAR
@@ -32,20 +30,15 @@ def stumps_half_width_at(y_depth):
     return width / 2.0
 
 
-def stump_center_x_at(y_depth):
+def stump_center_x_at(y_depth: float) -> float:
     """Stumps are assumed centered on the frame's vertical midline."""
-    return cfg.FRAME_CENTER_X
+    return float(cfg.FRAME_CENTER_X)
 
 
-def classify_lateral_zone(x, y_depth):
+def classify_lateral_zone(x: float, y_depth: float) -> str:
     """
-    Classifies a lateral position as relative to the stumps at that
-    depth: returns one of "OUTSIDE_LEG", "IN_LINE", "OUTSIDE_OFF".
-
-    NOTE: "off side" vs "leg side" is batsman-handedness dependent in
-    real cricket. For this simplified demo we treat +x (right of centre
-    in the frame) as "off" and -x as "leg" -- flip STUMPS lookups in your
-    own footage if your batsman is left-handed / camera is reversed.
+    Classifies a lateral position relative to the stumps at depth y.
+    Returns: 'OUTSIDE_LEG', 'IN_LINE', 'OUTSIDE_OFF'.
     """
     half_width = stumps_half_width_at(y_depth)
     center = stump_center_x_at(y_depth)
@@ -59,11 +52,10 @@ def classify_lateral_zone(x, y_depth):
         return "IN_LINE"
 
 
-def classify_wicket_hit(predicted_x, y_depth=cfg.BATSMAN_END_Y):
+def classify_wicket_hit(predicted_x: float, y_depth: float = cfg.BATSMAN_END_Y) -> str:
     """
-    Classifies whether the predicted trajectory hits the stumps, is an
-    umpire's call (marginal), or misses.
-    Returns one of "HITTING", "UMPIRES_CALL", "MISSING".
+    Classifies whether the predicted trajectory hits the stumps.
+    Returns: 'HITTING', 'UMPIRES_CALL', 'MISSING'.
     """
     half_width = stumps_half_width_at(y_depth)
     center = stump_center_x_at(y_depth)
@@ -77,10 +69,9 @@ def classify_wicket_hit(predicted_x, y_depth=cfg.BATSMAN_END_Y):
         return "MISSING"
 
 
-def get_stump_box(y_depth):
+def get_stump_box(y_depth: float):
     """
-    Returns (x1, y1, x2, y2) pixel box approximating the stumps at a
-    given depth, for drawing.
+    Returns (x1, y1, x2, y2) pixel box approximating the stumps at a given depth.
     """
     half_width = stumps_half_width_at(y_depth)
     center = stump_center_x_at(y_depth)

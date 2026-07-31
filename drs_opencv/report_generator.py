@@ -22,14 +22,14 @@ def generate_report(results, ai_info, delivery_stats, job_id, output_dir, color_
         delivery_stats: Output dict from DeliveryStatsAnalyzer.analyze()
         job_id:         Unique job identifier string
         output_dir:     Directory to write the report into
-        color_mode:     'red' or 'white'
+        color_mode:     'red', 'white', or 'pink'
 
     Returns:
         Path to the written JSON report file.
     """
     report = {
-        "report_version": "1.0",
-        "generated_at":   datetime.datetime.utcnow().isoformat() + "Z",
+        "report_version": "2.0-ICC-PRO",
+        "generated_at":   datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "job_id":         job_id,
         "pipeline": {
             "color_mode":       color_mode,
@@ -44,10 +44,10 @@ def generate_report(results, ai_info, delivery_stats, job_id, output_dir, color_
             "final_call":       results.get("final_call", "UNKNOWN"),
         },
         "ai_verdict": {
-            "summary":          ai_info.get("summary",    ""),
-            "reasoning":        ai_info.get("reasoning",  ""),
-            "confidence_pct":   ai_info.get("confidence", 0),
-            "tips":             ai_info.get("tips",       []),
+            "summary":          ai_info.get("summary",    "") if ai_info else "",
+            "reasoning":        ai_info.get("reasoning",  "") if ai_info else "",
+            "confidence_pct":   ai_info.get("confidence", 0)  if ai_info else 0,
+            "tips":             ai_info.get("tips",       []) if ai_info else [],
         },
         "delivery_stats": delivery_stats or {},
     }

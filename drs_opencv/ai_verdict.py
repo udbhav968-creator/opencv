@@ -19,6 +19,11 @@ def generate_verdict_explanation(pitching_zone, impact_zone, wicket_verdict, fin
         dict with 'summary', 'reasoning', 'confidence', 'tips'
     """
 
+    pz = pitching_zone.value if hasattr(pitching_zone, 'value') else str(pitching_zone)
+    iz = impact_zone.value if hasattr(impact_zone, 'value') else str(impact_zone)
+    wv = wicket_verdict.value if hasattr(wicket_verdict, 'value') else str(wicket_verdict)
+    fc = final_call.value if hasattr(final_call, 'value') else str(final_call)
+
     zone_map = {
         "OUTSIDE_LEG": "outside leg stump",
         "IN_LINE":      "in line with the stumps",
@@ -30,12 +35,12 @@ def generate_verdict_explanation(pitching_zone, impact_zone, wicket_verdict, fin
         "MISSING":      "missing the stumps",
     }
 
-    pitch_desc   = zone_map.get(pitching_zone,  pitching_zone)
-    impact_desc  = zone_map.get(impact_zone,    impact_zone)
-    wicket_desc  = wicket_map.get(wicket_verdict, wicket_verdict)
+    pitch_desc   = zone_map.get(pz, pz)
+    impact_desc  = zone_map.get(iz, iz)
+    wicket_desc  = wicket_map.get(wv, wv)
 
     # --- Confidence scoring ---
-    confidence = _compute_confidence(pitching_zone, impact_zone, wicket_verdict)
+    confidence = _compute_confidence(pz, iz, wv)
 
     # --- Reasoning ---
     reasoning_parts = [
@@ -44,22 +49,22 @@ def generate_verdict_explanation(pitching_zone, impact_zone, wicket_verdict, fin
     ]
 
     # LBW law notes
-    if pitching_zone == "OUTSIDE_LEG":
+    if pz == "OUTSIDE_LEG":
         reasoning_parts.append(
             "Under LBW law, a ball pitching outside leg stump cannot be given out, "
             "regardless of impact or wicket projection."
         )
-    elif pitching_zone == "OUTSIDE_OFF" and impact_zone != "IN_LINE":
+    elif pz == "OUTSIDE_OFF" and iz != "IN_LINE":
         reasoning_parts.append(
             "The ball pitched and impacted outside off stump — "
             "no LBW dismissal is possible when the impact is also outside off."
         )
-    elif wicket_verdict == "MISSING":
+    elif wv == "MISSING":
         reasoning_parts.append(
             "Since the ball is projected to miss the stumps entirely, "
             "no LBW dismissal can stand."
         )
-    elif wicket_verdict == "UMPIRES_CALL":
+    elif wv == "UMPIRES_CALL":
         reasoning_parts.append(
             "The ball is only clipping the stumps — Umpire's Call applies "
             "and the on-field decision stands."
@@ -69,27 +74,27 @@ def generate_verdict_explanation(pitching_zone, impact_zone, wicket_verdict, fin
 
     # --- Summary sentence ---
     emoji_map = {"OUT": "🔴", "NOT OUT": "🟢", "UMPIRE'S CALL": "🟡"}
-    emoji = emoji_map.get(final_call, "⚪")
-    summary = f"{emoji} **{final_call}** — {_build_summary(pitching_zone, impact_zone, wicket_verdict, final_call)}"
+    emoji = emoji_map.get(fc, "⚪")
+    summary = f"{emoji} **{fc}** — {_build_summary(pz, iz, wv, fc)}"
 
     # --- Tips for real footage ---
-    tips = _get_tips(pitching_zone, impact_zone, wicket_verdict)
+    tips = _get_tips(pz, iz, wv)
 
     return {
         "summary":    summary,
         "reasoning":  reasoning,
         "confidence": confidence,
         "tips":       tips,
-        "final_call": final_call,
+        "final_call": fc,
     }
 
 
 def _compute_confidence(pitching_zone, impact_zone, wicket_verdict):
     """Return a confidence percentage based on how clear-cut the decision is."""
     if wicket_verdict == "UMPIRES_CALL":
-        return 55  # borderline
+        return 55
     if pitching_zone == "OUTSIDE_LEG":
-        return 98  # clear not-out
+        return 98
     if wicket_verdict == "MISSING":
         if impact_zone == "OUTSIDE_OFF":
             return 97

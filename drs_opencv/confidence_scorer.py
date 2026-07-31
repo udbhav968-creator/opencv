@@ -12,12 +12,15 @@ Used by the tracker to weight Kalman filter measurements.
 
 import math
 import numpy as np
-import config as cfg
+try:
+    import config as cfg
+except ImportError:
+    from drs_opencv import config as cfg
 
 
 class DetectionConfidenceScorer:
     """
-    Assigns a confidence score [0.0 – 1.0] to each raw detection.
+    Assigns a confidence score [0.0 - 1.0] to each raw detection.
     Higher-confidence detections have more influence on the Kalman state.
     """
 
@@ -68,11 +71,9 @@ class DetectionConfidenceScorer:
         min_r = cfg.MIN_BALL_RADIUS
         max_r = cfg.MAX_BALL_RADIUS
         if min_r <= radius <= max_r:
-            # Highest score at the midpoint of expected range
             mid   = (min_r + max_r) / 2
             span  = (max_r - min_r) / 2
             return 1.0 - abs(radius - mid) / (span + 1e-6) * 0.3
-        # Out-of-range penalty
         over  = max(0, radius - max_r)
         under = max(0, min_r - radius)
         penalty = (over + under) / (max_r - min_r + 1e-6)
@@ -81,10 +82,9 @@ class DetectionConfidenceScorer:
     def _velocity_score(self, cx, cy):
         """Penalise detections that imply an implausibly large jump from the previous frame."""
         if self._prev_position is None:
-            return 0.85  # first detection — moderate prior
+            return 0.85
         px, py = self._prev_position
         dist   = math.hypot(cx - px, cy - py)
-        # Expect ball to move at most ~80 px/frame at typical frame rate
         max_expected = 80.0
         score  = max(0.0, 1.0 - dist / (max_expected * 3))
         return score
@@ -92,7 +92,7 @@ class DetectionConfidenceScorer:
     def _colour_score(self, frame, cx, cy, radius):
         """
         Sample pixel colour at the detection centre and check how well it
-        matches the expected ball hue. Returns 0.5–1.0.
+        matches expected hue/saturation.
         """
         try:
             import cv2
@@ -107,10 +107,9 @@ class DetectionConfidenceScorer:
             if patch.size == 0:
                 return 0.5
             hsv    = cv2.cvtColor(patch, cv2.COLOR_BGR2HSV)
-            mean_s = float(hsv[:, :, 1].mean())   # saturation
-            mean_v = float(hsv[:, :, 2].mean())   # brightness
-            # Ball should be saturated and bright
+            mean_s = float(hsv[:, :, 1].mean())
+            mean_v = float(hsv[:, :, 2].mean())
             score  = (mean_s / 255.0) * 0.5 + (mean_v / 255.0) * 0.5
-            return round(0.5 + score * 0.5, 3)    # scale to [0.5, 1.0]
+            return round(0.5 + score * 0.5, 3)
         except Exception:
             return 0.5

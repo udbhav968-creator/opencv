@@ -45,22 +45,26 @@ class UltraEdgeSimulator:
         waveform = 0.05 * np.random.randn(total_samples)
 
         # Impact sample index
-        impact_idx = impact_frame * self.samples_per_frame
+        impact_idx = min(impact_frame * self.samples_per_frame, total_samples - 1)
 
         if edge_event:
             # High-frequency sharp acoustic spike (Wood contact: 2500Hz - 4000Hz)
-            t_event = time_axis[impact_idx : impact_idx + self.samples_per_frame * 2]
-            t_rel = t_event - t_event[0]
-            spike = 0.85 * np.exp(-t_rel * 40.0) * np.sin(2 * np.pi * 3200 * t_rel)
-            waveform[impact_idx : impact_idx + len(spike)] += spike
+            end_idx = min(impact_idx + self.samples_per_frame * 2, total_samples)
+            t_event = time_axis[impact_idx : end_idx]
+            if len(t_event) > 0:
+                t_rel = t_event - t_event[0]
+                spike = 0.85 * np.exp(-t_rel * 40.0) * np.sin(2 * np.pi * 3200 * t_rel)
+                waveform[impact_idx : impact_idx + len(spike)] += spike
             event_type = "BAT EDGE"
             peak_freq = 3200
         else:
             # Low-frequency dull pulse (Pad contact: 300Hz - 600Hz)
-            t_event = time_axis[impact_idx : impact_idx + self.samples_per_frame * 3]
-            t_rel = t_event - t_event[0]
-            pulse = 0.4 * np.exp(-t_rel * 20.0) * np.sin(2 * np.pi * 450 * t_rel)
-            waveform[impact_idx : impact_idx + len(pulse)] += pulse
+            end_idx = min(impact_idx + self.samples_per_frame * 3, total_samples)
+            t_event = time_axis[impact_idx : end_idx]
+            if len(t_event) > 0:
+                t_rel = t_event - t_event[0]
+                pulse = 0.4 * np.exp(-t_rel * 20.0) * np.sin(2 * np.pi * 450 * t_rel)
+                waveform[impact_idx : impact_idx + len(pulse)] += pulse
             event_type = "PAD IMPACT"
             peak_freq = 450
 
@@ -101,7 +105,7 @@ class UltraEdgeSimulator:
             cv2.line(panel, pts[i - 1], pts[i], (34, 197, 94), 2, cv2.LINE_AA)
 
         # Synchronized Frame Timeline Marker (Red vertical cursor)
-        curr_px = int((current_frame_idx / self.n_frames) * width)
+        curr_px = int((current_frame_idx / max(1, self.n_frames)) * width)
         cv2.line(panel, (curr_px, 0), (curr_px, height), (239, 68, 68), 2)
 
         # Overlay Event Info Banner

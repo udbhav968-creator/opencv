@@ -126,8 +126,8 @@ class HybridBallDetector:
         """
         Runs Hybrid Detection:
         1. Query YOLO Deep Learning Detector.
-        2. If confidence > 0.45, return YOLO detection (x, y, radius, conf).
-        3. Else fallback to HSV Contour + Circularity detector (x, y, radius, conf=0.85).
+        2. If confidence >= 0.45, return YOLO detection.
+        3. Else fallback to HSV Contour + Circularity detector.
         """
         # Step 1: Deep Learning YOLO Detection
         yolo_res = self.yolo_detector.detect_ball(frame_bgr)

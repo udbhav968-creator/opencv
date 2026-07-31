@@ -34,6 +34,7 @@ except ImportError:
 G_ACCEL = 9.81  # Gravitational acceleration m/s^2
 RESTITUTION_Z = 0.65  # Vertical bounce coefficient
 FRICTION_Y = 0.88     # Forward velocity retention post-pitch
+BAIL_THICKNESS_M = 0.035 # Metric bail height tolerance
 
 
 class Physics3DPrediction:
@@ -117,7 +118,6 @@ class Physics3DPredictor:
         Vy = max(5.0, Vy)  # Ensure positive forward velocity (m/s)
 
         # Fit Vertical Z velocity with Gravity: Z(t) = Z0 + Vz0 * t - 0.5 * g * t^2
-        # => Z(t) + 0.5 * g * t^2 = Z0 + Vz0 * t
         z_adj = post_pts[:, 2] + 0.5 * G_ACCEL * (t_steps ** 2)
         Vz0 = np.polyfit(t_steps, z_adj, 1)[0]
 

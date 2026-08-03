@@ -1,7 +1,6 @@
-# ICC Official Cricket Ball Tracking Dataset Configuration
-path: C:\Users\Dell\Downloads\opencv\drs_opencv\dataset
-train: images/train
-val: images/val
-
 names:
   0: cricket_ball
+path: C:\Users\Dell\Downloads\opencv\drs_opencv\dataset
+test: images/test
+train: images/train
+val: images/val

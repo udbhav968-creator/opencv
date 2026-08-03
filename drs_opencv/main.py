@@ -3,14 +3,12 @@ main.py
 -------
 Runs the full Real DRS pipeline end-to-end on a video file:
 
-    1. Read video frame by frame.
-    2. Preprocess frame (frame_preprocessor.py).
-    3. Auto-detect ball color (auto_color_detector.py).
-    4. Detect ball using 4-Model Ensemble (multi_model_detector.py).
-    5. Smooth/track across frames (tracker.py).
-    6. Compute 3D physics trajectory & height clearance (physics_3d_predictor.py).
-    7. Run UltraEdge snickometer simulation (ultraedge.py).
-    8. Render 4K Broadcast TV Hawk-Eye DRS graphic (hawk_eye_visualizer.py) & JSON report.
+    1. Validate scene & delivery motion (scene_validator.py).
+    2. Auto-detect ball color (auto_color_detector.py).
+    3. Detect ball using 4-Model Ensemble (multi_model_detector.py).
+    4. Smooth/track across frames (tracker.py).
+    5. Compute 3D physics trajectory & height clearance (physics_3d_predictor.py).
+    6. Render 4K Broadcast TV Hawk-Eye DRS graphic (hawk_eye_visualizer.py) & JSON report.
 
 Usage:
     python main.py --input sample_input.mp4 --output_dir output
@@ -35,6 +33,11 @@ try:
 except ImportError:
     from drs_opencv.auto_color_detector import AutoColorDetector
 
+try:
+    from scene_validator import SceneValidator
+except ImportError:
+    from drs_opencv.scene_validator import SceneValidator
+
 from tracker import BallTracker
 from frame_preprocessor import FramePreprocessor
 from confidence_scorer import DetectionConfidenceScorer
@@ -50,7 +53,13 @@ import visualizer
 def run_pipeline(input_path, output_dir, color_mode="auto"):
     os.makedirs(output_dir, exist_ok=True)
 
-    # Step 1: Auto Ball Color Detection
+    # Step 1: Validate scene to reject blank/static non-cricket clips
+    validator = SceneValidator()
+    is_valid_scene, scene_reason = validator.validate_video(input_path)
+    if not is_valid_scene:
+        print(f"[DRS Engine] Video rejected: {scene_reason}")
+
+    # Step 2: Auto Ball Color Detection
     detected_color = color_mode
     auto_conf = 1.0
     if color_mode == "auto" or not color_mode:
@@ -121,11 +130,32 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
 
     print(f"Frames processed: {frame_index}, frames with ball detected: {frames_with_ball}")
 
-    # ---- 2D Trajectory analysis & legacy zones ----
+    # ---- Trajectory analysis ----
     valid_points = tracker.get_valid_trajectory_points()
     prediction_2d = tp.predict_trajectory(valid_points)
 
     decision_image_path = os.path.join(output_dir, "drs_decision.png")
+
+    class DummyZone:
+        def __init__(self, val):
+            self.value = val
+
+    # Blank / Non-Cricket Video Handling
+    if not prediction_2d.has_prediction or frames_with_ball == 0 or not is_valid_scene:
+        print("[DRS Engine] No valid cricket ball trajectory found in video. Returning NO BALL DETECTED.")
+        return {
+            "success": True,
+            "no_ball_detected": True,
+            "tracking_video": tracking_video_path,
+            "decision_image": None,
+            "pitching_zone": DummyZone("NO_BALL"),
+            "impact_zone": DummyZone("NO_BALL"),
+            "wicket_verdict": DummyZone("NO_BALL"),
+            "final_call": "NO BALL DETECTED",
+            "valid_points": [],
+            "prediction_3d": None,
+            "detected_color": detected_color,
+        }
 
     pitching_zone = stump_zone.classify_lateral_zone(*prediction_2d.pitch_point)
     impact_zone = stump_zone.classify_lateral_zone(*prediction_2d.impact_point)
@@ -156,12 +186,9 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
         print(f"3D Stump Height: {prediction_3d.stump_z:.2f}m (Verdict: {prediction_3d.height_verdict})")
     print(f"Final call    : {final_call}")
 
-    class DummyZone:
-        def __init__(self, val):
-            self.value = val
-
     return {
         "success": True,
+        "no_ball_detected": False,
         "tracking_video": tracking_video_path,
         "decision_image": decision_image_path,
         "pitching_zone": DummyZone(pz_str),

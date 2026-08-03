@@ -70,7 +70,7 @@ def history():
 
 @app.route('/api/stats')
 def session_stats():
-    counts = {'OUT': 0, 'NOT OUT': 0, "UMPIRE'S CALL": 0}
+    counts = {'OUT': 0, 'NOT OUT': 0, "UMPIRE'S CALL": 0, "NO BALL DETECTED": 0}
     for d in _decision_log:
         counts[d.get('final_call', 'NOT OUT')] = counts.get(d.get('final_call', 'NOT OUT'), 0) + 1
     return jsonify({'session_totals': counts, 'decisions': len(_decision_log)})
@@ -111,20 +111,25 @@ def process():
 
         results = run_pipeline(input_path, job_dir, color_mode=color)
 
-        if not results.get('success'):
-            return jsonify({'error': 'Pipeline failed — not enough ball detections.'}), 500
-
         pz_str = results['pitching_zone'].value if hasattr(results['pitching_zone'], 'value') else str(results['pitching_zone'])
         iz_str = results['impact_zone'].value if hasattr(results['impact_zone'], 'value') else str(results['impact_zone'])
         wv_str = results['wicket_verdict'].value if hasattr(results['wicket_verdict'], 'value') else str(results['wicket_verdict'])
         fc_str = str(results['final_call'])
 
-        ai_info = generate_verdict_explanation(
-            pitching_zone  = pz_str,
-            impact_zone    = iz_str,
-            wicket_verdict = wv_str,
-            final_call     = fc_str,
-        )
+        if results.get('no_ball_detected'):
+            ai_info = {
+                'summary': 'No Cricket Ball Detected in Video Feed',
+                'reasoning': 'The computer vision ensemble scanned the video feed but did not detect a valid moving cricket ball delivery. Please upload a clear cricket delivery video clip.',
+                'confidence': 100,
+                'tips': ['Ensure video contains a cricket pitch and active delivery.']
+            }
+        else:
+            ai_info = generate_verdict_explanation(
+                pitching_zone  = pz_str,
+                impact_zone    = iz_str,
+                wicket_verdict = wv_str,
+                final_call     = fc_str,
+            )
 
         analyzer   = DeliveryStatsAnalyzer(fps=25.0)
         valid_pts  = results.get('valid_points', [])
@@ -153,6 +158,7 @@ def process():
             'delivery_stats':  stats,
             'physics_3d':      physics_info,
             'detected_color':  results.get('detected_color', 'red'),
+            'no_ball_detected': results.get('no_ball_detected', False),
         }
 
         _decision_log.append({

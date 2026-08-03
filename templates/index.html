@@ -220,6 +220,7 @@
     .verdict-banner.out    { background: linear-gradient(135deg,#7f1d1d,#ef4444); border: 1px solid #f87171; }
     .verdict-banner.notout { background: linear-gradient(135deg,#14532d,#22c55e); border: 1px solid #4ade80; }
     .verdict-banner.umpire { background: linear-gradient(135deg,#713f12,#facc15); color: #1a0a00; border: 1px solid #fde047; }
+    .verdict-banner.noball { background: linear-gradient(135deg,#1e293b,#475569); border: 1px solid #94a3b8; color: #f8fafc; }
     .verdict-left { display: flex; align-items: center; gap: 1rem; }
     .verdict-icon { font-size: 2.5rem; }
     .auto-badge-pill { font-size: 0.75rem; padding: 0.3rem 0.8rem; background: rgba(0,0,0,0.3); border-radius: 99px; text-transform: uppercase; letter-spacing: 0.08em; }
@@ -480,7 +481,6 @@
   actionSel.addEventListener('change', toggleFileGroup);
   toggleFileGroup();
 
-  // Dropzone drag & drop
   dropzone.addEventListener('click', () => videoInput.click());
 
   ['dragenter', 'dragover'].forEach(name => {
@@ -520,7 +520,6 @@
     previewContainer.style.display = 'block';
   }
 
-  // Multi-View Switcher Logic
   function switchView(viewName) {
     document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById('viewCam1').style.display = 'none';
@@ -539,7 +538,6 @@
     }
   }
 
-  // Form submit
   const form      = document.getElementById('drsForm');
   const submitBtn = document.getElementById('submitBtn');
   const loading   = document.getElementById('loading');
@@ -580,34 +578,36 @@
 
     loading.style.display = 'none';
 
-    // Verdict Banner & Auto Color Badge
     const fc     = data.final_call;
     const banner = document.getElementById('verdictBanner');
-    const icons  = { 'OUT': '🔴', 'NOT OUT': '🟢', "UMPIRE'S CALL": '🟡' };
-    banner.className = 'verdict-banner ' + (fc === 'OUT' ? 'out' : fc === 'NOT OUT' ? 'notout' : 'umpire');
-    document.getElementById('verdictIcon').textContent = icons[fc] || '⚪';
+    const icons  = { 'OUT': '🔴', 'NOT OUT': '🟢', "UMPIRE'S CALL": '🟡', "NO BALL DETECTED": '⚠️' };
+    
+    let bannerClass = 'noball';
+    if (fc === 'OUT') bannerClass = 'out';
+    else if (fc === 'NOT OUT') bannerClass = 'notout';
+    else if (fc === "UMPIRE'S CALL") bannerClass = 'umpire';
+
+    banner.className = 'verdict-banner ' + bannerClass;
+    document.getElementById('verdictIcon').textContent = icons[fc] || '⚠️';
     document.getElementById('verdictText').textContent = fc;
 
     const detectedColor = (data.detected_color || 'auto').toUpperCase();
     document.getElementById('autoColorBadge').textContent = `Auto-Detected Ball: ${detectedColor}`;
 
-    // Stats
     const fmt = s => (s || '').replace(/_/g, ' ');
     document.getElementById('statPitching').textContent = fmt(data.pitching_zone);
     document.getElementById('statImpact').textContent   = fmt(data.impact_zone);
     document.getElementById('statWickets').textContent  = fmt(data.wicket_verdict);
 
     const dStats = data.delivery_stats || {};
-    document.getElementById('speedBadge').textContent = dStats.speed ? `${dStats.speed} ${dStats.speed_unit}` : '134 km/h';
+    document.getElementById('speedBadge').textContent = dStats.speed ? `${dStats.speed} ${dStats.speed_unit}` : '—';
 
-    // 3D Physics
     const p3d = data.physics_3d || {};
-    document.getElementById('stat3DHeight').textContent = p3d.height_verdict ? fmt(p3d.height_verdict) : 'HITTING';
+    document.getElementById('stat3DHeight').textContent = p3d.height_verdict ? fmt(p3d.height_verdict) : '—';
     document.getElementById('physPitchY').textContent = p3d.pitch_3d_m ? `${p3d.pitch_3d_m[1].toFixed(1)} m` : '—';
     document.getElementById('physImpactY').textContent = p3d.impact_3d_m ? `${p3d.impact_3d_m[1].toFixed(1)} m` : '—';
     document.getElementById('physStumpZ').textContent = p3d.stump_z_m !== undefined ? `${p3d.stump_z_m.toFixed(2)} m` : '—';
 
-    // AI Verdict
     const ai = data.ai_verdict || {};
     document.getElementById('aiSummary').textContent   = (ai.summary   || '').replace(/\*\*/g, '');
     document.getElementById('aiReasoning').textContent = (ai.reasoning || '').replace(/\*\*/g, '');
@@ -617,16 +617,18 @@
       document.getElementById('confBar').style.width = conf + '%';
     }, 100);
 
-    // Media Sources
     document.getElementById('resultVideo').src = `/outputs/${data.job_id}/tracked_output.mp4`;
-    document.getElementById('resultImage').src = `/outputs/${data.job_id}/drs_decision.png`;
+    if (data.decision_image) {
+      document.getElementById('resultImage').src = `/outputs/${data.job_id}/drs_decision.png`;
+    }
 
-    // Session
-    sess[fc] = (sess[fc] || 0) + 1;
-    document.getElementById('sOut').textContent    = sess['OUT'];
-    document.getElementById('sNotOut').textContent = sess['NOT OUT'];
-    document.getElementById('sUmpire').textContent = sess["UMPIRE'S CALL"];
-    document.getElementById('sessionBox').style.display = 'block';
+    if (fc !== "NO BALL DETECTED") {
+      sess[fc] = (sess[fc] || 0) + 1;
+      document.getElementById('sOut').textContent    = sess['OUT'] || 0;
+      document.getElementById('sNotOut').textContent = sess['NOT OUT'] || 0;
+      document.getElementById('sUmpire').textContent = sess["UMPIRE'S CALL"] || 0;
+      document.getElementById('sessionBox').style.display = 'block';
+    }
 
     results.style.display = 'block';
     submitBtn.disabled = false;

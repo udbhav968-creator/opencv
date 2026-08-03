@@ -5,16 +5,15 @@ Runs the full Real DRS pipeline end-to-end on a video file:
 
     1. Read video frame by frame.
     2. Preprocess frame (frame_preprocessor.py).
-    3. Auto-detect ball color if requested (auto_color_detector.py).
-    4. Detect the ball each frame (ball_detector.py) & score confidence (confidence_scorer.py).
+    3. Auto-detect ball color (auto_color_detector.py).
+    4. Detect ball using 4-Model Ensemble (multi_model_detector.py).
     5. Smooth/track across frames (tracker.py).
     6. Compute 3D physics trajectory & height clearance (physics_3d_predictor.py).
     7. Run UltraEdge snickometer simulation (ultraedge.py).
-    8. Generate broadcast TV Hawk-Eye DRS graphic (hawk_eye_visualizer.py) & JSON report.
+    8. Render 4K Broadcast TV Hawk-Eye DRS graphic (hawk_eye_visualizer.py) & JSON report.
 
 Usage:
     python main.py --input sample_input.mp4 --output_dir output
-    python main.py --input sample_input.mp4 --color auto
 """
 
 import argparse
@@ -27,16 +26,15 @@ except ImportError:
     from drs_opencv import config as cfg
 
 try:
-    from yolo_detector import HybridBallDetector
+    from multi_model_detector import MultiModelBallDetector
 except ImportError:
-    from drs_opencv.yolo_detector import HybridBallDetector
+    from drs_opencv.multi_model_detector import MultiModelBallDetector
 
 try:
     from auto_color_detector import AutoColorDetector
 except ImportError:
     from drs_opencv.auto_color_detector import AutoColorDetector
 
-from ball_detector import BallDetector
 from tracker import BallTracker
 from frame_preprocessor import FramePreprocessor
 from confidence_scorer import DetectionConfidenceScorer
@@ -52,7 +50,7 @@ import visualizer
 def run_pipeline(input_path, output_dir, color_mode="auto"):
     os.makedirs(output_dir, exist_ok=True)
 
-    # Step 1: Auto Ball Color Detection if requested
+    # Step 1: Auto Ball Color Detection
     detected_color = color_mode
     auto_conf = 1.0
     if color_mode == "auto" or not color_mode:
@@ -69,7 +67,7 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
     src_fps = cap.get(cv2.CAP_PROP_FPS) or cfg.FPS
 
     preprocessor = FramePreprocessor()
-    detector = HybridBallDetector(color_mode=detected_color)
+    detector = MultiModelBallDetector(color_mode=detected_color)
     confidence_scorer = DetectionConfidenceScorer()
     tracker = BallTracker()
 
@@ -80,7 +78,7 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
     frame_index = 0
     frames_with_ball = 0
 
-    print(f"Processing video frames through Real DRS Pipeline (Color Mode: {detected_color.upper()})...")
+    print(f"Processing video through ICC Multi-Model DRS Pipeline ({detected_color.upper()})...")
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -94,7 +92,7 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
 
         clean_frame = preprocessor.process(proc_frame)
 
-        # Detect ball
+        # 4-Model Ensemble Detection
         raw_det = detector.detect(clean_frame)
         detection = None
         if raw_det is not None:
@@ -122,22 +120,12 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
     writer.release()
 
     print(f"Frames processed: {frame_index}, frames with ball detected: {frames_with_ball}")
-    print(f"Annotated tracking video saved to: {tracking_video_path}")
 
     # ---- 2D Trajectory analysis & legacy zones ----
     valid_points = tracker.get_valid_trajectory_points()
     prediction_2d = tp.predict_trajectory(valid_points)
 
     decision_image_path = os.path.join(output_dir, "drs_decision.png")
-
-    if not prediction_2d.has_prediction:
-        print("Not enough confident ball detections to compute trajectory prediction.")
-        return {
-            "success": False,
-            "tracking_video": tracking_video_path,
-            "decision_image": None,
-            "detected_color": detected_color,
-        }
 
     pitching_zone = stump_zone.classify_lateral_zone(*prediction_2d.pitch_point)
     impact_zone = stump_zone.classify_lateral_zone(*prediction_2d.impact_point)
@@ -167,7 +155,6 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
     if prediction_3d.has_prediction:
         print(f"3D Stump Height: {prediction_3d.stump_z:.2f}m (Verdict: {prediction_3d.height_verdict})")
     print(f"Final call    : {final_call}")
-    print(f"Hawk-Eye Decision graphic saved to: {decision_image_path}")
 
     class DummyZone:
         def __init__(self, val):
@@ -188,13 +175,10 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Real DRS (Decision Review System) Hawk-Eye Simulation Pipeline.")
+    parser = argparse.ArgumentParser(description="Real DRS Hawk-Eye Simulation Pipeline.")
     parser.add_argument("--input", required=True, help="Path to input video")
     parser.add_argument("--output_dir", default="output", help="Directory to save results")
-    parser.add_argument(
-        "--color", choices=["auto", "red", "white", "pink", "yellow", "orange"], default="auto",
-        help="Ball colour mode (auto = automatic color detection)",
-    )
+    parser.add_argument("--color", default="auto", help="Ball colour mode")
     args = parser.parse_args()
 
     run_pipeline(args.input, args.output_dir, color_mode=args.color)

@@ -21,6 +21,12 @@ outputs/
 uploads/
 output/
 
+# Dataset generated images & labels
+drs_opencv/dataset/images/
+drs_opencv/dataset/labels/
+output_test/
+scratch/
+
 # OS
 .DS_Store
 Thumbs.db

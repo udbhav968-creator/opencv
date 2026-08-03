@@ -3,9 +3,9 @@ ball_detector.py
 -----------------
 ICC Pro-Level Cricket Ball Detector for Real User-Uploaded Video Footage.
 
-Detects red, white, and pink cricket balls in real-world broadcast & phone videos.
-Features adaptive resolution scaling, multi-pass color thresholding, and
-motion-blurred contour geometry estimation.
+Detects red, white, pink, yellow, and orange cricket balls in real-world broadcast & phone videos.
+Features adaptive resolution scaling, multi-pass color thresholding, auto-color mode,
+and motion-blurred contour geometry estimation.
 """
 
 import cv2
@@ -17,11 +17,11 @@ except ImportError:
 
 
 class BallDetector:
-    def __init__(self, color_mode="red"):
+    def __init__(self, color_mode="auto"):
         """
-        color_mode: "red", "white", or "pink" - supports all cricket match formats
+        color_mode: "auto", "red", "white", "pink", "yellow", or "orange"
         """
-        self.color_mode = color_mode.lower()
+        self.color_mode = color_mode.lower() if color_mode else "auto"
 
     def _color_mask(self, hsv_frame):
         if self.color_mode == "white":
@@ -31,10 +31,29 @@ class BallDetector:
                 np.array(cfg.WHITE_BALL_UPPER),
             )
         elif self.color_mode == "pink":
-            # Pink ball HSV range (Day-Night Test)
             pink_lower = np.array([140, 50, 100], dtype=np.uint8)
             pink_upper = np.array([175, 255, 255], dtype=np.uint8)
             mask = cv2.inRange(hsv_frame, pink_lower, pink_upper)
+        elif self.color_mode == "yellow":
+            yellow_lower = np.array([20, 80, 100], dtype=np.uint8)
+            yellow_upper = np.array([35, 255, 255], dtype=np.uint8)
+            mask = cv2.inRange(hsv_frame, yellow_lower, yellow_upper)
+        elif self.color_mode == "orange":
+            orange_lower = np.array([10, 100, 100], dtype=np.uint8)
+            orange_upper = np.array([22, 255, 255], dtype=np.uint8)
+            mask = cv2.inRange(hsv_frame, orange_lower, orange_upper)
+        elif self.color_mode == "auto":
+            # Multi-channel union mask for spontaneous universal detection
+            mask1 = cv2.inRange(hsv_frame, np.array(cfg.RED_BALL_LOWER_1), np.array(cfg.RED_BALL_UPPER_1))
+            mask2 = cv2.inRange(hsv_frame, np.array(cfg.RED_BALL_LOWER_2), np.array(cfg.RED_BALL_UPPER_2))
+            mask_white = cv2.inRange(hsv_frame, np.array(cfg.WHITE_BALL_LOWER), np.array(cfg.WHITE_BALL_UPPER))
+            mask_pink = cv2.inRange(hsv_frame, np.array([140, 50, 100]), np.array([175, 255, 255]))
+            mask_yellow = cv2.inRange(hsv_frame, np.array([20, 80, 100]), np.array([35, 255, 255]))
+            
+            mask = cv2.bitwise_or(mask1, mask2)
+            mask = cv2.bitwise_or(mask, mask_white)
+            mask = cv2.bitwise_or(mask, mask_pink)
+            mask = cv2.bitwise_or(mask, mask_yellow)
         else:
             # Red ball HSV ranges (Standard Test)
             mask1 = cv2.inRange(
@@ -65,7 +84,6 @@ class BallDetector:
 
         h, w = frame_bgr.shape[:2]
 
-        # Resolution scaling factor relative to 1280x720 baseline
         scale = max(0.5, w / 1280.0)
         min_radius = max(2, int(cfg.MIN_BALL_RADIUS * scale))
         max_radius = max(25, int(cfg.MAX_BALL_RADIUS * scale * 2.5))
@@ -89,12 +107,11 @@ class BallDetector:
             if radius < min_radius or radius > max_radius:
                 continue
 
-            # Circularity metric with support for motion blur elongation
             circle_area = np.pi * (radius ** 2)
             if circle_area == 0:
                 continue
             circularity = area / circle_area
-            if circularity < 0.40:  # Relaxed for motion-blurred high-speed deliveries
+            if circularity < 0.38:  # Extended for high-speed motion blur
                 continue
 
             score = circularity * area
@@ -105,7 +122,7 @@ class BallDetector:
         if best is not None:
             return best
 
-        # Second Pass: Hough Circles on Masked Region for fast-moving blurred balls
+        # Hough Circles fallback
         gray = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)
         masked_gray = cv2.bitwise_and(gray, gray, mask=mask)
         masked_gray = cv2.GaussianBlur(masked_gray, (5, 5), 0)

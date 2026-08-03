@@ -5,15 +5,16 @@ Runs the full Real DRS pipeline end-to-end on a video file:
 
     1. Read video frame by frame.
     2. Preprocess frame (frame_preprocessor.py).
-    3. Detect the ball each frame (ball_detector.py) & score confidence (confidence_scorer.py).
-    4. Smooth/track across frames (tracker.py).
-    5. Compute 3D physics trajectory & height clearance (physics_3d_predictor.py).
-    6. Run UltraEdge snickometer simulation (ultraedge.py).
-    7. Generate broadcast TV Hawk-Eye DRS graphic (hawk_eye_visualizer.py) & JSON report.
+    3. Auto-detect ball color if requested (auto_color_detector.py).
+    4. Detect the ball each frame (ball_detector.py) & score confidence (confidence_scorer.py).
+    5. Smooth/track across frames (tracker.py).
+    6. Compute 3D physics trajectory & height clearance (physics_3d_predictor.py).
+    7. Run UltraEdge snickometer simulation (ultraedge.py).
+    8. Generate broadcast TV Hawk-Eye DRS graphic (hawk_eye_visualizer.py) & JSON report.
 
 Usage:
     python main.py --input sample_input.mp4 --output_dir output
-    python main.py --input sample_input.mp4 --color white
+    python main.py --input sample_input.mp4 --color auto
 """
 
 import argparse
@@ -29,6 +30,12 @@ try:
     from yolo_detector import HybridBallDetector
 except ImportError:
     from drs_opencv.yolo_detector import HybridBallDetector
+
+try:
+    from auto_color_detector import AutoColorDetector
+except ImportError:
+    from drs_opencv.auto_color_detector import AutoColorDetector
+
 from ball_detector import BallDetector
 from tracker import BallTracker
 from frame_preprocessor import FramePreprocessor
@@ -42,8 +49,16 @@ import stump_zone
 import visualizer
 
 
-def run_pipeline(input_path, output_dir, color_mode="red"):
+def run_pipeline(input_path, output_dir, color_mode="auto"):
     os.makedirs(output_dir, exist_ok=True)
+
+    # Step 1: Auto Ball Color Detection if requested
+    detected_color = color_mode
+    auto_conf = 1.0
+    if color_mode == "auto" or not color_mode:
+        auto_detector = AutoColorDetector()
+        detected_color, auto_conf = auto_detector.detect_ball_color(input_path)
+        print(f"[DRS Engine] Auto-Detected Ball Color: {detected_color.upper()} (Confidence: {auto_conf})")
 
     cap = cv2.VideoCapture(input_path)
     if not cap.isOpened():
@@ -54,7 +69,7 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
     src_fps = cap.get(cv2.CAP_PROP_FPS) or cfg.FPS
 
     preprocessor = FramePreprocessor()
-    detector = HybridBallDetector(color_mode=color_mode)
+    detector = HybridBallDetector(color_mode=detected_color)
     confidence_scorer = DetectionConfidenceScorer()
     tracker = BallTracker()
 
@@ -65,7 +80,7 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
     frame_index = 0
     frames_with_ball = 0
 
-    print("Processing video frames through Real DRS Pipeline...")
+    print(f"Processing video frames through Real DRS Pipeline (Color Mode: {detected_color.upper()})...")
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -73,10 +88,11 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
 
         # Resize to working resolution
         if (src_w, src_h) != (cfg.FRAME_WIDTH, cfg.FRAME_HEIGHT):
-            frame = cv2.resize(frame, (cfg.FRAME_WIDTH, cfg.FRAME_HEIGHT))
+            proc_frame = cv2.resize(frame, (cfg.FRAME_WIDTH, cfg.FRAME_HEIGHT))
+        else:
+            proc_frame = frame
 
-        # Preprocess frame
-        clean_frame = preprocessor.process(frame)
+        clean_frame = preprocessor.process(proc_frame)
 
         # Detect ball
         raw_det = detector.detect(clean_frame)
@@ -120,6 +136,7 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
             "success": False,
             "tracking_video": tracking_video_path,
             "decision_image": None,
+            "detected_color": detected_color,
         }
 
     pitching_zone = stump_zone.classify_lateral_zone(*prediction_2d.pitch_point)
@@ -166,6 +183,7 @@ def run_pipeline(input_path, output_dir, color_mode="red"):
         "final_call": final_call,
         "valid_points": valid_points,
         "prediction_3d": prediction_3d,
+        "detected_color": detected_color,
     }
 
 
@@ -174,8 +192,8 @@ def main():
     parser.add_argument("--input", required=True, help="Path to input video")
     parser.add_argument("--output_dir", default="output", help="Directory to save results")
     parser.add_argument(
-        "--color", choices=["red", "white"], default="red",
-        help="Ball colour to detect (red = default Test ball, white = limited-overs ball)",
+        "--color", choices=["auto", "red", "white", "pink", "yellow", "orange"], default="auto",
+        help="Ball colour mode (auto = automatic color detection)",
     )
     args = parser.parse_args()
 

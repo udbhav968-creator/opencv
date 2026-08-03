@@ -82,7 +82,7 @@ def process():
         return jsonify({'error': f'Pipeline unavailable: {import_error_message}'}), 500
 
     try:
-        color  = request.form.get('color', 'red')
+        color  = request.form.get('color', 'auto')
         action = request.form.get('action', 'upload')
 
         job_id  = str(uuid.uuid4())
@@ -138,37 +138,44 @@ def process():
                 'impact_3d_m':    [float(v) for v in pred_3d.impact_3d] if pred_3d.impact_3d is not None else None,
                 'stump_x_m':      float(pred_3d.stump_x) if pred_3d.stump_x is not None else 0.0,
                 'stump_z_m':      float(pred_3d.stump_z) if pred_3d.stump_z is not None else 0.0,
-                'height_verdict': str(pred_3d.height_verdict),
-                'lateral_verdict':str(pred_3d.lateral_verdict)
+                'lateral_verdict': str(pred_3d.lateral_verdict),
+                'height_verdict':  str(pred_3d.height_verdict),
+                'final_3d_verdict': str(pred_3d.final_3d_verdict),
             }
 
-        record = {
-            'job_id':         job_id,
-            'timestamp':      datetime.datetime.utcnow().isoformat() + 'Z',
-            'color':          color,
-            'pitching_zone':  pz_str,
-            'impact_zone':    iz_str,
-            'wicket_verdict': wv_str,
-            'final_call':     fc_str,
-            'confidence':     ai_info.get('confidence', 80),
+        response_payload = {
+            'job_id':          job_id,
+            'pitching_zone':   pz_str,
+            'impact_zone':     iz_str,
+            'wicket_verdict':  wv_str,
+            'final_call':      fc_str,
+            'ai_verdict':      ai_info,
+            'delivery_stats':  stats,
+            'physics_3d':      physics_info,
+            'detected_color':  results.get('detected_color', 'red'),
         }
-        _decision_log.append(record)
 
-        return jsonify({
-            'job_id':         job_id,
-            'pitching_zone':  pz_str,
-            'impact_zone':    iz_str,
-            'wicket_verdict': wv_str,
-            'final_call':     fc_str,
-            'ai_verdict':     ai_info,
-            'delivery_stats': stats,
-            'physics_3d':     physics_info,
+        _decision_log.append({
+            'job_id':     job_id,
+            'final_call': fc_str,
+            'timestamp':  datetime.datetime.utcnow().isoformat() + 'Z',
         })
 
+        return jsonify(response_payload)
+
     except Exception as exc:
+        traceback.print_exc()
         return jsonify({'error': str(exc)}), 500
 
 
 @app.route('/outputs/<job_id>/<filename>')
-def get_output(job_id, filename):
-    return send_file(os.path.join(app.config['OUTPUT_FOLDER'], job_id, filename))
+def serve_output(job_id, filename):
+    job_dir = os.path.join(app.config['OUTPUT_FOLDER'], job_id)
+    file_path = os.path.join(job_dir, filename)
+    if os.path.exists(file_path):
+        return send_file(file_path)
+    return jsonify({'error': 'File not found'}), 404
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

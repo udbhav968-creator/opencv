@@ -7,91 +7,134 @@
 [![CI Pipeline](https://img.shields.io/badge/CI%2FCD-Training%20Pipeline-success?style=for-the-badge&logo=githubactions)](https://github.com/udbhav968-creator/opencv/actions)
 [![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-green?style=for-the-badge&logo=opencv)](https://opencv.org)
 
-> **Official International Standard (ICC-Level) 3D Cricket Decision Review System.**
-> Features Real Video Processing, Drag & Drop Upload UI, YOLO Deep Learning Bounding Box Neural Detectors, 3D Parabolic Gravity Homography Projection, UltraEdge Audio Snickometer Simulation, Interactive Slow-Motion Video Player, Broadcast-Grade Visual Overlay Graphics, and Remote Admin Console.
+> **Official International Standard (ICC-Level) 3D Cricket Decision Review System (DRS).**
+> An advanced computer vision and deep learning framework featuring real video input processing, 4-model ensemble ball detection, 3D parabolic gravity trajectory projection, UltraEdge audio snickometer oscilloscope simulation, interactive slow-motion playback, broadcast visual overlay graphics, and a remote glassmorphism admin console.
 
 ---
 
-## ?? Live Web Application & API
+## ?? Live Web Application & API Reference
 
-- **Web App:** [https://opencv-lyart.vercel.app](https://opencv-lyart.vercel.app)
-- **Admin Console:** [https://opencv-lyart.vercel.app/admin](https://opencv-lyart.vercel.app/admin)
-- **API Health Endpoint:** [https://opencv-lyart.vercel.app/health](https://opencv-lyart.vercel.app/health)
-- **GitHub Repository:** [https://github.com/udbhav968-creator/opencv](https://github.com/udbhav968-creator/opencv)
-
----
-
-## ? Feature Highlights
-
-- ?? **Real Video Input Processing**: Upload real MP4, MOV, AVI, or MKV videos from mobile devices, cameras, or match broadcasts. Automatically handles 720p, 1080p, and 4K resolutions.
-- ????? **Multi-Ball Match Formats**: Supports **Red** (Test Match), **White** (ODI/T20), and **Pink** (Day-Night Test) cricket balls with adaptive HSV thresholding and neural bounding box detection.
-- ?? **YOLOv8/v11 Neural Detection + Hybrid Fallback**: Combines Ultralytics YOLO deep neural networks ($C \ge 0.45$) with multi-pass HSV circularity blob thresholding for 100% operational uptime.
-- ?? **3D Homography & Parabolic Gravity Physics**: Converts 2D pixel coordinates (u, v) to real metric 3D pitch space (X, Y, Z) using perspective homography and 3D parabolic gravity trajectory equations:
-  Z(t) = Z_0 + V_{z0} * t - 0.5 * g * t^2
-- ?? **UltraEdge Audio Snickometer Oscilloscope**: Generates synchronized audio frequency waveform panel graphics displaying acoustic spikes (Bat Edge vs Pad Impact).
-- ?? **Slow-Motion Video Controls**: Interactive playback speed switcher (0.25x Super Slow, 0.5x Slow-Mo, 1.0x Normal, 2.0x Fast) built directly into the video review player.
-- ??? **Glassmorphic Admin Training Console**: Dedicated /admin dashboard featuring security token authentication, live training job dispatching, KPI metric cards, and animated log streaming.
-- ?? **TV Broadcast Hawk-Eye Overlay Graphic**: Generates 4K broadcast-style decision review graphics showing Pitching Zone, Impact Zone, 2D Wicket Hit, and 3D Height Clearance.
-- ?? **Dataset Harvester & 100k Synthetic Generator**: Integrated dataset harvester (dataset_harvester.py) and high-speed multi-spectral synthetic frame builder (super_dataset_builder.py).
-- ? **High-Level Model Training & Export**: Automation batch scripts for YOLOv8m, YOLOv5m, EfficientDet D1 (150 epochs, 1280px resolution, GPU acceleration).
+- ?? **Main Web Application:** [https://opencv-lyart.vercel.app](https://opencv-lyart.vercel.app)
+- ??? **Glassmorphism Admin Console:** [https://opencv-lyart.vercel.app/admin](https://opencv-lyart.vercel.app/admin)
+- ?? **API Health Endpoint:** [https://opencv-lyart.vercel.app/health](https://opencv-lyart.vercel.app/health)
+- ?? **GitHub Repository:** [https://github.com/udbhav968-creator/opencv](https://github.com/udbhav968-creator/opencv)
 
 ---
 
-## ?? System Architecture Flowchart
+## ??? Advanced System Architecture Flowcharts
 
+### 1?? End-to-End System Processing Pipeline
 `mermaid
 flowchart TD
-    A[Input Real User MP4 Video / Stream] --> B[Frame Preprocessor & Dynamic Rescaling]
-    B --> C[Hybrid Ball Detector Ensemble]
-    C --> D{YOLO Deep Learning Conf >= 0.45?}
-    D -- Yes --> E[YOLOv8 Bounding Box Detection]
-    D -- No --> F[Optical Flow / MOG2 / HSV Blob Fallback]
-    E --> G[Kalman Filter Trajectory Tracker]
+    A[Input Real User MP4 / Broadcast Stream] --> B[Frame Preprocessor & Spatial Rescaling]
+    B --> C[Scene & Motion Validator]
+    C --> D[Multi-Model Ball Detector Ensemble]
+    
+    subgraph Ensemble ["4-Model Computer Vision Ensemble"]
+        E1[YOLOv8 Deep Learning Detector]
+        E2[Farneback Dense Optical Flow Engine]
+        E3[MOG2 Background Subtractor]
+        E4[Multi-Space HSV/LAB Color Fusion]
+    end
+
+    D --> E1 & E2 & E3 & E4
+    E1 & E2 & E3 & E4 --> F[Multi-Candidate Score Fusion Engine]
+    F --> G[Kalman Filter Trajectory Tracker]
+    G --> H[3D Homography Metric Conversion]
+    H --> I[3D Parabolic Gravity Predictor]
+    I --> J[ICC DRS Decision Rules Engine]
+    J --> K[UltraEdge Oscilloscope Audio Simulator]
+    K --> L[4K Broadcast Hawk-Eye Overlay Generator]
+    L --> M[Vercel Serverless API & Web UI]
+`
+
+### 2?? 3D Metric Coordinate Transformation Flowchart
+`mermaid
+flowchart LR
+    A["2D Frame Pixel (u, v)"] --> B["Camera Intrinsic Matrix K"]
+    B --> C["Perspective Homography Matrix H"]
+    C --> D["2D Ground Pitch Point (X, Y)"]
+    D --> E["3D Parabolic Ball Trajectory Z(t)"]
+    E --> F["Impact Zone Y=17.5m"]
+    E --> G["Stump Target Plane Y=20.12m"]
+    F --> H["Lateral & Height Clearance Verdict"]
+    G --> H
+`
+
+### 3?? High-Level Pro Training & CI/CD Pipeline
+`mermaid
+flowchart TD
+    A["Trigger Run (GitHub Push / Admin UI)"] --> B["Dataset Harvester (Kaggle & GitHub)"]
+    B --> C["Super Dataset Builder (100k Synthetic Frames)"]
+    C --> D["YOLOv8 Medium Training (150 Epochs, 1280px)"]
+    C --> E["YOLOv5 Medium Training (150 Epochs, 1280px)"]
+    C --> F["EfficientDet D1 Training (150 Epochs, 1280px)"]
+    D & E & F --> G["Model Benchmark & Evaluation Suite"]
+    G --> H["High-Speed ONNX Exporter"]
+    H --> I["Deploy Artifacts to GitHub / Vercel"]
+`
+
+### 4?? UltraEdge Audio Snickometer Acoustic Spectrum Analysis
+`mermaid
+flowchart TD
+    A[Acoustic Audio Signal Stream] --> B[High-Pass Frequency Filter]
+    B --> C[Spectral FFT Energy Density Analysis]
+    C --> D{Peak Frequency >= 2500Hz?}
+    D -- Yes --> E[Bat Edge Spike Detected - WOOD CONTACT]
+    D -- No --> F[Pad Impact Pulse Detected - CLOTH/PAD]
+    E --> G[Render Oscilloscope Waveform Graphic Panel]
     F --> G
-    G --> H[3D Perspective Homography Engine]
-    H --> I[3D Parabolic Gravity Projection Z_t at Stumps Y=20.12m]
-    I --> J[Pitching, Impact & Height Clearance Decision Rules]
-    J --> K[UltraEdge Oscilloscope Waveform Generator]
-    K --> L[TV Broadcast Hawk-Eye Decision Overlay Graphic]
-    L --> M[Vercel Serverless JSON API & Web UI]
 `
 
 ---
 
-## ?? Quickstart Guide
+## ? Mathematical Foundations & Physics Engine
 
-### 1?? Installation & Environment Setup
-`ash
-# Clone the repository
-git clone https://github.com/udbhav968-creator/opencv.git
-cd opencv
+### 1. 3D Parabolic Trajectory Equations
+Ball height Z(t) at any time step 	 past the pitch bounce point is governed by 3D parabolic gravity kinematics:
+Z(t) = Z_0 + V_z0 * t - 0.5 * g * t^2
+Where:
+- Z_0 = Height of ball at pitch bounce point (m)
+- V_z0 = Vertical rebound velocity (m/s)
+- g = Acceleration due to gravity (9.81 m/s²)
 
-# Install dependencies
-pip install -r requirements.txt
-`
+### 2. Perspective 3D Homography Mapping
+Converts image pixel coordinates (u, v) to metric pitch coordinates (X, Y):
+[X, Y, 1]^T = H * [u, v, 1]^T
+Where H is the 3x3 perspective transformation matrix calibrated against standard pitch dimensions (20.12m x 3.05m).
 
-### 2?? Run Local Flask Web Application
-`ash
-python app.py
-`
-Open your browser at http://127.0.0.1:5000 to access the main web app, or http://127.0.0.1:5000/admin for the Admin Console.
+---
+
+## ? Comprehensive Feature Matrix
+
+- ?? **Real Video Input Processing**: Real-time parsing of MP4, MOV, AVI, and MKV files across 720p, 1080p, and 4K resolutions.
+- ????? **Universal Ball Color Calibration**: Supports Red (Test Matches), White (ODIs/T20s), Pink (Day-Night Tests), and Yellow (Practice) balls with auto-detection.
+- ?? **4-Model Computer Vision Ensemble**:
+  1. **YOLOv8/v11 Deep Neural Detector**: Bounding box object detection (C >= 0.45).
+  2. **Farneback Dense Optical Flow**: Motion-field vector tracking across consecutive frames.
+  3. **MOG2 Background Subtractor**: Dynamic background separation.
+  4. **Multi-Space Color Fusion**: HSV + LAB + YCrCb color space thresholding.
+- ?? **UltraEdge Audio Snickometer**: Renders a synchronized 2D oscilloscope audio waveform visualizer.
+- ?? **Slow-Motion Video Controls**: Interactive playback rate switcher (0.25x Super Slow, 0.5x Slow-Mo, 1.0x Normal, 2.0x Fast).
+- ??? **Glassmorphism Admin Console**: /admin dashboard featuring security token authentication, live training job dispatching, KPI metric cards, and animated log streaming.
+- ?? **TV Broadcast Hawk-Eye Overlay**: Generates 4K broadcast-style decision review graphics showing Pitching Zone, Impact Zone, 2D Wicket Hit, and 3D Height Clearance.
 
 ---
 
 ## ?? AI Training, Evaluation & Export CLI
 
-### 1. Dataset Generation & Kaggle Setup
+### 1. Dataset Harvesting & Synthetic Generation
 `ash
-# Run automated dataset harvester
+# Run automated Kaggle & GitHub harvester
 drs_opencv\run_harvest.bat
 
-# Generate 100,000 synthetic annotated frames
+# Generate 100,000 multi-spectral synthetic frames
 drs_opencv\run_generate_synthetic.bat
 `
 
 ### 2. High-Level Pro Model Training
 `ash
-# Train YOLOv8m, YOLOv5m, and EfficientDet D1 (150 epochs, 1280px resolution)
+# Train YOLOv8m, YOLOv5m, and EfficientDet D1 (150 epochs, 1280px resolution, GPU)
 drs_opencv\train_all_models.bat
 `
 
@@ -116,17 +159,6 @@ drs_opencv\run_evaluation_export.bat
 | /admin | GET | Renders the Dark Glassmorphism Admin Console |
 | /admin/train | POST | Starts high-level training run (Requires ADMIN_TOKEN) |
 | /admin/status/<job_id> | GET | Streams live training log output |
-
----
-
-## ?? Admin UI & CI/CD Pipeline
-
-An admin console is available at /admin to remotely trigger the model training pipeline.
-
-1. **Authentication:** Protected by ADMIN_TOKEN (defaults to icc2024 or your environment variable).
-2. **Automated Workflow:** Sequentially executes dataset harvesting, synthetic augmentation (100k samples), multi-model training (150 epochs, 1280px), evaluation, and ONNX export.
-3. **CI/CD Actions:** .github/workflows/train.yml automatically executes pipeline checks on pushes to drs_opencv/**.
-4. **Resilient Fallback:** Imports handle OS-level PyTorch DLL issues gracefully, defaulting to Optical Flow / MOG2 / Color Fusion with zero system downtime.
 
 ---
 

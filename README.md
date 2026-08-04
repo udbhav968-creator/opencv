@@ -1,27 +1,20 @@
 # ?? Real DRS Hawk-Eye 3D — ICC Pro-Level AI Computer Vision System
 
-[![Live Vercel Production](https://img.shields.io/badge/Vercel-Live%20Production-success?style=for-the-badge&logo=vercel)](https://opencv-lyart.vercel.app)
-[![Python 3.12](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)](https://python.org)
-[![YOLOv8 AI](https://img.shields.io/badge/YOLOv8%2Fv11-Deep%20Learning-orange?style=for-the-badge&logo=ultralytics)](https://ultralytics.com)
-[![ONNX Runtime](https://img.shields.io/badge/ONNX-High%20Speed%20Inference-purple?style=for-the-badge&logo=onnx)](https://onnxruntime.ai)
-[![CI Pipeline](https://img.shields.io/badge/CI%2FCD-Training%20Pipeline-success?style=for-the-badge&logo=githubactions)](https://github.com/udbhav968-creator/opencv/actions)
-[![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-green?style=for-the-badge&logo=opencv)](https://opencv.org)
-
 > **Official International Standard (ICC-Level) 3D Cricket Decision Review System (DRS).**
 > An advanced computer vision and deep learning framework featuring real video input processing, 4-model ensemble ball detection, 3D parabolic gravity trajectory projection, UltraEdge audio snickometer oscilloscope simulation, interactive slow-motion playback, broadcast visual overlay graphics, and a remote glassmorphism admin console.
 
 ---
 
-## ?? Live Web Application & API Reference
+## ?? Live Application Links
 
-- ?? **Main Web Application:** [https://opencv-lyart.vercel.app](https://opencv-lyart.vercel.app)
-- ??? **Glassmorphism Admin Console:** [https://opencv-lyart.vercel.app/admin](https://opencv-lyart.vercel.app/admin)
-- ?? **API Health Endpoint:** [https://opencv-lyart.vercel.app/health](https://opencv-lyart.vercel.app/health)
-- ?? **GitHub Repository:** [https://github.com/udbhav968-creator/opencv](https://github.com/udbhav968-creator/opencv)
+- **Main Web Application:** [https://opencv-lyart.vercel.app](https://opencv-lyart.vercel.app)
+- **Glassmorphism Admin Console:** [https://opencv-lyart.vercel.app/admin](https://opencv-lyart.vercel.app/admin)
+- **API Health Endpoint:** [https://opencv-lyart.vercel.app/health](https://opencv-lyart.vercel.app/health)
+- **GitHub Repository:** [https://github.com/udbhav968-creator/opencv](https://github.com/udbhav968-creator/opencv)
 
 ---
 
-## ??? Advanced System Architecture Flowcharts
+## ??? System Architecture & High-Level Flowcharts
 
 ### 1?? End-to-End System Processing Pipeline
 `mermaid
@@ -118,6 +111,26 @@ Where H is the 3x3 perspective transformation matrix calibrated against standard
 - ?? **Slow-Motion Video Controls**: Interactive playback rate switcher (0.25x Super Slow, 0.5x Slow-Mo, 1.0x Normal, 2.0x Fast).
 - ??? **Glassmorphism Admin Console**: /admin dashboard featuring security token authentication, live training job dispatching, KPI metric cards, and animated log streaming.
 - ?? **TV Broadcast Hawk-Eye Overlay**: Generates 4K broadcast-style decision review graphics showing Pitching Zone, Impact Zone, 2D Wicket Hit, and 3D Height Clearance.
+
+---
+
+## ?? Quickstart Guide
+
+### 1?? Installation & Environment Setup
+`ash
+# Clone the repository
+git clone https://github.com/udbhav968-creator/opencv.git
+cd opencv
+
+# Install dependencies
+pip install -r requirements.txt
+`
+
+### 2?? Run Local Flask Web Application
+`ash
+python app.py
+`
+Open your browser at http://127.0.0.1:5000 to access the main web app, or http://127.0.0.1:5000/admin for the Admin Console.
 
 ---
 

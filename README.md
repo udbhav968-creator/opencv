@@ -4,6 +4,7 @@
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)](https://python.org)
 [![YOLOv8 AI](https://img.shields.io/badge/YOLOv8%2Fv11-Deep%20Learning-orange?style=for-the-badge&logo=ultralytics)](https://ultralytics.com)
 [![ONNX Runtime](https://img.shields.io/badge/ONNX-High%20Speed%20Inference-purple?style=for-the-badge&logo=onnx)](https://onnxruntime.ai)
+[![CI Pipeline](https://img.shields.io/badge/CI%2FCD-Training%20Pipeline-success?style=for-the-badge&logo=githubactions)](https://github.com/udbhav968-creator/opencv/actions)
 [![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-green?style=for-the-badge&logo=opencv)](https://opencv.org)
 
 > **Official International Standard (ICC-Level) 3D Cricket Decision Review System.**
@@ -115,6 +116,20 @@ python drs_opencv/export_model.py --format onnx --imgsz 640
 | `/outputs/<job_id>/<file>`| `GET` | Serves annotated tracking video or Hawk-Eye decision image |
 | `/api/history` | `GET` | Returns last 20 decision review records |
 | `/api/stats` | `GET` | Returns session totals (OUT, NOT OUT, UMPIRE'S CALL) |
+| `/admin` | `GET` | Renders the Admin Training Dashboard |
+| `/admin/train` | `POST` | Starts YOLO/EfficientDet training (Requires `ADMIN_TOKEN`) |
+| `/admin/status/<job_id>` | `GET` | Returns current training log |
+
+---
+
+## 🔒 Admin UI & Training Pipeline
+An admin UI is available at `/admin` to remotely trigger the model training pipeline.
+
+1. **Authentication:** The training endpoint is protected by a static token. Use `icc2024` (or your custom `ADMIN_TOKEN` environment variable) in the dashboard.
+2. **Batch Scripts:** The pipeline sequentially runs `run_harvest.bat` (dataset pulling), `run_generate_synthetic.bat` (synthetic data), `train_all_models.bat` (YOLOv8, YOLOv5, EfficientDet fallback), and `run_evaluation_export.bat` (ONNX export).
+3. **CI/CD:** The `.github/workflows/train.yml` GitHub action runs this automatically on pushes to `drs_opencv/**`.
+4. **Troubleshooting WinError 1114:** If you encounter `OSError: [WinError 1114] A dynamic link library (DLL) initialization routine failed` with ONNX Runtime on Windows, ensure you have the latest Visual C++ Redistributable installed.
+5. **GPU Setup:** Ensure CUDA is installed (`pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121`) for faster training.
 
 ---
 

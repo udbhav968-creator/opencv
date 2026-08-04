@@ -116,10 +116,15 @@ def main():
     parser.add_argument('--kaggle', type=str, default='cricket-ball-detection', help='Kaggle dataset name')
     parser.add_argument('--github', type=str, default='cricket ball dataset', help='GitHub search query')
     parser.add_argument('--dry-run', action='store_true', help='Only simulate actions')
+    parser.add_argument('--full', action='store_true', default=True, help='Run full harvest (default)')
     args = parser.parse_args()
+    
+    # If dry-run is specified, we override full
+    is_dry_run = args.dry_run
+    
     ensure_dirs()
-    harvest_kaggle(args.kaggle, dry_run=args.dry_run)
-    harvest_github(args.github, dry_run=args.dry_run)
+    harvest_kaggle(args.kaggle, dry_run=is_dry_run)
+    harvest_github(args.github, dry_run=is_dry_run)
 
 if __name__ == "__main__":
     main()

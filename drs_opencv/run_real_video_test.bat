@@ -1,0 +1,3 @@
+@echo off
+echo Running real video test against local server...
+curl -X POST http://127.0.0.1:5000/process -F "video=@%~dp0..\sample_input.mp4" -F "color=red" -F "action=upload"

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ICC Admin Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .btn { padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        .log { background-color: #f4f4f4; padding: 10px; height: 300px; overflow-y: scroll; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>ICC Model Training Admin Dashboard</h1>
+    <div>
+        <input type="text" id="token" placeholder="Admin Token" />
+        <button class="btn" onclick="startTraining()">Start Training</button>
+    </div>
+    <h2>Training Status</h2>
+    <div id="log" class="log"></div>
+    <script>
+        let currentJobId = null;
+        async function startTraining() {
+            const token = document.getElementById('token').value;
+            const res = await fetch('/admin/train', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                currentJobId = data.job_id;
+                document.getElementById('log').innerText = "Training started. Job ID: " + currentJobId;
+                setInterval(checkStatus, 2000);
+            } else {
+                alert(data.error);
+            }
+        }
+        async function checkStatus() {
+            if (!currentJobId) return;
+            const res = await fetch('/admin/status/' + currentJobId);
+            const data = await res.json();
+            if (res.ok) {
+                document.getElementById('log').innerText = data.log || "No logs yet.";
+            }
+        }
+    </script>
+</body>
+</html>

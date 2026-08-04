@@ -112,4 +112,8 @@ if __name__ == '__main__':
     parser.add_argument('--weights', type=str, default=None, help="Path to custom model weights")
     args = parser.parse_args()
 
-    evaluate_icc_model(args.weights)
+    results = evaluate_icc_model(args.weights)
+    import json
+    with open("evaluation_results.json", "w") as f:
+        json.dump(results, f, indent=4)
+    print("[Evaluate Model] Results saved to evaluation_results.json")

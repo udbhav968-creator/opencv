@@ -1,0 +1,48 @@
+name: Train YOLO Model
+
+on:
+  push:
+    paths:
+      - 'drs_opencv/**'
+      - 'requirements.txt'
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install ultralytics
+
+      - name: Run dataset harvest
+        run: |
+          drs_opencv\run_harvest.bat
+
+      - name: Generate synthetic dataset
+        run: |
+          drs_opencv\run_generate_synthetic.bat
+
+      - name: Train all models
+        run: |
+          drs_opencv\train_all_models.bat
+
+      - name: Export model
+        run: |
+          python drs_opencv/export_model.py
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: trained-model
+          path: drs_opencv/weights/*

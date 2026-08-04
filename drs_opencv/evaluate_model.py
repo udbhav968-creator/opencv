@@ -17,7 +17,7 @@ import numpy as np
 
 try:
     from ultralytics import YOLO
-except ImportError:
+except Exception:
     YOLO = None
 
 from dataset_manager import YAML_PATH, generate_synthetic_icc_dataset

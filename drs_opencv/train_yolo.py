@@ -14,8 +14,8 @@ import time
 
 try:
     from ultralytics import YOLO
-except ImportError:
-    print("[Train YOLO] Ultralytics module not found. Install via: pip install ultralytics")
+except Exception:
+    print("[Train YOLO] Ultralytics module unavailable or failed to load.")
     YOLO = None
 
 from dataset_manager import generate_synthetic_icc_dataset, YAML_PATH

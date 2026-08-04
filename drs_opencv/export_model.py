@@ -14,7 +14,7 @@ import argparse
 
 try:
     from ultralytics import YOLO
-except ImportError:
+except Exception:
     YOLO = None
 
 

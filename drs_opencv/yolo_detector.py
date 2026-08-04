@@ -23,7 +23,7 @@ YOLO_AVAILABLE = False
 try:
     from ultralytics import YOLO
     YOLO_AVAILABLE = True
-except ImportError:
+except Exception:
     YOLO_AVAILABLE = False
 
 

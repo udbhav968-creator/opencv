@@ -393,6 +393,7 @@
       <div class="view-switcher">
         <button class="view-btn active" onclick="switchView('cam1')">📹 Camera 1 (Live Tracking)</button>
         <button class="view-btn" onclick="switchView('cam2')">📊 Camera 2 (Hawk-Eye 3D)</button>
+        <button class="view-btn" onclick="switchView('ultraedge')">📈 UltraEdge Snickometer</button>
         <button class="view-btn" onclick="switchView('physics')">📐 3D Height Clearance</button>
       </div>
 
@@ -420,11 +421,23 @@
       <div id="viewCam1" class="media-card">
         <h4><span>📹 Camera 1 — Real-Time Live Tracking Video</span> <span style="color:var(--accent)" id="speedBadge">— km/h</span></h4>
         <video id="resultVideo" controls autoplay loop muted playsinline></video>
+        <div style="display:flex; gap:0.4rem; padding:0.6rem 1rem; background:rgba(15,23,42,0.9); border-top:1px solid var(--card-border); align-items:center;">
+          <span style="font-size:0.75rem; color:var(--muted); font-weight:600; margin-right:0.4rem;">Slow-Mo Playback:</span>
+          <button type="button" class="view-btn" style="flex:none; padding:0.3rem 0.6rem;" onclick="setSpeed(0.25)">0.25x Super Slow</button>
+          <button type="button" class="view-btn" style="flex:none; padding:0.3rem 0.6rem;" onclick="setSpeed(0.5)">0.5x Slow-Mo</button>
+          <button type="button" class="view-btn active" style="flex:none; padding:0.3rem 0.6rem;" onclick="setSpeed(1.0)">1.0x Normal</button>
+          <button type="button" class="view-btn" style="flex:none; padding:0.3rem 0.6rem;" onclick="setSpeed(2.0)">2.0x Fast</button>
+        </div>
       </div>
 
       <div id="viewCam2" class="media-card" style="display:none;">
         <h4><span>📊 Camera 2 — Hawk-Eye 3D Broadcast Graphic</span> <span style="color:var(--accent2)">4K Render</span></h4>
         <img id="resultImage" alt="Hawk-Eye 3D DRS Decision Graphic" />
+      </div>
+
+      <div id="viewUltraEdge" class="media-card" style="display:none;">
+        <h4><span>📈 UltraEdge Audio Snickometer Waveform</span> <span style="color:#22c55e">Acoustic Audio Oscilloscope</span></h4>
+        <img id="resultUltraEdge" alt="UltraEdge Audio Waveform Graphic" />
       </div>
 
       <div id="viewPhysics" class="physics-card" style="display:none; margin-top:0;">
@@ -520,10 +533,18 @@
     previewContainer.style.display = 'block';
   }
 
+  function setSpeed(rate) {
+    const video = document.getElementById('resultVideo');
+    if (video) {
+      video.playbackRate = rate;
+    }
+  }
+
   function switchView(viewName) {
     document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById('viewCam1').style.display = 'none';
     document.getElementById('viewCam2').style.display = 'none';
+    document.getElementById('viewUltraEdge').style.display = 'none';
     document.getElementById('viewPhysics').style.display = 'none';
 
     if (viewName === 'cam1') {
@@ -532,8 +553,11 @@
     } else if (viewName === 'cam2') {
       document.querySelectorAll('.view-btn')[1].classList.add('active');
       document.getElementById('viewCam2').style.display = 'block';
-    } else if (viewName === 'physics') {
+    } else if (viewName === 'ultraedge') {
       document.querySelectorAll('.view-btn')[2].classList.add('active');
+      document.getElementById('viewUltraEdge').style.display = 'block';
+    } else if (viewName === 'physics') {
+      document.querySelectorAll('.view-btn')[3].classList.add('active');
       document.getElementById('viewPhysics').style.display = 'block';
     }
   }
@@ -620,6 +644,9 @@
     document.getElementById('resultVideo').src = `/outputs/${data.job_id}/tracked_output.mp4`;
     if (data.decision_image) {
       document.getElementById('resultImage').src = `/outputs/${data.job_id}/drs_decision.png`;
+    }
+    if (data.ultraedge_image) {
+      document.getElementById('resultUltraEdge').src = `/outputs/${data.job_id}/ultraedge_waveform.png`;
     }
 
     if (fc !== "NO BALL DETECTED") {

@@ -178,6 +178,14 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
     )
     cv2.imwrite(decision_image_path, broadcast_canvas)
 
+    # ---- Render UltraEdge Snickometer Waveform Graphic ----
+    ultraedge_sim = UltraEdgeSimulator(n_frames=max(30, frame_index))
+    edge_detected = (wv_str == "UMPIRES_CALL" or final_call == "NOT OUT")
+    waveform_data = ultraedge_sim.generate_waveform(impact_frame=max(1, frame_index // 2), edge_event=edge_detected)
+    ultraedge_panel = ultraedge_sim.render_ultraedge_panel(waveform_data, current_frame_idx=frame_index // 2)
+    ultraedge_image_path = os.path.join(output_dir, "ultraedge_waveform.png")
+    cv2.imwrite(ultraedge_image_path, ultraedge_panel)
+
     print("---- REAL DRS HAWK-EYE RESULT ----")
     print(f"Pitching zone : {pz_str}")
     print(f"Impact zone   : {iz_str}")
@@ -191,6 +199,7 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
         "no_ball_detected": False,
         "tracking_video": tracking_video_path,
         "decision_image": decision_image_path,
+        "ultraedge_image": ultraedge_image_path,
         "pitching_zone": DummyZone(pz_str),
         "impact_zone": DummyZone(iz_str),
         "wicket_verdict": DummyZone(wv_str),

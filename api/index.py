@@ -196,6 +196,7 @@ def process():
             'physics_3d':      physics_info,
             'detected_color':  results.get('detected_color', 'red'),
             'no_ball_detected': results.get('no_ball_detected', False),
+            'ultraedge_image': 'ultraedge_waveform.png' if results.get('ultraedge_image') else None,
         }
 
         _decision_log.append({

@@ -165,6 +165,7 @@ def process():
         'ai_verdict':     ai_info,
         'delivery_stats': stats,
         'physics_3d':     physics_info,
+        'ultraedge_image': 'ultraedge_waveform.png' if results.get('ultraedge_image') else None,
     })
 
 

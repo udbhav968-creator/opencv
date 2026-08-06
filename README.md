@@ -207,15 +207,15 @@ To guarantee sub-pixel precision across all lighting conditions, camera angles, 
 
 ### 📐 3. Mathematical Kinematics & 3D Homography
 
-#### 3D Parabolic Gravity Equation
-Height $Z(t)$ past the pitch bounce point is modeled by 3D parabolic gravity kinematics:
-$$Z(t) = Z_0 + V_{z0} \cdot t - rac{1}{2} g t^2$$
-Where $Z_0$ is height at bounce, $V_{z0}$ is vertical rebound velocity, and $g = 9.81 	ext{ m/s}^2$.
+#### 3D Parabolic Gravity Kinematics Equation
+Height `Z(t)` past the pitch bounce point is modeled by 3D parabolic gravity kinematics:
+`Z(t) = Z_0 + V_z0 * t - 0.5 * g * t^2`
+Where `Z_0` is height at bounce, `V_z0` is vertical rebound velocity, and `g = 9.81 m/s^2`.
 
-#### 3D Perspective Homography Matrix
-Perspective transformation converting 2D pixel coordinates $(u, v)$ to 3D pitch metric coordinates $(X, Y)$:
-$$egin{bmatrix} X \ Y \ 1 \end{bmatrix} = \mathbf{H} egin{bmatrix} u \ v \ 1 \end{bmatrix}$$
-Where $\mathbf{H}$ is the $3 	imes 3$ matrix calibrated against standard pitch dimensions ($20.12	ext{m} 	imes 3.05	ext{m}$).
+#### 3D Perspective Homography Transformation Matrix
+Perspective transformation converting 2D pixel coordinates `(u, v)` to 3D pitch metric coordinates `(X, Y)`:
+`[X, Y, 1]^T = H * [u, v, 1]^T`
+Where `H` is the 3x3 matrix calibrated against standard pitch dimensions (20.12m length x 3.05m width).
 
 ---
 

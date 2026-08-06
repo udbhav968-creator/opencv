@@ -216,7 +216,19 @@ def process():
                 'final_3d_verdict': str(pred_3d.final_3d_verdict),
             }
 
-        response_payload = {
+        record = {
+            'job_id':         job_id,
+            'timestamp':      datetime.datetime.utcnow().isoformat() + 'Z',
+            'color':          color,
+            'pitching_zone':  pz_str,
+            'impact_zone':    iz_str,
+            'wicket_verdict': wv_str,
+            'final_call':     fc_str,
+            'confidence':     ai_info.get('confidence', 0),
+        }
+        _decision_log.append(record)
+
+        return jsonify({
             'job_id':          job_id,
             'pitching_zone':   pz_str,
             'impact_zone':     iz_str,
@@ -225,14 +237,6 @@ def process():
             'ai_verdict':      ai_info,
             'delivery_stats':  stats,
             'physics_3d':      physics_info,
-            'detected_color':  results.get('detected_color', 'red'),
-            'no_ball_detected': results.get('no_ball_detected', False),
-            'ultraedge_image': 'ultraedge_waveform.png' if results.get('ultraedge_image') else None,
-        }
-
-        _decision_log.append({
-            'job_id':     job_id,
-            'final_call': fc_str,
             'timestamp':  datetime.datetime.utcnow().isoformat() + 'Z',
         })
 

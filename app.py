@@ -146,7 +146,7 @@ def session_stats():
 
 @app.route('/process', methods=['POST'])
 def process():
-    color  = request.form.get('color', 'red')
+    color  = request.form.get('color') or request.form.get('color_mode') or 'auto'
     action = request.form.get('action', 'upload')
 
     job_id  = str(uuid.uuid4())
@@ -218,15 +218,17 @@ def process():
     _decision_log.append(record)
 
     return jsonify({
-        'job_id':         job_id,
-        'pitching_zone':  results['pitching_zone'].value,
-        'impact_zone':    results['impact_zone'].value,
-        'wicket_verdict': results['wicket_verdict'].value,
-        'final_call':     results['final_call'],
-        'ai_verdict':     ai_info,
-        'delivery_stats': stats,
-        'physics_3d':     physics_info,
-        'ultraedge_image': 'ultraedge_waveform.png' if results.get('ultraedge_image') else None,
+        'job_id':          job_id,
+        'pitching_zone':   results['pitching_zone'].value,
+        'impact_zone':     results['impact_zone'].value,
+        'wicket_verdict':  results['wicket_verdict'].value,
+        'final_call':      results['final_call'],
+        'ai_verdict':      ai_info,
+        'delivery_stats':  stats,
+        'physics_3d':      physics_info,
+        'annotated_video': f"/outputs/{job_id}/tracked_output.mp4",
+        'drs_image':        f"/outputs/{job_id}/drs_decision.png",
+        'ultraedge_image':  f"/outputs/{job_id}/ultraedge_waveform.png",
     })
 
 

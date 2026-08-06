@@ -1,296 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ICC DRS Pro Admin � AI Model Training & Pipeline Console</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --bg: #030712;
-            --surface: #0b1528;
-            --card: rgba(15, 23, 42, 0.75);
-            --card-border: rgba(56, 189, 248, 0.2);
-            --accent: #38bdf8;
-            --accent2: #818cf8;
-            --green: #22c55e;
-            --red: #ef4444;
-            --yellow: #facc15;
-            --text: #f8fafc;
-            --muted: #94a3b8;
-            --radius: 16px;
-        }
-        body {
-            font-family: 'Outfit', 'Inter', system-ui, sans-serif;
-            background: radial-gradient(circle at 50% 0%, #0f2342 0%, #030712 100%);
-            color: var(--text);
-            min-height: 100vh;
-            padding-bottom: 3rem;
-        }
-        header {
-            background: rgba(11, 21, 40, 0.85);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--card-border);
-            padding: 1.2rem 2.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .header-left { display: flex; align-items: center; gap: 1rem; }
-        .logo { font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); }
-        header h1 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .nav-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid var(--card-border);
-            transition: all 0.2s;
-        }
-        .nav-link:hover { background: rgba(56, 189, 248, 0.2); transform: translateY(-1px); }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICC DRS Pro Admin Console — Remote AI Model Pipeline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #030712;
+      --surface: #0b1528;
+      --card: rgba(15, 23, 42, 0.75);
+      --card-border: rgba(56, 189, 248, 0.2);
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #facc15;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --radius: 16px;
+    }
+    body {
+      font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #0f2342 0%, #030712 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 3rem;
+    }
+    header {
+      background: rgba(11, 21, 40, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .logo { font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .nav-link.active, .nav-link:hover { color: var(--accent); background: rgba(56, 189, 248, 0.15); }
 
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+    .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
 
-        /* KPI Banner */
-        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-bottom: 2rem; }
-        .kpi-card {
-            background: var(--card);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius);
-            padding: 1.25rem;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-        }
-        .kpi-card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.4rem; }
-        .kpi-card .val { font-size: 1.3rem; font-weight: 800; color: var(--text); }
-        .kpi-card .sub { font-size: 0.75rem; color: var(--accent); margin-top: 0.3rem; }
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+      margin-bottom: 2rem;
+    }
 
-        /* Control Panel Card */
-        .panel-card {
-            background: var(--card);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-        }
-        .panel-card h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 0.5rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .kpi { background: rgba(15, 23, 42, 0.9); border: 1px solid var(--card-border); border-radius: 12px; padding: 1rem; }
+    .kpi .lbl { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; margin-bottom: 0.3rem; }
+    .kpi .val { font-size: 1.2rem; font-weight: 800; color: var(--accent); }
 
-        .auth-bar { display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; }
-        .token-input {
-            flex: 1;
-            max-width: 400px;
-            padding: 0.85rem 1.2rem;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid var(--card-border);
-            border-radius: 10px;
-            color: var(--text);
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .token-input:focus { border-color: var(--accent); box-shadow: 0 0 12px rgba(56, 189, 248, 0.2); }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; font-size: 0.875rem; color: var(--muted); margin-bottom: 0.5rem; font-weight: 600; }
+    .input-field {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+    }
+    .btn-train {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      color: #030712;
+      font-weight: 900;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .btn-train:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4); }
 
-        .btn-train {
-            padding: 0.85rem 1.8rem;
-            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-            color: #030712;
-            font-weight: 800;
-            font-size: 0.95rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
-        }
-        .btn-train:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(56, 189, 248, 0.45); }
-        .btn-train:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-
-        /* Terminal Console */
-        .terminal-header {
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid var(--card-border);
-            border-bottom: none;
-            padding: 0.8rem 1.2rem;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .terminal-dots { display: flex; gap: 6px; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
-        .dot.r { background: #ef4444; } .dot.y { background: #facc15; } .dot.g { background: #22c55e; }
-        .terminal-title { font-size: 0.75rem; color: var(--muted); font-family: monospace; }
-
-        .terminal-box {
-            background: #020617;
-            border: 1px solid var(--card-border);
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
-            padding: 1.2rem;
-            height: 380px;
-            overflow-y: auto;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.85rem;
-            color: #38bdf8;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-        }
-    </style>
+    .terminal {
+      background: #020617;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: #38bdf8;
+      height: 320px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+  </style>
 </head>
 <body>
 
 <header>
-    <div class="header-left">
-        <div class="logo">?</div>
-        <div>
-            <h1>ICC Pro DRS Admin Console</h1>
-            <p>Remote Deep Learning Pipeline Controller & Monitoring Dashboard</p>
-        </div>
+  <div class="header-left">
+    <div class="logo">⚡</div>
+    <div>
+      <h1>DRS Admin Training Console</h1>
+      <p>Page 4 — Remote Pipeline Controller · Pro Model Training · Live Logs</p>
     </div>
-    <a href="/" class="nav-link">? Back to Live Hawk-Eye App</a>
+  </div>
+  <div style="display:flex; gap:0.6rem; align-items:center;">
+    <a href="/" class="nav-link">📹 DRS Review</a>
+    <a href="/analytics" class="nav-link">📊 Precision Matrix</a>
+    <a href="/records" class="nav-link">📁 Decision Records</a>
+    <a href="/admin" class="nav-link active">⚡ Admin Console</a>
+  </div>
 </header>
 
 <div class="container">
 
-    <!-- KPI Grid -->
-    <div class="kpi-grid">
-        <div class="kpi-card">
-            <div class="label">Target Models</div>
-            <div class="val">YOLOv8m / v5m</div>
-            <div class="sub">Medium High-Accuracy</div>
-        </div>
-        <div class="kpi-card">
-            <div class="label">Resolution</div>
-            <div class="val">1280 � 1280</div>
-            <div class="sub">Sub-pixel Ball Radius</div>
-        </div>
-        <div class="kpi-card">
-            <div class="label">Training Epochs</div>
-            <div class="val">150 Epochs</div>
-            <div class="sub">Full Pro Convergence</div>
-        </div>
-        <div class="kpi-card">
-            <div class="label">Backend Hardware</div>
-            <div class="val">CUDA GPU</div>
-            <div class="sub">Self-Hosted / CI Cloud</div>
-        </div>
+  <div class="card">
+    <h2 style="font-size:1.3rem; font-weight:800; color:var(--accent); margin-bottom:1rem;">🚀 Trigger Ultra-Deep Pro Model Training Engine</h2>
+    
+    <div class="grid-4">
+      <div class="kpi">
+        <div class="lbl">Architectures</div>
+        <div class="val">YOLOv8x / v5x</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Synthetic Data</div>
+        <div class="val">250,000 Frames</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Resolution</div>
+        <div class="val">1280px GPU</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Total Epochs</div>
+        <div class="val">300 Epochs</div>
+      </div>
     </div>
 
-    <!-- Control Panel -->
-    <div class="panel-card">
-        <h2>?? Launch Pipeline Training Run</h2>
-        <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
-            Enter your <strong>ADMIN_TOKEN</strong> authentication key to initiate dataset harvesting, synthetic augmentation (100k samples), multi-model neural training, and ONNX export.
-        </p>
-
-        <div class="auth-bar">
-            <input type="password" id="token" class="token-input" placeholder="Enter ADMIN_TOKEN (e.g. icc2024)" />
-            <button class="btn-train" id="trainBtn" onclick="startTraining()">
-                <span>? Start Pro Training Engine</span>
-            </button>
-        </div>
+    <div class="form-group">
+      <label for="adminToken">Admin Security Token</label>
+      <input type="password" id="adminToken" class="input-field" value="icc2024" placeholder="Enter ADMIN_TOKEN (default: icc2024)" />
     </div>
 
-    <!-- Live Log Console -->
-    <div class="terminal-header">
-        <div class="terminal-dots">
-            <div class="dot r"></div>
-            <div class="dot y"></div>
-            <div class="dot g"></div>
-        </div>
-        <div class="terminal-title">training_pipeline_runner.log</div>
-        <div id="statusBadge" style="font-size:0.75rem; color:var(--muted)">READY</div>
-    </div>
-    <div id="log" class="terminal-box">System initialized and ready for training command...</div>
+    <button type="button" class="btn-train" onclick="startTraining()">⚡ Start Pro Training Engine</button>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1.1rem; font-weight:800; color:var(--accent2); margin-bottom:0.8rem;">🖥️ Live Pipeline Execution Terminal Logs</h2>
+    <div id="terminalLog" class="terminal">Terminal ready. Click "Start Pro Training Engine" above to trigger high-level training run...</div>
+  </div>
 
 </div>
 
 <script>
-    let currentJobId = null;
-    let pollInterval = null;
+  let activeJobId = null;
+  let pollInterval = null;
 
-    async function startTraining() {
-        const token = document.getElementById('token').value;
-        const btn = document.getElementById('trainBtn');
-        const logBox = document.getElementById('log');
-        const badge = document.getElementById('statusBadge');
+  async function startTraining() {
+    const token = document.getElementById('adminToken').value;
+    const terminal = document.getElementById('terminalLog');
+    
+    terminal.textContent = "[SYSTEM] Sending authentication token and launching training pipeline...
+";
 
-        if (!token) {
-            alert('Please enter your ADMIN_TOKEN');
-            return;
-        }
+    try {
+      const res = await fetch('/admin/train', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token })
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.job_id) {
+        activeJobId = data.job_id;
+        terminal.textContent += `[SUCCESS] Job dispatched with ID: ${activeJobId}
+[SYSTEM] Polling live training logs...
 
-        btn.disabled = true;
-        badge.textContent = "LAUNCHING...";
-        badge.style.color = "var(--yellow)";
-        logBox.textContent = "[Console] Sending authenticated training request to server...\n";
-
-        try {
-            const res = await fetch('/admin/train', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token })
-            });
-
-            const data = await res.json();
-            if (res.ok) {
-                currentJobId = data.job_id;
-                badge.textContent = "RUNNING (Job: " + currentJobId.substring(0, 8) + "...)"
-                badge.style.color = "var(--green)";
-                logBox.textContent += "[Console] Training job successfully dispatched! Job ID: " + currentJobId + "\n";
-                logBox.textContent += "[Console] Streaming pipeline output logs below:\n\n";
-
-                if (pollInterval) clearInterval(pollInterval);
-                pollInterval = setInterval(checkStatus, 2000);
-            } else {
-                alert('Authentication or Launch Error: ' + (data.error || 'Unauthorized'));
-                btn.disabled = false;
-                badge.textContent = "FAILED";
-                badge.style.color = "var(--red)";
-            }
-        } catch (err) {
-            alert('Failed to connect to admin endpoint: ' + err.message);
-            btn.disabled = false;
-            badge.textContent = "ERROR";
-            badge.style.color = "var(--red)";
-        }
+`;
+        if (pollInterval) clearInterval(pollInterval);
+        pollInterval = setInterval(fetchLogs, 2000);
+      } else {
+        terminal.textContent += `[ERROR] ${data.error || 'Authentication failed or server error.'}
+`;
+      }
+    } catch (err) {
+      terminal.textContent += `[ERROR] Failed to connect to server: ${err}
+`;
     }
+  }
 
-    async function checkStatus() {
-        if (!currentJobId) return;
-        try {
-            const res = await fetch('/admin/status/' + currentJobId);
-            const data = await res.json();
-            if (res.ok && data.log) {
-                const logBox = document.getElementById('log');
-                logBox.textContent = data.log;
-                logBox.scrollTop = logBox.scrollHeight;
-            }
-        } catch (err) {
-            console.error("Poll error:", err);
-        }
+  async function fetchLogs() {
+    if (!activeJobId) return;
+    try {
+      const res = await fetch(`/admin/status/${activeJobId}`);
+      const data = await res.json();
+      if (data.log) {
+        const terminal = document.getElementById('terminalLog');
+        terminal.textContent = data.log;
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+    } catch (err) {
+      console.error(err);
     }
+  }
 </script>
 
 </body>

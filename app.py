@@ -43,6 +43,9 @@ _decision_log = []
 # Routes
 # ─────────────────────────────────────────────
 
+import subprocess
+import threading
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -54,6 +57,40 @@ def analytics_page():
 @app.route('/records')
 def records_page():
     return render_template('records.html')
+
+# --- Admin Training Endpoints ---
+ADMIN_TOKEN = os.environ.get('ADMIN_TOKEN', 'icc2024')
+_training_jobs = {}
+
+def run_training_job(job_id):
+    log_file = os.path.join(app.config['OUTPUT_FOLDER'], f"train_{job_id}.log")
+    script = os.path.join(drs_dir, "train_all_models.bat")
+    with open(log_file, "w") as f:
+        subprocess.Popen(script, stdout=f, stderr=subprocess.STDOUT, shell=True)
+
+@app.route('/admin')
+def admin_dashboard():
+    return render_template('admin.html')
+
+@app.route('/admin/train', methods=['POST'])
+def admin_train():
+    data = request.json or {}
+    if data.get('token') != ADMIN_TOKEN:
+        return jsonify({'error': 'Unauthorized'}), 401
+    job_id = str(uuid.uuid4())
+    _training_jobs[job_id] = "Running"
+    threading.Thread(target=run_training_job, args=(job_id,)).start()
+    return jsonify({'job_id': job_id})
+
+@app.route('/admin/status/<job_id>')
+def admin_status(job_id):
+    log_file = os.path.join(app.config['OUTPUT_FOLDER'], f"train_{job_id}.log")
+    if not os.path.exists(log_file):
+        return jsonify({'log': 'Job not found or log not created yet.'})
+    with open(log_file, "r") as f:
+        log_data = f.read()
+    return jsonify({'log': log_data})
+# --------------------------------
 
 
 @app.route('/health')

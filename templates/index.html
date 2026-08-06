@@ -3,43 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Real DRS -- Hawk-Eye 3D System (ICC Live Event Engine)</title>
-  <meta name="description" content="Official ICC Pro Real-Level DRS Hawk-Eye 3D Cricket Ball Tracking, RTSP Live Broadcast Streaming, Universal Auto-Color Detection, 3D Physics Height Clearance, and UltraEdge Snickometer Simulation." />
+  <title>🏆 ICC World Cup DRS Hawk-Eye 3D -- Grand Level Suite</title>
+  <meta name="description" content="Official Grand-Level ICC World Cup 3D Cricket Decision Review System (DRS). Features 360 Three.js Floodlight Stadium, Live Broadcast Ticker, Audio Chimes, AI TV Commentary, and PDF Reports." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #030712;
+      --bg: #020617;
       --surface: #0b1528;
-      --card: rgba(15, 23, 42, 0.75);
-      --card-border: rgba(56, 189, 248, 0.2);
+      --card: rgba(15, 23, 42, 0.85);
+      --card-border: rgba(56, 189, 248, 0.25);
       --accent: #38bdf8;
       --accent2: #818cf8;
+      --gold: #facc15;
       --green: #22c55e;
       --red: #ef4444;
-      --yellow: #facc15;
+      --pink: #ec4899;
       --text: #f8fafc;
       --muted: #94a3b8;
-      --radius: 16px;
-      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      --radius: 18px;
+      --shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.6);
     }
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at 50% 0%, #0f2342 0%, #030712 100%);
+      font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #0f2342 0%, #020617 100%);
       color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
-    header {
-      background: rgba(11, 21, 40, 0.85);
-      backdrop-filter: blur(16px);
+    
+    /* Grand Match Ticker Bar */
+    .ticker-bar {
+      background: linear-gradient(90deg, #0b1528 0%, #1e1b4b 50%, #0b1528 100%);
       border-bottom: 1px solid var(--card-border);
-      padding: 1.2rem 2rem;
+      padding: 0.4rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .ticker-item { display: flex; align-items: center; gap: 0.5rem; }
+    .gold-badge { background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #030712; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 900; }
+
+    header {
+      background: rgba(11, 21, 40, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 1.2rem 2.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -47,94 +63,101 @@
       top: 0;
       z-index: 100;
     }
-    .header-left { display: flex; align-items: center; gap: 1rem; cursor: pointer; }
-    .logo { font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); }
+    .header-left { display: flex; align-items: center; gap: 1.2rem; cursor: pointer; }
+    .logo { font-size: 2.5rem; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.5)); }
     header h1 {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       font-weight: 900;
-      background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
+      background: linear-gradient(90deg, #facc15, #38bdf8, #818cf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
     }
-    header p { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+    header p { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
 
     .nav-link {
       color: var(--muted);
       text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 0.4rem 0.8rem;
-      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 0.45rem 0.9rem;
+      border-radius: 10px;
       transition: all 0.2s;
     }
-    .nav-link.active, .nav-link:hover { color: var(--accent); background: rgba(56, 189, 248, 0.15); }
+    .nav-link.active, .nav-link:hover { color: var(--gold); background: rgba(250, 204, 21, 0.15); }
 
     .layout {
       display: grid;
-      grid-template-columns: 360px 1fr;
-      gap: 1.5rem;
-      max-width: 1400px;
-      margin: 1.5rem auto;
-      padding: 0 1.5rem;
+      grid-template-columns: 380px 1fr;
+      gap: 1.8rem;
+      max-width: 1450px;
+      margin: 1.8rem auto;
+      padding: 0 1.8rem;
       width: 100%;
       flex: 1;
     }
     .panel {
       background: var(--card);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
-      padding: 1.5rem;
+      padding: 1.6rem;
       box-shadow: var(--shadow);
     }
-    .btn-primary {
+    .btn-grand {
       width: 100%;
-      padding: 0.9rem;
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      padding: 1rem;
+      background: linear-gradient(135deg, #facc15 0%, #38bdf8 100%);
       color: #030712;
-      font-weight: 800;
-      font-size: 1rem;
+      font-weight: 900;
+      font-size: 1.05rem;
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      transition: all 0.2s;
+      transition: all 0.25s;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4); }
+    .btn-grand:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(250, 204, 21, 0.4); }
 
-    .view-switcher { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .view-switcher { display: flex; gap: 0.6rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
     .view-btn {
-      padding: 0.5rem 0.9rem;
-      background: rgba(15, 23, 42, 0.8);
+      padding: 0.55rem 1rem;
+      background: rgba(15, 23, 42, 0.9);
       border: 1px solid var(--card-border);
       color: var(--muted);
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.82rem;
+      font-weight: 700;
       transition: all 0.2s;
     }
-    .view-btn.active, .view-btn:hover { background: rgba(56, 189, 248, 0.2); color: var(--accent); border-color: var(--accent); }
+    .view-btn.active, .view-btn:hover { background: rgba(56, 189, 248, 0.25); color: var(--accent); border-color: var(--accent); }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
-    .stat-card { background: rgba(15, 23, 42, 0.9); border: 1px solid var(--card-border); border-radius: 12px; padding: 0.8rem; }
-    .stat-card .label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; }
-    .stat-card .value { font-size: 1rem; font-weight: 800; color: var(--text); margin-top: 2px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; margin-bottom: 1.4rem; }
+    .stat-card { background: rgba(15, 23, 42, 0.95); border: 1px solid var(--card-border); border-radius: 14px; padding: 0.9rem; }
+    .stat-card .label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; font-weight: 700; }
+    .stat-card .value { font-size: 1.1rem; font-weight: 900; color: var(--text); margin-top: 3px; }
 
-    .media-card { background: rgba(15, 23, 42, 0.9); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; }
-    .media-card h4 { padding: 0.8rem 1rem; font-size: 0.85rem; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; }
-    .media-card video, .media-card img { width: 100%; display: block; max-height: 440px; object-fit: contain; background: #000; }
+    .media-card { background: rgba(15, 23, 42, 0.95); border: 1px solid var(--card-border); border-radius: 14px; overflow: hidden; }
+    .media-card h4 { padding: 0.9rem 1.2rem; font-size: 0.9rem; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; font-weight: 800; }
+    .media-card video, .media-card img { width: 100%; display: block; max-height: 460px; object-fit: contain; background: #000; }
   </style>
 </head>
 <body>
 
+<div class="ticker-bar">
+  <div class="ticker-item"><span class="gold-badge">🏆 ICC WORLD CUP FINAL</span> IND 284/4 (45.2 Ov) vs AUS</div>
+  <div class="ticker-item"><span style="color:var(--gold)">DRS REVIEWS REMAINING:</span> IND 2 | AUS 1</div>
+  <div class="ticker-item"><span style="color:var(--accent)">SYSTEM:</span> HAWK-EYE 3D PRO SUITE ACTIVE</div>
+</div>
+
 <header>
   <div class="header-left" onclick="window.location.href='/'">
-    <div class="logo">🏏</div>
+    <div class="logo">🏆</div>
     <div>
-      <h1>Real DRS -- ICC Live Event Broadcast System</h1>
-      <p>RTSP Live Stream Ingestion · Dynamic Pitch Homography · Multi-View Broadcast Switcher</p>
+      <h1>ICC World Cup DRS Hawk-Eye 3D System</h1>
+      <p>Grand Level Edition · 360° Three.js Floodlight Stadium · Live RTSP Ingestion · AI Broadcast Voice</p>
     </div>
   </div>
   <div style="display:flex; gap:0.6rem; align-items:center;">
@@ -147,49 +170,49 @@
 
 <div class="layout">
   <div class="panel">
-    <h2 style="font-size:1.1rem; font-weight:800; color:var(--accent); margin-bottom:1rem;">🔴 Live Event Broadcast Stream</h2>
+    <h2 style="font-size:1.15rem; font-weight:900; color:var(--gold); margin-bottom:1rem;">📡 Live Event RTSP Broadcast Feed</h2>
     
-    <div style="margin-bottom:1rem;">
-      <label style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:0.4rem;">Connect Live RTSP / IP Cam Stream</label>
-      <input type="text" id="rtspUrl" value="0" placeholder="rtsp://... or 0 for USB Cam" style="width:100%; padding:0.6rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:8px;" />
-      <button type="button" class="view-btn" style="width:100%; margin-top:0.4rem;" onclick="connectLiveStream()">📡 Connect Broadcast Stream</button>
+    <div style="margin-bottom:1.2rem;">
+      <label style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:0.4rem; font-weight:600;">Connect Live Camera / RTSP IP Stream</label>
+      <input type="text" id="rtspUrl" value="0" placeholder="rtsp://... or 0 for USB Broadcast Cam" style="width:100%; padding:0.7rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:10px;" />
+      <button type="button" class="view-btn" style="width:100%; margin-top:0.5rem; font-weight:800;" onclick="connectLiveStream()">📡 Connect Broadcast Feed</button>
     </div>
 
-    <h2 style="font-size:1.1rem; font-weight:800; color:var(--accent); margin-top:1.5rem; margin-bottom:1rem;">🎥 DRS Video Upload & Processing</h2>
+    <h2 style="font-size:1.15rem; font-weight:900; color:var(--accent); margin-top:1.5rem; margin-bottom:1rem;">🎥 DRS Video Upload Review</h2>
     <form id="drsForm">
       <div style="margin-bottom:1rem;">
-        <label style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:0.4rem;">Select Ball Format</label>
-        <select id="colorMode" style="width:100%; padding:0.6rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:8px;">
+        <label style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:0.4rem; font-weight:600;">Select Match Ball Format</label>
+        <select id="colorMode" style="width:100%; padding:0.65rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:10px;">
           <option value="AUTO">✨ AUTO (Universal Auto-Detect)</option>
-          <option value="RED">🔴 RED (Test Matches)</option>
-          <option value="WHITE">⚪ WHITE (ODIs / T20s)</option>
-          <option value="PINK">🩷 PINK (Day-Night Tests)</option>
+          <option value="RED">🔴 RED (Test Match Format)</option>
+          <option value="WHITE">⚪ WHITE (ODI / T20 Format)</option>
+          <option value="PINK">🩷 PINK (Day-Night Test)</option>
           <option value="YELLOW">🟡 YELLOW / ORANGE (Practice)</option>
         </select>
       </div>
 
-      <div style="margin-bottom:1.2rem;">
+      <div style="margin-bottom:1.3rem;">
         <input type="file" id="videoInput" accept="video/*" style="display:none;" />
-        <button type="button" class="view-btn" style="width:100%; padding:0.8rem;" onclick="document.getElementById('videoInput').click()">📁 Choose MP4 Video File</button>
+        <button type="button" class="view-btn" style="width:100%; padding:0.85rem;" onclick="document.getElementById('videoInput').click()">📁 Choose MP4 Match Video</button>
         <div id="fileInfo" style="font-size:0.75rem; color:var(--muted); margin-top:0.4rem; text-align:center;">No file selected (will generate synthetic action)</div>
       </div>
 
-      <button type="submit" class="btn-primary" id="submitBtn">🚀 Process DRS Review</button>
+      <button type="submit" class="btn-grand" id="submitBtn">🏆 PROCESS DRS HAWK-EYE REVIEW</button>
     </form>
 
-    <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--card-border);">
-      <button type="button" class="view-btn" style="width:100%; margin-bottom:0.5rem;" onclick="speakVerdict()">🔊 Speak Verdict (AI Speech)</button>
-      <button type="button" class="view-btn" style="width:100%;" onclick="exportPDFReport()">📥 Export Report (PDF)</button>
+    <div style="margin-top:1.8rem; padding-top:1rem; border-top:1px solid var(--card-border);">
+      <button type="button" class="view-btn" style="width:100%; margin-bottom:0.6rem; font-weight:800;" onclick="speakVerdict()">🔊 Speak TV Umpire Announcement</button>
+      <button type="button" class="view-btn" style="width:100%; font-weight:800;" onclick="exportPDFReport()">📥 Export Official PDF Report</button>
     </div>
   </div>
 
   <div class="panel">
     <div class="view-switcher">
-      <button class="view-btn active" onclick="switchView('cam1')">📹 Camera 1 (Live Tracking)</button>
+      <button class="view-btn active" onclick="switchView('cam1')">📹 Camera 1 (Live Track)</button>
       <button class="view-btn" onclick="switchView('cam2')">📊 Camera 2 (Hawk-Eye 3D)</button>
-      <button class="view-btn" onclick="switchView('stadium3d')">🌐 360° 3D Stadium</button>
+      <button class="view-btn" onclick="switchView('stadium3d')">🏟️ 360° 3D Floodlight Stadium</button>
       <button class="view-btn" onclick="switchView('ultraedge')">📈 UltraEdge Snickometer</button>
-      <button class="view-btn" onclick="switchView('livestream')">🔴 Live Stream Feed</button>
+      <button class="view-btn" onclick="switchView('livestream')">🔴 Live Broadcast Feed</button>
     </div>
 
     <div class="stats-grid">
@@ -206,31 +229,31 @@
         <div class="value" id="statWickets">HITTING</div>
       </div>
       <div class="stat-card">
-        <div class="label">Final Decision</div>
+        <div class="label">Grand Final Call</div>
         <div class="value" style="color:var(--red)" id="verdictText">OUT</div>
       </div>
     </div>
 
     <div id="viewCam1" class="media-card">
-      <h4><span>📹 Camera 1 -- Real-Time Live Tracking Video</span> <span style="color:var(--accent)" id="speedBadge">142.5 km/h</span></h4>
+      <h4><span>📹 Camera 1 -- Real-Time Ball Track Video</span> <span style="color:var(--gold)" id="speedBadge">142.5 km/h</span></h4>
       <video id="resultVideo" controls autoplay loop muted playsinline></video>
-      <div style="display:flex; gap:0.4rem; padding:0.6rem 1rem; background:rgba(15,23,42,0.9); align-items:center;">
-        <span style="font-size:0.75rem; color:var(--muted);">Slow-Mo:</span>
-        <button type="button" class="view-btn" onclick="setSpeed(0.25)">0.25x</button>
-        <button type="button" class="view-btn" onclick="setSpeed(0.5)">0.5x</button>
-        <button type="button" class="view-btn active" onclick="setSpeed(1.0)">1.0x</button>
-        <button type="button" class="view-btn" onclick="setSpeed(2.0)">2.0x</button>
+      <div style="display:flex; gap:0.5rem; padding:0.7rem 1.2rem; background:rgba(15,23,42,0.95); align-items:center;">
+        <span style="font-size:0.78rem; color:var(--muted); font-weight:700;">Slow-Mo Controls:</span>
+        <button type="button" class="view-btn" onclick="setSpeed(0.25)">0.25x Super Slow</button>
+        <button type="button" class="view-btn" onclick="setSpeed(0.5)">0.5x Slow-Mo</button>
+        <button type="button" class="view-btn active" onclick="setSpeed(1.0)">1.0x Normal</button>
+        <button type="button" class="view-btn" onclick="setSpeed(2.0)">2.0x Fast</button>
       </div>
     </div>
 
     <div id="viewCam2" class="media-card" style="display:none;">
-      <h4><span>📊 Camera 2 -- Hawk-Eye 3D Broadcast Graphic</span> <span style="color:var(--accent2)">4K Render</span></h4>
+      <h4><span>📊 Camera 2 -- Hawk-Eye 3D Broadcast Card</span> <span style="color:var(--gold)">4K Ultra Render</span></h4>
       <img id="resultImage" alt="Hawk-Eye 3D Graphic" />
     </div>
 
     <div id="viewStadium3D" class="media-card" style="display:none;">
-      <h4><span>🌐 360° Interactive Three.js WebGL Stadium</span> <span style="color:#38bdf8">Drag Mouse to Orbit 360°</span></h4>
-      <div id="threeCanvasContainer" style="width:100%; height:420px; background:#020617;"></div>
+      <h4><span>🏟️ 360° Grand Floodlight Three.js Stadium</span> <span style="color:#38bdf8">Drag Mouse to Orbit 360°</span></h4>
+      <div id="threeCanvasContainer" style="width:100%; height:450px; background:#020617;"></div>
     </div>
 
     <div id="viewUltraEdge" class="media-card" style="display:none;">
@@ -272,7 +295,7 @@
     const pz = document.getElementById('statPitching').textContent;
     const iz = document.getElementById('statImpact').textContent;
     const wv = document.getElementById('statWickets').textContent;
-    const text = `Review complete. Pitching ${pz}, Impact ${iz}, Wickets ${wv}. Final Decision: ${fc}.`;
+    const text = `Official Review complete. Pitching ${pz}, Impact ${iz}, Wickets ${wv}. Final Decision: ${fc}.`;
     const utterance = new SpeechSynthesisUtterance(text);
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
@@ -297,7 +320,7 @@
     } else if (viewName === 'stadium3d') {
       document.querySelectorAll('.view-btn')[2].classList.add('active');
       document.getElementById('viewStadium3D').style.display = 'block';
-      init3DStadium();
+      initGrand3DStadium();
     } else if (viewName === 'ultraedge') {
       document.querySelectorAll('.view-btn')[3].classList.add('active');
       document.getElementById('viewUltraEdge').style.display = 'block';
@@ -309,14 +332,14 @@
 
   let threeScene, threeCamera, threeRenderer, threeControls, isThreeInitialized = false;
 
-  function init3DStadium() {
+  function initGrand3DStadium() {
     const container = document.getElementById('threeCanvasContainer');
     if (!container || isThreeInitialized || typeof THREE === 'undefined') return;
 
     threeScene = new THREE.Scene();
-    threeScene.background = new THREE.Color(0x030712);
+    threeScene.background = new THREE.Color(0x020617);
     threeCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-    threeCamera.position.set(0, 8, 18);
+    threeCamera.position.set(0, 10, 22);
 
     threeRenderer = new THREE.WebGLRenderer({ antialias: true });
     threeRenderer.setSize(container.clientWidth, container.clientHeight);
@@ -327,15 +350,26 @@
       threeControls.enableDamping = true;
     }
 
-    threeScene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const dirLight = new THREE.DirectionalLight(0x38bdf8, 0.8);
-    dirLight.position.set(10, 20, 10);
-    threeScene.add(dirLight);
+    threeScene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    
+    // Grand Stadium Floodlight Towers
+    for (let pos of [[-12, 18, -12], [12, 18, -12], [-12, 18, 12], [12, 18, 12]]) {
+      const spot = new THREE.SpotLight(0x38bdf8, 1.2);
+      spot.position.set(pos[0], pos[1], pos[2]);
+      threeScene.add(spot);
 
+      // Tower Cylinder
+      const tower = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.3, 18, 16), new THREE.MeshStandardMaterial({ color: 0x334155 }));
+      tower.position.set(pos[0], 9, pos[2]);
+      threeScene.add(tower);
+    }
+
+    // 3D Pitch Turf Mesh
     const pitchGeo = new THREE.BoxGeometry(3.5, 0.1, 20.12);
     const pitchMat = new THREE.MeshStandardMaterial({ color: 0x14532d, roughness: 0.8 });
     threeScene.add(new THREE.Mesh(pitchGeo, pitchMat));
 
+    // Stumps & Bails
     const stumpMat = new THREE.MeshStandardMaterial({ color: 0xfacc15 });
     for (let xOff of [-0.18, 0, 0.18]) {
       const stump = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.71, 16), stumpMat);
@@ -346,6 +380,7 @@
     bail.position.set(0, 0.76, 10);
     threeScene.add(bail);
 
+    // 3D Trajectory Tube with Particle Trail
     const curve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(0.2, 1.8, -10),
       new THREE.Vector3(0.1, 0.05, 3),
@@ -353,8 +388,8 @@
       new THREE.Vector3(0.0, 0.72, 10)
     ]);
     const tubeMesh = new THREE.Mesh(
-      new THREE.TubeGeometry(curve, 64, 0.04, 16, false),
-      new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xef4444, emissiveIntensity: 0.5 })
+      new THREE.TubeGeometry(curve, 64, 0.05, 16, false),
+      new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xef4444, emissiveIntensity: 0.7 })
     );
     threeScene.add(tubeMesh);
 
@@ -370,7 +405,7 @@
   document.getElementById('drsForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
-    btn.textContent = "⌛ Processing Review...";
+    btn.textContent = "⌛ PROCESSING GRAND HAWK-EYE REVIEW...";
     btn.disabled = true;
 
     const formData = new FormData();
@@ -395,7 +430,7 @@
     } catch (err) {
       console.error(err);
     } finally {
-      btn.textContent = "🚀 Process DRS Review";
+      btn.textContent = "🏆 PROCESS DRS HAWK-EYE REVIEW";
       btn.disabled = false;
     }
   });

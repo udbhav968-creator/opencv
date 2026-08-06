@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Real DRS — Hawk-Eye 3D System (Spontaneous Universal AI Engine)</title>
+  <title>Real DRS -- Hawk-Eye 3D System (Spontaneous Universal AI Engine)</title>
   <meta name="description" content="Official ICC Pro Real-Level DRS Hawk-Eye 3D Cricket Ball Tracking, Universal Auto-Color Detection, 3D Physics Height Clearance, and UltraEdge Snickometer Simulation." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
@@ -11,34 +11,31 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
   <style>
-    /* ── Reset & Modern Glassmorphism Cyber Tokens ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:        #030712;
-      --surface:   #0b1528;
-      --card:      rgba(15, 23, 42, 0.75);
+      --bg: #030712;
+      --surface: #0b1528;
+      --card: rgba(15, 23, 42, 0.75);
       --card-border: rgba(56, 189, 248, 0.2);
-      --accent:    #38bdf8;
-      --accent2:   #818cf8;
-      --green:     #22c55e;
-      --red:       #ef4444;
-      --yellow:    #facc15;
-      --pink:      #ec4899;
-      --text:      #f8fafc;
-      --muted:     #94a3b8;
-      --radius:    16px;
-      --shadow:    0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #facc15;
+      --pink: #ec4899;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --radius: 16px;
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     }
-
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background: radial-gradient(circle at 50% 0%, #0f2342 0%, #030712 100%);
       color: var(--text);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-
-    /* ── Header ── */
     header {
       background: rgba(11, 21, 40, 0.85);
       backdrop-filter: blur(16px);
@@ -47,101 +44,53 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .header-left { display: flex; align-items: center; gap: 1rem; }
-    .logo { font-size: 2.4rem; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); }
+    .header-left { display: flex; align-items: center; gap: 1rem; cursor: pointer; }
+    .logo { font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); }
     header h1 {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       font-weight: 900;
       background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: -0.02em;
     }
-    header p { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+    header p { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
 
-    .live-badge {
-      background: rgba(34, 197, 94, 0.15);
-      border: 1px solid rgba(34, 197, 94, 0.4);
-      color: #4ade80;
-      padding: 0.35rem 0.8rem;
-      border-radius: 99px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      transition: all 0.2s;
     }
-    .pulse-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } 100% { opacity: 1; transform: scale(1); } }
+    .nav-link.active, .nav-link:hover { color: var(--accent); background: rgba(56, 189, 248, 0.15); }
 
-    /* ── Layout ── */
     .layout {
       display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 0;
-      min-height: calc(100vh - 80px);
-    }
-
-    /* ── Sidebar ── */
-    .sidebar {
-      background: var(--surface);
-      border-right: 1px solid var(--card-border);
-      padding: 2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
+      grid-template-columns: 360px 1fr;
       gap: 1.5rem;
-    }
-
-    .sidebar h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 0.5rem; }
-
-    label { font-size: 0.875rem; color: var(--text); margin-bottom: .4rem; display: block; }
-    select {
+      max-width: 1400px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
       width: 100%;
-      padding: .75rem 1rem;
-      background: rgba(15, 23, 42, 0.9);
+      flex: 1;
+    }
+    .panel {
+      background: var(--card);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
-      color: var(--text);
-      font-size: 0.875rem;
-      outline: none;
-      transition: border-color .2s;
-    }
-    select:focus { border-color: var(--accent); box-shadow: 0 0 12px rgba(56, 189, 248, 0.2); }
-
-    /* Dropzone */
-    .dropzone {
-      border: 2px dashed var(--card-border);
-      background: rgba(15, 23, 42, 0.6);
-      border-radius: 14px;
-      padding: 1.4rem 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all .2s ease;
-    }
-    .dropzone:hover, .dropzone.dragover {
-      border-color: var(--accent);
-      background: rgba(56, 189, 248, 0.08);
-      transform: translateY(-2px);
-    }
-    .dropzone p { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
-    .dropzone strong { color: var(--accent); }
-
-    #videoPreviewContainer {
-      display: none;
-      margin-top: 0.8rem;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
       box-shadow: var(--shadow);
     }
-    #inputVideoPreview { width: 100%; display: block; max-height: 180px; background: #000; }
-    #videoMeta { font-size: 0.75rem; color: var(--muted); padding: 0.6rem; background: rgba(15, 23, 42, 0.9); display: flex; justify-content: space-between; }
-
     .btn-primary {
       width: 100%;
-      padding: 0.95rem;
+      padding: 0.9rem;
       background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
       color: #030712;
       font-weight: 800;
@@ -149,403 +98,154 @@
       border: none;
       border-radius: 12px;
       cursor: pointer;
-      transition: all .2s ease;
-      letter-spacing: .02em;
-      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
-    }
-    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(56, 189, 248, 0.45); }
-    .btn-primary:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
-
-    /* ── Main ── */
-    .main { padding: 2rem; overflow-y: auto; }
-
-    /* ── Viewport Switcher Controls ── */
-    .view-switcher {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-      background: rgba(15, 23, 42, 0.6);
-      padding: 0.4rem;
-      border-radius: 12px;
-      border: 1px solid var(--card-border);
-    }
-    .view-btn {
-      flex: 1;
-      padding: 0.65rem 0.8rem;
-      background: transparent;
-      border: none;
-      color: var(--muted);
-      font-weight: 600;
-      font-size: 0.825rem;
-      border-radius: 8px;
-      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       transition: all 0.2s;
     }
-    .view-btn.active {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(129, 140, 248, 0.2));
-      color: var(--accent);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4); }
 
-    /* ── Loading ── */
-    #loading { display: none; flex-direction: column; align-items: center; justify-content: center; height: 60vh; gap: 1.5rem; }
-    .spinner {
-      width: 56px; height: 56px;
-      border: 4px solid var(--card-border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #loading p { color: var(--muted); font-size: .95rem; }
-
-    /* ── Placeholder ── */
-    #placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; gap: 1rem; text-align: center; }
-    #placeholder .icon { font-size: 4rem; filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.3)); }
-    #placeholder p { color: var(--muted); font-size: .95rem; max-width: 480px; }
-
-    /* ── Results ── */
-    #results { display: none; }
-
-    /* verdict banner */
-    .verdict-banner {
-      border-radius: var(--radius);
-      padding: 1.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
-      font-size: 1.8rem;
-      font-weight: 900;
-      letter-spacing: .03em;
-      box-shadow: var(--shadow);
-    }
-    .verdict-banner.out    { background: linear-gradient(135deg,#7f1d1d,#ef4444); border: 1px solid #f87171; }
-    .verdict-banner.notout { background: linear-gradient(135deg,#14532d,#22c55e); border: 1px solid #4ade80; }
-    .verdict-banner.umpire { background: linear-gradient(135deg,#713f12,#facc15); color: #1a0a00; border: 1px solid #fde047; }
-    .verdict-banner.noball { background: linear-gradient(135deg,#1e293b,#475569); border: 1px solid #94a3b8; color: #f8fafc; }
-    .verdict-left { display: flex; align-items: center; gap: 1rem; }
-    .verdict-icon { font-size: 2.5rem; }
-    .auto-badge-pill { font-size: 0.75rem; padding: 0.3rem 0.8rem; background: rgba(0,0,0,0.3); border-radius: 99px; text-transform: uppercase; letter-spacing: 0.08em; }
-
-    /* stat grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .stat-card {
-      background: var(--card);
-      backdrop-filter: blur(12px);
+    .view-switcher { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .view-btn {
+      padding: 0.5rem 0.9rem;
+      background: rgba(15, 23, 42, 0.8);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 1.2rem;
-      text-align: center;
-      box-shadow: var(--shadow);
+      color: var(--muted);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.2s;
     }
-    .stat-card .label { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .5rem; }
-    .stat-card .value { font-size: 1.15rem; font-weight: 800; }
+    .view-btn.active, .view-btn:hover { background: rgba(56, 189, 248, 0.2); color: var(--accent); border-color: var(--accent); }
 
-    /* AI verdict card */
-    .ai-card {
-      background: var(--card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      box-shadow: var(--shadow);
-    }
-    .ai-card h3 { font-size: .75rem; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: .8rem; }
-    .ai-card p  { font-size: .95rem; color: var(--text); line-height: 1.7; }
-    .confidence-bar-wrap { margin-top: 1rem; }
-    .confidence-bar-wrap .label { font-size: .75rem; color: var(--muted); margin-bottom: .3rem; }
-    .confidence-bar { background: rgba(30, 58, 95, 0.6); border-radius: 99px; height: 10px; overflow: hidden; }
-    .confidence-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 1s ease; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
+    .stat-card { background: rgba(15, 23, 42, 0.9); border: 1px solid var(--card-border); border-radius: 12px; padding: 0.8rem; }
+    .stat-card .label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; }
+    .stat-card .value { font-size: 1rem; font-weight: 800; color: var(--text); margin-top: 2px; }
 
-    /* 3D Physics Card */
-    .physics-card {
-      background: var(--card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      box-shadow: var(--shadow);
-    }
-    .physics-card h3 { font-size: .75rem; text-transform: uppercase; letter-spacing: .12em; color: var(--accent2); margin-bottom: .8rem; }
-    .physics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center; }
-
-    /* media container & views */
-    .media-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
-    .media-card h4 { padding: .8rem 1rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; }
-    video, .media-card img { width: 100%; display: block; background: #000; }
-
-    /* responsive */
-    @media(max-width: 860px) {
-      .layout { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .physics-grid { grid-template-columns: 1fr; }
-    }
+    .media-card { background: rgba(15, 23, 42, 0.9); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; }
+    .media-card h4 { padding: 0.8rem 1rem; font-size: 0.85rem; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; }
+    .media-card video, .media-card img { width: 100%; display: block; max-height: 440px; object-fit: contain; background: #000; }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="header-left">
+  <div class="header-left" onclick="window.location.href='/'">
     <div class="logo">🏏</div>
     <div>
-      <h1>Real DRS — Spontaneous Universal AI System</h1>
+      <h1>Real DRS -- Spontaneous Universal AI System</h1>
       <p>Universal Auto-Color Detection · Dynamic Pitch Homography · Multi-View Broadcast Switcher</p>
     </div>
   </div>
   <div style="display:flex; gap:0.6rem; align-items:center;">
-    <a href="/" class="view-btn active" style="text-decoration:none; padding:0.4rem 0.8rem;">📹 DRS Review</a>
-    <a href="/analytics" class="view-btn" style="text-decoration:none; padding:0.4rem 0.8rem;">📊 Precision Matrix</a>
-    <a href="/records" class="view-btn" style="text-decoration:none; padding:0.4rem 0.8rem;">📁 Decision Records</a>
-    <a href="/admin" class="view-btn" style="text-decoration:none; padding:0.4rem 0.8rem;">⚡ Admin Console</a>
+    <a href="/" class="nav-link active">📹 DRS Review</a>
+    <a href="/analytics" class="nav-link">📊 Precision Matrix</a>
+    <a href="/records" class="nav-link">📁 Decision Records</a>
+    <a href="/admin" class="nav-link">⚡ Admin Console</a>
   </div>
 </header>
 
 <div class="layout">
-
-  <!-- ── Sidebar ── -->
-  <aside class="sidebar">
-    <div>
-      <h2>DRS Review Controls</h2>
-    </div>
-
+  <div class="panel">
+    <h2 style="font-size:1.1rem; font-weight:800; color:var(--accent); margin-bottom:1rem;">🎥 Video Upload & Processing</h2>
     <form id="drsForm">
-      <div style="margin-bottom:1rem">
-        <label for="colorSelect">Ball Colour Calibration</label>
-        <select id="colorSelect" name="color">
-          <option value="auto" selected>✨ Auto-Detect Ball & Lighting (Universal)</option>
-          <option value="red">🔴 Red (Test Match)</option>
-          <option value="white">⚪ White (Limited Overs)</option>
-          <option value="pink">🩷 Pink (Day-Night Test)</option>
-          <option value="yellow">🟡 Yellow (Practice / Indoor)</option>
+      <div style="margin-bottom:1rem;">
+        <label style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:0.4rem;">Select Ball Format</label>
+        <select id="colorMode" style="width:100%; padding:0.6rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:8px;">
+          <option value="AUTO">✨ AUTO (Universal Auto-Detect)</option>
+          <option value="RED">🔴 RED (Test Matches)</option>
+          <option value="WHITE">⚪ WHITE (ODIs / T20s)</option>
+          <option value="PINK">🩷 PINK (Day-Night Tests)</option>
+          <option value="YELLOW">🟡 YELLOW / ORANGE (Practice)</option>
         </select>
       </div>
 
-      <div style="margin-bottom:1rem">
-        <label for="actionSelect">Delivery Input Source</label>
-        <select id="actionSelect" name="action">
-          <option value="upload">🎥 Upload Real User Video (MP4 / MOV / AVI)</option>
-          <option value="synthetic_hitting">🎯 Synthetic — Hitting Stumps</option>
-          <option value="synthetic_missing">❌ Synthetic — Missing Stumps</option>
-          <option value="synthetic_umpires_call">🟡 Synthetic — Umpire's Call</option>
-        </select>
+      <div style="margin-bottom:1.2rem;">
+        <input type="file" id="videoInput" accept="video/*" style="display:none;" />
+        <button type="button" class="view-btn" style="width:100%; padding:0.8rem;" onclick="document.getElementById('videoInput').click()">📁 Choose MP4 Video File</button>
+        <div id="fileInfo" style="font-size:0.75rem; color:var(--muted); margin-top:0.4rem; text-align:center;">No file selected (will generate synthetic action)</div>
       </div>
 
-      <div id="fileGroup" style="margin-bottom:1rem">
-        <label>Upload Real Video File</label>
-        <div class="dropzone" id="dropzone">
-          <div style="font-size: 2.2rem; margin-bottom: 6px;">📁</div>
-          <div>Drag & drop your <strong>Cricket Video</strong> here</div>
-          <p>or click to browse from device</p>
-          <input type="file" id="videoFile" name="video" accept="video/mp4,video/quicktime,video/x-msvideo" style="display:none;" />
-        </div>
-
-        <div id="videoPreviewContainer">
-          <video id="inputVideoPreview" controls preload="metadata"></video>
-          <div id="videoMeta">
-            <span id="metaName">File: —</span>
-            <span id="metaSize">— MB</span>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn-primary" id="submitBtn" type="submit">▶ Run Hawk-Eye 3D Review</button>
+      <button type="submit" class="btn-primary" id="submitBtn">🚀 Process DRS Review</button>
     </form>
 
-    <!-- session mini-stats -->
-    <div id="sessionBox" style="display:none; background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:1.2rem;">
-      <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.8rem;">Session Summary</div>
-      <div style="display:flex;gap:.5rem;justify-content:space-around;text-align:center;">
-        <div><div style="font-size:1.3rem;font-weight:800;color:var(--red)" id="sOut">0</div><div style="font-size:.65rem;color:var(--muted)">OUT</div></div>
-        <div><div style="font-size:1.3rem;font-weight:800;color:var(--green)" id="sNotOut">0</div><div style="font-size:.65rem;color:var(--muted)">NOT OUT</div></div>
-        <div><div style="font-size:1.3rem;font-weight:800;color:var(--yellow)" id="sUmpire">0</div><div style="font-size:.65rem;color:var(--muted)">UC</div></div>
-      </div>
+    <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--card-border);">
+      <button type="button" class="view-btn" style="width:100%; margin-bottom:0.5rem;" onclick="speakVerdict()">🔊 Speak Verdict (AI Speech)</button>
+      <button type="button" class="view-btn" style="width:100%;" onclick="exportPDFReport()">📥 Export Report (PDF)</button>
     </div>
-  </aside>
+  </div>
 
-  <!-- ── Main ── -->
-  <main class="main">
-
-    <div id="placeholder">
-      <div class="icon">📹</div>
-      <p>Upload any real cricket delivery video or select a benchmark, then click <strong>Run Hawk-Eye 3D Review</strong>.</p>
+  <div class="panel">
+    <div class="view-switcher">
+      <button class="view-btn active" onclick="switchView('cam1')">📹 Camera 1 (Live Tracking)</button>
+      <button class="view-btn" onclick="switchView('cam2')">📊 Camera 2 (Hawk-Eye 3D)</button>
+      <button class="view-btn" onclick="switchView('stadium3d')">🌐 360° 3D Stadium</button>
+      <button class="view-btn" onclick="switchView('ultraedge')">📈 UltraEdge Snickometer</button>
     </div>
 
-    <div id="loading">
-      <div class="spinner"></div>
-      <p id="loadingMsg">Scanning Auto-Color & Pitch Keypoints · Running Neural YOLO Engine · Computing 3D Gravity Physics…</p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Pitching Zone</div>
+        <div class="value" id="statPitching">IN LINE</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Impact Zone</div>
+        <div class="value" id="statImpact">IN LINE</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Wickets (Lateral)</div>
+        <div class="value" id="statWickets">HITTING</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Final Decision</div>
+        <div class="value" style="color:var(--red)" id="verdictText">OUT</div>
+      </div>
     </div>
 
-    <div id="results">
-
-      <!-- Verdict Banner -->
-      <div class="verdict-banner" id="verdictBanner">
-        <div class="verdict-left">
-          <span class="verdict-icon" id="verdictIcon"></span>
-          <span id="verdictText"></span>
-        </div>
-        <div style="display:flex; gap:0.5rem; align-items:center;">
-          <button type="button" class="view-btn" style="background:rgba(255,255,255,0.2); color:#fff; border:none; padding:0.4rem 0.8rem;" onclick="speakVerdict()">🔊 Speak Verdict</button>
-          <button type="button" class="view-btn" style="background:rgba(255,255,255,0.2); color:#fff; border:none; padding:0.4rem 0.8rem;" onclick="exportPDFReport()">📥 Export Report</button>
-          <div class="auto-badge-pill" id="autoColorBadge">Auto-Color: RED</div>
-        </div>
+    <div id="viewCam1" class="media-card">
+      <h4><span>📹 Camera 1 -- Real-Time Live Tracking Video</span> <span style="color:var(--accent)" id="speedBadge">142.5 km/h</span></h4>
+      <video id="resultVideo" controls autoplay loop muted playsinline></video>
+      <div style="display:flex; gap:0.4rem; padding:0.6rem 1rem; background:rgba(15,23,42,0.9); align-items:center;">
+        <span style="font-size:0.75rem; color:var(--muted);">Slow-Mo:</span>
+        <button type="button" class="view-btn" onclick="setSpeed(0.25)">0.25x</button>
+        <button type="button" class="view-btn" onclick="setSpeed(0.5)">0.5x</button>
+        <button type="button" class="view-btn active" onclick="setSpeed(1.0)">1.0x</button>
+        <button type="button" class="view-btn" onclick="setSpeed(2.0)">2.0x</button>
       </div>
+    </div>
 
-      <!-- View Switcher Tabs -->
-      <div class="view-switcher">
-        <button class="view-btn active" onclick="switchView('cam1')">📹 Camera 1 (Live Tracking)</button>
-        <button class="view-btn" onclick="switchView('cam2')">📊 Camera 2 (Hawk-Eye 3D)</button>
-        <button class="view-btn" onclick="switchView('stadium3d')">🌐 360° 3D Stadium</button>
-        <button class="view-btn" onclick="switchView('ultraedge')">📈 UltraEdge Snickometer</button>
-        <button class="view-btn" onclick="switchView('physics')">📐 3D Height Clearance</button>
-      </div>
+    <div id="viewCam2" class="media-card" style="display:none;">
+      <h4><span>📊 Camera 2 -- Hawk-Eye 3D Broadcast Graphic</span> <span style="color:var(--accent2)">4K Render</span></h4>
+      <img id="resultImage" alt="Hawk-Eye 3D Graphic" />
+    </div>
 
-      <!-- Zone Stats -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="label">Pitching Zone</div>
-          <div class="value" id="statPitching">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="label">Impact Zone</div>
-          <div class="value" id="statImpact">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="label">Wickets (Lateral)</div>
-          <div class="value" id="statWickets">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="label">3D Height Verdict</div>
-          <div class="value" style="color: var(--accent)" id="stat3DHeight">—</div>
-        </div>
-      </div>
+    <div id="viewStadium3D" class="media-card" style="display:none;">
+      <h4><span>🌐 360° Interactive Three.js WebGL Stadium</span> <span style="color:#38bdf8">Drag Mouse to Orbit 360°</span></h4>
+      <div id="threeCanvasContainer" style="width:100%; height:420px; background:#020617;"></div>
+    </div>
 
-      <!-- Media Viewers -->
-      <div id="viewCam1" class="media-card">
-        <h4><span>📹 Camera 1 — Real-Time Live Tracking Video</span> <span style="color:var(--accent)" id="speedBadge">— km/h</span></h4>
-        <video id="resultVideo" controls autoplay loop muted playsinline></video>
-        <div style="display:flex; gap:0.4rem; padding:0.6rem 1rem; background:rgba(15,23,42,0.9); border-top:1px solid var(--card-border); align-items:center;">
-          <span style="font-size:0.75rem; color:var(--muted); font-weight:600; margin-right:0.4rem;">Slow-Mo Playback:</span>
-          <button type="button" class="view-btn" style="flex:none; padding:0.3rem 0.6rem;" onclick="setSpeed(0.25)">0.25x Super Slow</button>
-          <button type="button" class="view-btn" style="flex:none; padding:0.3rem 0.6rem;" onclick="setSpeed(0.5)">0.5x Slow-Mo</button>
-          <button type="button" class="view-btn active" style="flex:none; padding:0.3rem 0.6rem;" onclick="setSpeed(1.0)">1.0x Normal</button>
-          <button type="button" class="view-btn" style="flex:none; padding:0.3rem 0.6rem;" onclick="setSpeed(2.0)">2.0x Fast</button>
-        </div>
-      </div>
-
-      <div id="viewCam2" class="media-card" style="display:none;">
-        <h4><span>📊 Camera 2 — Hawk-Eye 3D Broadcast Graphic</span> <span style="color:var(--accent2)">4K Render</span></h4>
-        <img id="resultImage" alt="Hawk-Eye 3D DRS Decision Graphic" />
-      </div>
-
-      <div id="viewStadium3D" class="media-card" style="display:none;">
-        <h4><span>🌐 360° Interactive Three.js WebGL Stadium Orbit</span> <span style="color:#38bdf8">Drag Mouse to Orbit 360° / Zoom</span></h4>
-        <div id="threeCanvasContainer" style="width:100%; height:420px; background:#020617;"></div>
-      </div>
-
-      <div id="viewUltraEdge" class="media-card" style="display:none;">
-        <h4><span>📈 UltraEdge Audio Snickometer Waveform</span> <span style="color:#22c55e">Acoustic Audio Oscilloscope</span></h4>
-        <img id="resultUltraEdge" alt="UltraEdge Audio Waveform Graphic" />
-      </div>
-
-      <div id="viewPhysics" class="physics-card" style="display:none; margin-top:0;">
-        <h3>📐 3D Metric Pitch & Height Clearance Analysis</h3>
-        <div class="physics-grid" style="grid-template-columns: repeat(5, 1fr);">
-          <div>
-            <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Pitch Distance</div>
-            <div style="font-size:1.3rem; font-weight:800; margin-top:4px;" id="physPitchY">—</div>
-          </div>
-          <div>
-            <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Impact Distance</div>
-            <div style="font-size:1.3rem; font-weight:800; margin-top:4px;" id="physImpactY">—</div>
-          </div>
-          <div>
-            <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Stump Clearance Z</div>
-            <div style="font-size:1.3rem; font-weight:800; margin-top:4px; color:var(--accent);" id="physStumpZ">—</div>
-          </div>
-          <div>
-            <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Ball Spin RPM</div>
-            <div style="font-size:1.3rem; font-weight:800; margin-top:4px; color:#22c55e;" id="physSpinRPM">—</div>
-          </div>
-          <div>
-            <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Seam Movement</div>
-            <div style="font-size:1.3rem; font-weight:800; margin-top:4px; color:#818cf8;" id="physSeamCm">—</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- AI Verdict -->
-      <div class="ai-card" style="margin-top: 1.5rem;">
-        <h3>🤖 AI Verdict Explanation</h3>
-        <p id="aiSummary"></p>
-        <p id="aiReasoning" style="color:var(--muted);margin-top:.5rem;"></p>
-        <div class="confidence-bar-wrap">
-          <div class="label">Decision Confidence: <span id="confPct">—</span>%</div>
-          <div class="confidence-bar"><div class="confidence-bar-fill" id="confBar" style="width:0%"></div></div>
-        </div>
-      </div>
-
-    </div><!-- /results -->
-
-  </main>
+    <div id="viewUltraEdge" class="media-card" style="display:none;">
+      <h4><span>📈 UltraEdge Audio Snickometer Waveform</span> <span style="color:#22c55e">Acoustic Audio Oscilloscope</span></h4>
+      <img id="resultUltraEdge" alt="UltraEdge Waveform Graphic" />
+    </div>
+  </div>
 </div>
 
 <script>
-  // ── Session Counters ──
-  const sess = { OUT: 0, 'NOT OUT': 0, "UMPIRE'S CALL": 0 };
-
-  // ── DOM Elements ──
-  const actionSel       = document.getElementById('actionSelect');
-  const fileGroup       = document.getElementById('fileGroup');
-  const dropzone        = document.getElementById('dropzone');
-  const videoInput      = document.getElementById('videoFile');
-  const previewContainer= document.getElementById('videoPreviewContainer');
-  const inputPreview    = document.getElementById('inputVideoPreview');
-  const metaName        = document.getElementById('metaName');
-  const metaSize        = document.getElementById('metaSize');
-
-  function toggleFileGroup() {
-    fileGroup.style.display = actionSel.value === 'upload' ? 'block' : 'none';
-  }
-  actionSel.addEventListener('change', toggleFileGroup);
-  toggleFileGroup();
-
-  dropzone.addEventListener('click', () => videoInput.click());
-
-  ['dragenter', 'dragover'].forEach(name => {
-    dropzone.addEventListener(name, (e) => {
-      e.preventDefault();
-      dropzone.classList.add('dragover');
-    });
-  });
-
-  ['dragleave', 'drop'].forEach(name => {
-    dropzone.addEventListener(name, (e) => {
-      e.preventDefault();
-      dropzone.classList.remove('dragover');
-    });
-  });
-
-  dropzone.addEventListener('drop', (e) => {
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      videoInput.files = files;
-      handleFileSelected(files[0]);
-    }
-  });
+  let videoInput = document.getElementById('videoInput');
+  let fileInfo = document.getElementById('fileInfo');
 
   videoInput.addEventListener('change', (e) => {
     if (e.target.files.length > 0) {
-      handleFileSelected(e.target.files[0]);
+      fileInfo.textContent = `Selected: ${e.target.files[0].name}`;
     }
   });
+
+  function setSpeed(rate) {
+    const video = document.getElementById('resultVideo');
+    if (video) video.playbackRate = rate;
+  }
 
   function speakVerdict() {
     if (!('speechSynthesis' in window)) return;
@@ -553,35 +253,13 @@
     const pz = document.getElementById('statPitching').textContent;
     const iz = document.getElementById('statImpact').textContent;
     const wv = document.getElementById('statWickets').textContent;
-    if (!fc || fc === '—') return;
-    
     const text = `Review complete. Pitching ${pz}, Impact ${iz}, Wickets ${wv}. Final Decision: ${fc}.`;
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.95;
-    utterance.pitch = 1.0;
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
   }
 
-  function exportPDFReport() {
-    window.print();
-  }
-
-  function handleFileSelected(file) {
-    if (!file) return;
-    metaName.textContent = file.name;
-    metaSize.textContent = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
-    const fileURL = URL.createObjectURL(file);
-    inputPreview.src = fileURL;
-    previewContainer.style.display = 'block';
-  }
-
-  function setSpeed(rate) {
-    const video = document.getElementById('resultVideo');
-    if (video) {
-      video.playbackRate = rate;
-    }
-  }
+  function exportPDFReport() { window.print(); }
 
   function switchView(viewName) {
     document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
@@ -589,7 +267,6 @@
     document.getElementById('viewCam2').style.display = 'none';
     document.getElementById('viewStadium3D').style.display = 'none';
     document.getElementById('viewUltraEdge').style.display = 'none';
-    document.getElementById('viewPhysics').style.display = 'none';
 
     if (viewName === 'cam1') {
       document.querySelectorAll('.view-btn')[0].classList.add('active');
@@ -604,14 +281,10 @@
     } else if (viewName === 'ultraedge') {
       document.querySelectorAll('.view-btn')[3].classList.add('active');
       document.getElementById('viewUltraEdge').style.display = 'block';
-    } else if (viewName === 'physics') {
-      document.querySelectorAll('.view-btn')[4].classList.add('active');
-      document.getElementById('viewPhysics').style.display = 'block';
     }
   }
 
-  let threeScene, threeCamera, threeRenderer, threeControls;
-  let isThreeInitialized = false;
+  let threeScene, threeCamera, threeRenderer, threeControls, isThreeInitialized = false;
 
   function init3DStadium() {
     const container = document.getElementById('threeCanvasContainer');
@@ -619,14 +292,11 @@
 
     threeScene = new THREE.Scene();
     threeScene.background = new THREE.Color(0x030712);
-
-    const aspect = container.clientWidth / container.clientHeight;
-    threeCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
+    threeCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
     threeCamera.position.set(0, 8, 18);
 
     threeRenderer = new THREE.WebGLRenderer({ antialias: true });
     threeRenderer.setSize(container.clientWidth, container.clientHeight);
-    threeRenderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(threeRenderer.domElement);
 
     if (typeof THREE.OrbitControls !== 'undefined') {
@@ -634,47 +304,36 @@
       threeControls.enableDamping = true;
     }
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    threeScene.add(ambientLight);
-
+    threeScene.add(new THREE.AmbientLight(0xffffff, 0.6));
     const dirLight = new THREE.DirectionalLight(0x38bdf8, 0.8);
     dirLight.position.set(10, 20, 10);
     threeScene.add(dirLight);
 
     const pitchGeo = new THREE.BoxGeometry(3.5, 0.1, 20.12);
     const pitchMat = new THREE.MeshStandardMaterial({ color: 0x14532d, roughness: 0.8 });
-    const pitchMesh = new THREE.Mesh(pitchGeo, pitchMat);
-    threeScene.add(pitchMesh);
+    threeScene.add(new THREE.Mesh(pitchGeo, pitchMat));
 
     const stumpMat = new THREE.MeshStandardMaterial({ color: 0xfacc15 });
     for (let xOff of [-0.18, 0, 0.18]) {
-      const stumpGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.71, 16);
-      const stump = new THREE.Mesh(stumpGeo, stumpMat);
+      const stump = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.71, 16), stumpMat);
       stump.position.set(xOff, 0.4, 10);
       threeScene.add(stump);
     }
-    const bailGeo = new THREE.BoxGeometry(0.44, 0.02, 0.02);
-    const bail = new THREE.Mesh(bailGeo, stumpMat);
+    const bail = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.02, 0.02), stumpMat);
     bail.position.set(0, 0.76, 10);
     threeScene.add(bail);
 
-    const curvePoints = [
+    const curve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(0.2, 1.8, -10),
       new THREE.Vector3(0.1, 0.05, 3),
       new THREE.Vector3(0.05, 0.6, 6),
       new THREE.Vector3(0.0, 0.72, 10)
-    ];
-    const curve = new THREE.CatmullRomCurve3(curvePoints);
-    const tubeGeo = new THREE.TubeGeometry(curve, 64, 0.04, 16, false);
-    const tubeMat = new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xef4444, emissiveIntensity: 0.5 });
-    const tubeMesh = new THREE.Mesh(tubeGeo, tubeMat);
+    ]);
+    const tubeMesh = new THREE.Mesh(
+      new THREE.TubeGeometry(curve, 64, 0.04, 16, false),
+      new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xef4444, emissiveIntensity: 0.5 })
+    );
     threeScene.add(tubeMesh);
-
-    const ballGeo = new THREE.SphereGeometry(0.07, 32, 32);
-    const ballMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.3 });
-    const ballMesh = new THREE.Mesh(ballGeo, ballMat);
-    ballMesh.position.set(0, 0.72, 10);
-    threeScene.add(ballMesh);
 
     function animate() {
       requestAnimationFrame(animate);
@@ -682,112 +341,40 @@
       threeRenderer.render(threeScene, threeCamera);
     }
     animate();
-
     isThreeInitialized = true;
   }
 
-  const form      = document.getElementById('drsForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const loading   = document.getElementById('loading');
-  const results   = document.getElementById('results');
-  const ph        = document.getElementById('placeholder');
-
-  form.addEventListener('submit', async (e) => {
+  document.getElementById('drsForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = "⌛ Processing Review...";
+    btn.disabled = true;
 
-    if (actionSel.value === 'upload' && (!videoInput.files || videoInput.files.length === 0)) {
-      alert('Please select or drag & drop a cricket video file to review.');
-      return;
+    const formData = new FormData();
+    formData.append('color_mode', document.getElementById('colorMode').value);
+    if (videoInput.files.length > 0) {
+      formData.append('video', videoInput.files[0]);
     }
 
-    submitBtn.disabled = true;
-    ph.style.display      = 'none';
-    results.style.display = 'none';
-    loading.style.display = 'flex';
-
-    const fd = new FormData(form);
-    let data;
     try {
-      const res = await fetch('/process', { method: 'POST', body: fd });
-      const text = await res.text();
-      try {
-        data = JSON.parse(text);
-      } catch (jsonErr) {
-        throw new Error(`Server returned response (${res.status}): ${text.substring(0, 120)}`);
+      const res = await fetch('/process', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (data.final_call) {
+        document.getElementById('verdictText').textContent = data.final_call;
+        document.getElementById('statPitching').textContent = data.pitching_zone || 'IN LINE';
+        document.getElementById('statImpact').textContent = data.impact_zone || 'IN LINE';
+        document.getElementById('statWickets').textContent = data.wicket_verdict || 'HITTING';
+        if (data.annotated_video) document.getElementById('resultVideo').src = data.annotated_video;
+        if (data.drs_image) document.getElementById('resultImage').src = data.drs_image;
+        if (data.ultraedge_image) document.getElementById('resultUltraEdge').src = data.ultraedge_image;
+        speakVerdict();
       }
-      if (!res.ok) throw new Error(data.error || 'Processing failed');
     } catch (err) {
-      loading.style.display = 'none';
-      ph.style.display      = 'flex';
-      alert('⚠ ' + err.message);
-      submitBtn.disabled = false;
-      return;
+      console.error(err);
+    } finally {
+      btn.textContent = "🚀 Process DRS Review";
+      btn.disabled = false;
     }
-
-    loading.style.display = 'none';
-
-    const fc     = data.final_call;
-    const banner = document.getElementById('verdictBanner');
-    const icons  = { 'OUT': '🔴', 'NOT OUT': '🟢', "UMPIRE'S CALL": '🟡', "NO BALL DETECTED": '⚠️' };
-    
-    let bannerClass = 'noball';
-    if (fc === 'OUT') bannerClass = 'out';
-    else if (fc === 'NOT OUT') bannerClass = 'notout';
-    else if (fc === "UMPIRE'S CALL") bannerClass = 'umpire';
-
-    banner.className = 'verdict-banner ' + bannerClass;
-    document.getElementById('verdictIcon').textContent = icons[fc] || '⚠️';
-    document.getElementById('verdictText').textContent = fc;
-
-    const detectedColor = (data.detected_color || 'auto').toUpperCase();
-    document.getElementById('autoColorBadge').textContent = `Auto-Detected Ball: ${detectedColor}`;
-
-    const fmt = s => (s || '').replace(/_/g, ' ');
-    document.getElementById('statPitching').textContent = fmt(data.pitching_zone);
-    document.getElementById('statImpact').textContent   = fmt(data.impact_zone);
-    document.getElementById('statWickets').textContent  = fmt(data.wicket_verdict);
-
-    const dStats = data.delivery_stats || {};
-    document.getElementById('speedBadge').textContent = dStats.speed ? `${dStats.speed} ${dStats.speed_unit}` : '—';
-    document.getElementById('physSpinRPM').textContent = dStats.spin_rpm ? `${dStats.spin_rpm} RPM` : '1850 RPM';
-    document.getElementById('physSeamCm').textContent = dStats.seam_movement_cm ? `${dStats.seam_movement_cm} cm` : '4.2 cm';
-
-    const p3d = data.physics_3d || {};
-    document.getElementById('stat3DHeight').textContent = p3d.height_verdict ? fmt(p3d.height_verdict) : '—';
-    document.getElementById('physPitchY').textContent = p3d.pitch_3d_m ? `${p3d.pitch_3d_m[1].toFixed(1)} m` : '—';
-    document.getElementById('physImpactY').textContent = p3d.impact_3d_m ? `${p3d.impact_3d_m[1].toFixed(1)} m` : '—';
-    document.getElementById('physStumpZ').textContent = p3d.stump_z_m !== undefined ? `${p3d.stump_z_m.toFixed(2)} m` : '—';
-
-    const ai = data.ai_verdict || {};
-    document.getElementById('aiSummary').textContent   = (ai.summary   || '').replace(/\*\*/g, '');
-    document.getElementById('aiReasoning').textContent = (ai.reasoning || '').replace(/\*\*/g, '');
-    const conf = ai.confidence || 0;
-    document.getElementById('confPct').textContent = conf;
-    setTimeout(() => {
-      document.getElementById('confBar').style.width = conf + '%';
-      speakVerdict();
-    }, 100);
-
-    document.getElementById('resultVideo').src = `/outputs/${data.job_id}/tracked_output.mp4`;
-    if (data.decision_image) {
-      document.getElementById('resultImage').src = `/outputs/${data.job_id}/drs_decision.png`;
-    }
-    if (data.ultraedge_image) {
-      document.getElementById('resultUltraEdge').src = `/outputs/${data.job_id}/ultraedge_waveform.png`;
-    }
-
-    if (fc !== "NO BALL DETECTED") {
-      sess[fc] = (sess[fc] || 0) + 1;
-      document.getElementById('sOut').textContent    = sess['OUT'] || 0;
-      document.getElementById('sNotOut').textContent = sess['NOT OUT'] || 0;
-      document.getElementById('sUmpire').textContent = sess["UMPIRE'S CALL"] || 0;
-      document.getElementById('sessionBox').style.display = 'block';
-    }
-
-    results.style.display = 'block';
-    submitBtn.disabled = false;
-
-    switchView('cam1');
   });
 </script>
 

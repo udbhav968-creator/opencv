@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ICC DRS Pro Records � Historical Decision Review Console</title>
+  <title>ICC DRS Pro Records -- Decision Review Console</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -15,9 +15,6 @@
       --card-border: rgba(56, 189, 248, 0.2);
       --accent: #38bdf8;
       --accent2: #818cf8;
-      --green: #22c55e;
-      --red: #ef4444;
-      --yellow: #facc15;
       --text: #f8fafc;
       --muted: #94a3b8;
       --radius: 16px;
@@ -38,7 +35,7 @@
       align-items: center;
       justify-content: space-between;
     }
-    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .header-left { display: flex; align-items: center; gap: 1rem; cursor: pointer; }
     .logo { font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); }
     header h1 {
       font-size: 1.5rem;
@@ -90,9 +87,7 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: all 0.2s;
     }
-    .btn-export:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4); }
 
     .table-card {
       background: var(--card);
@@ -100,11 +95,10 @@
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
     }
     table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
     th, td { padding: 1rem 1.2rem; border-bottom: 1px solid var(--card-border); }
-    th { background: rgba(15, 23, 42, 0.9); color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.08em; }
+    th { background: rgba(15, 23, 42, 0.9); color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; }
     tr:hover { background: rgba(56, 189, 248, 0.05); }
 
     .badge-out { padding: 0.25rem 0.6rem; border-radius: 99px; background: rgba(239, 68, 68, 0.2); color: #f87171; font-weight: 700; font-size: 0.75rem; }
@@ -112,32 +106,30 @@
     .badge-umpire { padding: 0.25rem 0.6rem; border-radius: 99px; background: rgba(250, 204, 21, 0.2); color: #fde047; font-weight: 700; font-size: 0.75rem; }
 
     .media-btn { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.8rem; }
-    .media-btn:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="header-left">
-    <div class="logo">??</div>
+  <div class="header-left" onclick="window.location.href='/'">
+    <div class="logo">📁</div>
     <div>
       <h1>DRS Decision Records Console</h1>
-      <p>Page 3 � Historical Match Review Records � Job Search � CSV Export</p>
+      <p>Page 3 -- Historical Match Review Records · Job Search · CSV Export</p>
     </div>
   </div>
   <div style="display:flex; gap:0.6rem; align-items:center;">
-    <a href="/" class="nav-link">?? DRS Review</a>
-    <a href="/analytics" class="nav-link">?? Precision Matrix</a>
-    <a href="/records" class="nav-link active">?? Decision Records</a>
-    <a href="/admin" class="nav-link">? Admin Console</a>
+    <a href="/" class="nav-link">📹 DRS Review</a>
+    <a href="/analytics" class="nav-link">📊 Precision Matrix</a>
+    <a href="/records" class="nav-link active">📁 Decision Records</a>
+    <a href="/admin" class="nav-link">⚡ Admin Console</a>
   </div>
 </header>
 
 <div class="container">
-
   <div class="control-bar">
-    <input type="text" id="searchInput" class="search-input" placeholder="?? Search Job ID or Verdict..." onkeyup="filterTable()" />
-    <button class="btn-export" onclick="exportCSV()">?? Export CSV Records</button>
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search Job ID or Verdict..." onkeyup="filterTable()" />
+    <button class="btn-export" onclick="exportCSV()">📥 Export CSV Records</button>
   </div>
 
   <div class="table-card">
@@ -155,16 +147,14 @@
         </tr>
       </thead>
       <tbody id="recordsBody">
-        <tr><td colspan="8" style="text-align:center; color:var(--muted)">Loading historical decision records...</td></tr>
+        <tr><td colspan="8" style="text-align:center; color:var(--muted)">Loading decision records...</td></tr>
       </tbody>
     </table>
   </div>
-
 </div>
 
 <script>
   let allRecords = [];
-
   async function loadRecords() {
     try {
       const res = await fetch('/api/history');
@@ -172,35 +162,34 @@
       allRecords = data.decisions || [];
       renderTable(allRecords);
     } catch (err) {
-      console.error("Failed to load records:", err);
+      console.error(err);
     }
   }
 
   function renderTable(records) {
     const tbody = document.getElementById('recordsBody');
     if (!records || records.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--muted)">No historical decision reviews recorded yet.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--muted)">No decision reviews recorded yet.</td></tr>';
       return;
     }
-
     tbody.innerHTML = records.map(r => {
       let fc = r.final_call || 'NOT OUT';
       let badgeClass = fc === 'OUT' ? 'badge-out' : fc === 'NOT OUT' ? 'badge-notout' : 'badge-umpire';
-      return 
+      return `
         <tr>
-          <td style="font-family:monospace; font-weight:700; color:var(--accent)">...</td>
-          <td></td>
-          <td><span style="text-transform:uppercase; font-size:0.75rem; font-weight:700;"></span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class=""></span></td>
+          <td style="font-family:monospace; font-weight:700; color:var(--accent)">${(r.job_id || '').substring(0, 8)}...</td>
+          <td>${r.timestamp ? r.timestamp.substring(0, 19).replace('T', ' ') : '—'}</td>
+          <td><span style="text-transform:uppercase; font-size:0.75rem; font-weight:700;">${r.color || 'RED'}</span></td>
+          <td>${(r.pitching_zone || 'IN_LINE').replace(/_/g, ' ')}</td>
+          <td>${(r.impact_zone || 'IN_LINE').replace(/_/g, ' ')}</td>
+          <td>${(r.wicket_verdict || 'HITTING').replace(/_/g, ' ')}</td>
+          <td><span class="${badgeClass}">${fc}</span></td>
           <td>
-            <a href="/outputs//tracked_output.mp4" target="_blank" class="media-btn">?? Video</a> | 
-            <a href="/outputs//drs_decision.png" target="_blank" class="media-btn">?? Graphic</a>
+            <a href="/outputs/${r.job_id}/tracked_output.mp4" target="_blank" class="media-btn">📹 Video</a> | 
+            <a href="/outputs/${r.job_id}/drs_decision.png" target="_blank" class="media-btn">📊 Graphic</a>
           </td>
         </tr>
-      ;
+      `;
     }).join('');
   }
 
@@ -208,8 +197,7 @@
     const q = document.getElementById('searchInput').value.toLowerCase();
     const filtered = allRecords.filter(r => 
       (r.job_id && r.job_id.toLowerCase().includes(q)) ||
-      (r.final_call && r.final_call.toLowerCase().includes(q)) ||
-      (r.color && r.color.toLowerCase().includes(q))
+      (r.final_call && r.final_call.toLowerCase().includes(q))
     );
     renderTable(filtered);
   }
@@ -218,16 +206,15 @@
     if (!allRecords.length) return alert("No records to export.");
     let csv = "Job ID,Timestamp,Color,Pitching Zone,Impact Zone,Wicket Verdict,Final Call\n";
     allRecords.forEach(r => {
-      csv += "","","","","","",""\n;
+      csv += `"${r.job_id}","${r.timestamp}","${r.color}","${r.pitching_zone}","${r.impact_zone}","${r.wicket_verdict}","${r.final_call}"\n`;
     });
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = drs_decision_records_.csv;
+    a.download = `drs_decision_records_${Date.now()}.csv`;
     a.click();
   }
-
   loadRecords();
 </script>
 

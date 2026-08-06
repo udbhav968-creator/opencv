@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ICC DRS Pro Analytics � Trajectories & Model Precision Matrix</title>
+  <title>ICC DRS Pro Analytics -- Precision Matrix</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -16,9 +16,6 @@
       --card-border: rgba(56, 189, 248, 0.2);
       --accent: #38bdf8;
       --accent2: #818cf8;
-      --green: #22c55e;
-      --red: #ef4444;
-      --yellow: #facc15;
       --text: #f8fafc;
       --muted: #94a3b8;
       --radius: 16px;
@@ -39,7 +36,7 @@
       align-items: center;
       justify-content: space-between;
     }
-    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .header-left { display: flex; align-items: center; gap: 1rem; cursor: pointer; }
     .logo { font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); }
     header h1 {
       font-size: 1.5rem;
@@ -68,9 +65,8 @@
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
       padding: 1.25rem;
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
     }
-    .kpi-card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.4rem; }
+    .kpi-card .label { font-size: 0.75rem; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
     .kpi-card .val { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
     .kpi-card .sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
 
@@ -82,9 +78,8 @@
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
       padding: 1.5rem;
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
     }
-    .chart-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--accent); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .chart-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--accent); margin-bottom: 1rem; text-transform: uppercase; }
 
     .cm-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; text-align: center; }
     .cm-table th, .cm-table td { padding: 0.8rem; border: 1px solid var(--card-border); font-size: 0.85rem; }
@@ -96,24 +91,22 @@
 <body>
 
 <header>
-  <div class="header-left">
-    <div class="logo">??</div>
+  <div class="header-left" onclick="window.location.href='/'">
+    <div class="logo">📊</div>
     <div>
       <h1>DRS Analytics & Model Precision Matrix</h1>
-      <p>Page 2 � 3D Parabolic Flight Trajectories � Precision-Recall Benchmark � Confusion Matrix</p>
+      <p>Page 2 -- 3D Parabolic Flight Trajectories · Precision-Recall Benchmark · Confusion Matrix</p>
     </div>
   </div>
   <div style="display:flex; gap:0.6rem; align-items:center;">
-    <a href="/" class="nav-link">?? DRS Review</a>
-    <a href="/analytics" class="nav-link active">?? Precision Matrix</a>
-    <a href="/records" class="nav-link">?? Decision Records</a>
-    <a href="/admin" class="nav-link">? Admin Console</a>
+    <a href="/" class="nav-link">📹 DRS Review</a>
+    <a href="/analytics" class="nav-link active">📊 Precision Matrix</a>
+    <a href="/records" class="nav-link">📁 Decision Records</a>
+    <a href="/admin" class="nav-link">⚡ Admin Console</a>
   </div>
 </header>
 
 <div class="container">
-
-  <!-- KPI Metrics Bar -->
   <div class="kpi-grid">
     <div class="kpi-card">
       <div class="label">mAP@50 Score</div>
@@ -137,26 +130,24 @@
     </div>
   </div>
 
-  <!-- Charts Row 1 -->
   <div class="grid-2">
     <div class="chart-card">
-      <h3>?? 3D Parabolic Trajectory (Height Z vs Distance Y)</h3>
+      <h3>📈 3D Parabolic Trajectory (Height Z vs Distance Y)</h3>
       <canvas id="trajectoryChart" height="220"></canvas>
     </div>
     <div class="chart-card">
-      <h3>?? Model Precision-Recall Benchmark Curve</h3>
+      <h3>🎯 Model Precision-Recall Benchmark Curve</h3>
       <canvas id="prCurveChart" height="220"></canvas>
     </div>
   </div>
 
-  <!-- Charts Row 2 -->
   <div class="grid-2">
     <div class="chart-card">
-      <h3>? Delivery Speed & Spin RPM Distribution</h3>
+      <h3>⚡ Delivery Speed & Spin RPM Distribution</h3>
       <canvas id="speedSpinChart" height="220"></canvas>
     </div>
     <div class="chart-card">
-      <h3>?? Wicket Decision Confusion Matrix</h3>
+      <h3>🧩 Wicket Decision Confusion Matrix</h3>
       <table class="cm-table">
         <thead>
           <tr>
@@ -189,7 +180,6 @@
       </table>
     </div>
   </div>
-
 </div>
 
 <script>
@@ -198,22 +188,8 @@
     data: {
       labels: ['0m', '3m', '6m (Pitch)', '9m', '12m', '15m (Impact)', '18m', '20.12m (Stumps)'],
       datasets: [
-        {
-          label: 'Out Delivery Trajectory (Z Height)',
-          data: [2.1, 1.4, 0.08, 0.45, 0.62, 0.70, 0.72, 0.71],
-          borderColor: '#ef4444',
-          backgroundColor: 'rgba(239, 68, 68, 0.1)',
-          fill: true,
-          tension: 0.3
-        },
-        {
-          label: 'Not Out Delivery (Over Bails)',
-          data: [2.2, 1.5, 0.05, 0.55, 0.85, 0.98, 1.08, 1.15],
-          borderColor: '#22c55e',
-          backgroundColor: 'rgba(34, 197, 94, 0.05)',
-          fill: true,
-          tension: 0.3
-        }
+        { label: 'Out Delivery Trajectory (Z Height)', data: [2.1, 1.4, 0.08, 0.45, 0.62, 0.70, 0.72, 0.71], borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', fill: true, tension: 0.3 },
+        { label: 'Not Out Delivery (Over Bails)', data: [2.2, 1.5, 0.05, 0.55, 0.85, 0.98, 1.08, 1.15], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.05)', fill: true, tension: 0.3 }
       ]
     },
     options: {
@@ -221,7 +197,7 @@
       plugins: { legend: { labels: { color: '#94a3b8' } } },
       scales: {
         x: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' } },
-        y: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' }, title: { display: true, text: 'Height Z (meters)', color: '#38bdf8' } }
+        y: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' } }
       }
     }
   });
@@ -240,8 +216,8 @@
       responsive: true,
       plugins: { legend: { labels: { color: '#94a3b8' } } },
       scales: {
-        x: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' }, title: { display: true, text: 'Recall', color: '#94a3b8' } },
-        y: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' }, title: { display: true, text: 'Precision', color: '#38bdf8' } }
+        x: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' } },
+        y: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' } }
       }
     }
   });
@@ -250,9 +226,7 @@
     type: 'bar',
     data: {
       labels: ['80-90 km/h (Spin)', '90-110 km/h (Medium)', '110-130 km/h (Fast-Medium)', '130-150 km/h (Express Fast)'],
-      datasets: [
-        { label: 'Deliveries Analyzed', data: [340, 520, 890, 410], backgroundColor: ['#818cf8', '#38bdf8', '#34d399', '#facc15'] }
-      ]
+      datasets: [{ label: 'Deliveries Analyzed', data: [340, 520, 890, 410], backgroundColor: ['#818cf8', '#38bdf8', '#34d399', '#facc15'] }]
     },
     options: {
       responsive: true,

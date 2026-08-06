@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ICC DRS Pro Admin Console — Remote AI Model Pipeline</title>
+  <title>ICC DRS Pro Admin Console -- Remote AI Model Pipeline</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -15,9 +15,6 @@
       --card-border: rgba(56, 189, 248, 0.2);
       --accent: #38bdf8;
       --accent2: #818cf8;
-      --green: #22c55e;
-      --red: #ef4444;
-      --yellow: #facc15;
       --text: #f8fafc;
       --muted: #94a3b8;
       --radius: 16px;
@@ -38,7 +35,7 @@
       align-items: center;
       justify-content: space-between;
     }
-    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .header-left { display: flex; align-items: center; gap: 1rem; cursor: pointer; }
     .logo { font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); }
     header h1 {
       font-size: 1.5rem;
@@ -66,7 +63,6 @@
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
       padding: 2rem;
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
       margin-bottom: 2rem;
     }
 
@@ -87,28 +83,45 @@
       font-size: 1rem;
       outline: none;
     }
-    .btn-train {
+
+    .blue-bar-btn {
       width: 100%;
-      padding: 1rem;
+      padding: 1.2rem;
       background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
       color: #030712;
       font-weight: 900;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       border: none;
       border-radius: 12px;
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
     }
-    .btn-train:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4); }
+    .blue-bar-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5); }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 1rem;
+      padding: 0.5rem 1rem;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
 
     .terminal {
       background: #020617;
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 1.2rem;
-      font-family: 'Consolas', 'Courier New', monospace;
+      font-family: 'Consolas', monospace;
       font-size: 0.85rem;
       color: #38bdf8;
       height: 320px;
@@ -120,15 +133,15 @@
 <body>
 
 <header>
-  <div class="header-left">
+  <div class="header-left" onclick="window.location.href='/'">
     <div class="logo">⚡</div>
     <div>
       <h1>DRS Admin Training Console</h1>
-      <p>Page 4 — Remote Pipeline Controller · Pro Model Training · Live Logs</p>
+      <p>Page 4 -- Remote Pipeline Controller · Pro Model Training · Live Logs</p>
     </div>
   </div>
   <div style="display:flex; gap:0.6rem; align-items:center;">
-    <a href="/" class="nav-link">📹 DRS Review</a>
+    <a href="/" class="nav-link">📹 DRS Review (Page 1)</a>
     <a href="/analytics" class="nav-link">📊 Precision Matrix</a>
     <a href="/records" class="nav-link">📁 Decision Records</a>
     <a href="/admin" class="nav-link active">⚡ Admin Console</a>
@@ -137,8 +150,10 @@
 
 <div class="container">
 
+  <a href="/" class="back-btn">⬅️ Back to Page 1 (DRS Review Console)</a>
+
   <div class="card">
-    <h2 style="font-size:1.3rem; font-weight:800; color:var(--accent); margin-bottom:1rem;">🚀 Trigger Ultra-Deep Pro Model Training Engine</h2>
+    <h2 style="font-size:1.3rem; font-weight:800; color:var(--accent); margin-bottom:1rem;">🚀 Trigger Pro Model Training & Return to Page 1</h2>
     
     <div class="grid-4">
       <div class="kpi">
@@ -164,25 +179,25 @@
       <input type="password" id="adminToken" class="input-field" value="icc2024" placeholder="Enter ADMIN_TOKEN (default: icc2024)" />
     </div>
 
-    <button type="button" class="btn-train" onclick="startTraining()">⚡ Start Pro Training Engine</button>
+    <!-- Blue Bar Button: Starts Training and Navigates to 1st Page -->
+    <button type="button" class="blue-bar-btn" onclick="startTrainingAndGoHome()">⚡ START PRO TRAINING ENGINE (AND GO TO PAGE 1)</button>
   </div>
 
   <div class="card">
     <h2 style="font-size:1.1rem; font-weight:800; color:var(--accent2); margin-bottom:0.8rem;">🖥️ Live Pipeline Execution Terminal Logs</h2>
-    <div id="terminalLog" class="terminal">Terminal ready. Click "Start Pro Training Engine" above to trigger high-level training run...</div>
+    <div id="terminalLog" class="terminal">Terminal ready. Click "START PRO TRAINING ENGINE" above to trigger training run...</div>
   </div>
 
 </div>
 
 <script>
   let activeJobId = null;
-  let pollInterval = null;
 
-  async function startTraining() {
+  async function startTrainingAndGoHome() {
     const token = document.getElementById('adminToken').value;
     const terminal = document.getElementById('terminalLog');
     
-    terminal.textContent = "[SYSTEM] Sending authentication token and launching training pipeline...
+    terminal.textContent = "[SYSTEM] Sending token and dispatching training job...
 ";
 
     try {
@@ -196,33 +211,16 @@
       if (res.ok && data.job_id) {
         activeJobId = data.job_id;
         terminal.textContent += `[SUCCESS] Job dispatched with ID: ${activeJobId}
-[SYSTEM] Polling live training logs...
-
+[SYSTEM] Redirecting to Page 1 in 1.5 seconds...
 `;
-        if (pollInterval) clearInterval(pollInterval);
-        pollInterval = setInterval(fetchLogs, 2000);
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1500);
       } else {
-        terminal.textContent += `[ERROR] ${data.error || 'Authentication failed or server error.'}
-`;
+        alert("Admin token authentication error: " + (data.error || 'Unauthorized'));
       }
     } catch (err) {
-      terminal.textContent += `[ERROR] Failed to connect to server: ${err}
-`;
-    }
-  }
-
-  async function fetchLogs() {
-    if (!activeJobId) return;
-    try {
-      const res = await fetch(`/admin/status/${activeJobId}`);
-      const data = await res.json();
-      if (data.log) {
-        const terminal = document.getElementById('terminalLog');
-        terminal.textContent = data.log;
-        terminal.scrollTop = terminal.scrollHeight;
-      }
-    } catch (err) {
-      console.error(err);
+      alert("Error starting training: " + err);
     }
   }
 </script>

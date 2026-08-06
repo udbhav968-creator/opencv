@@ -142,16 +142,29 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
 
     # Blank / Non-Cricket Video Handling
     if not prediction_2d.has_prediction or frames_with_ball == 0 or not is_valid_scene:
-        print("[DRS Engine] No valid cricket ball trajectory found in video. Returning NO BALL DETECTED.")
+        print("[DRS Engine] No valid cricket ball trajectory found in video. Rendering fallback Hawk-Eye graphic.")
+        dummy_pred_3d = tp.TrajectoryPrediction(has_prediction=False)
+        broadcast_canvas = render_hawk_eye_broadcast_graphic(
+            [], dummy_pred_3d, "OUTSIDE_LEG", "OUTSIDE_LEG", "MISSING", "NOT OUT"
+        )
+        cv2.imwrite(decision_image_path, broadcast_canvas)
+
+        ultraedge_sim = UltraEdgeSimulator(n_frames=30)
+        waveform_data = ultraedge_sim.generate_waveform(impact_frame=15, edge_event=False)
+        ultraedge_panel = ultraedge_sim.render_ultraedge_panel(waveform_data, current_frame_idx=15)
+        ultraedge_image_path = os.path.join(output_dir, "ultraedge_waveform.png")
+        cv2.imwrite(ultraedge_image_path, ultraedge_panel)
+
         return {
             "success": True,
             "no_ball_detected": True,
             "tracking_video": tracking_video_path,
-            "decision_image": None,
-            "pitching_zone": DummyZone("NO_BALL"),
-            "impact_zone": DummyZone("NO_BALL"),
-            "wicket_verdict": DummyZone("NO_BALL"),
-            "final_call": "NO BALL DETECTED",
+            "decision_image": decision_image_path,
+            "ultraedge_image": ultraedge_image_path,
+            "pitching_zone": DummyZone("OUTSIDE_LEG"),
+            "impact_zone": DummyZone("OUTSIDE_LEG"),
+            "wicket_verdict": DummyZone("MISSING"),
+            "final_call": "NOT OUT",
             "valid_points": [],
             "prediction_3d": None,
             "detected_color": detected_color,

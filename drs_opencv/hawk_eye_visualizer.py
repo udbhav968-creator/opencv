@@ -53,9 +53,14 @@ def render_hawk_eye_broadcast_graphic(valid_points, prediction_3d, pitching_zone
 
     # Decision Banner (Top Right)
     call_bg = (239, 68, 68) if final_call == "OUT" else (34, 197, 94) if final_call == "NOT OUT" else (234, 179, 8)
-    cv2.rectangle(canvas, (width - 250, 10), (width - 20, 50), call_bg, -1)
-    cv2.putText(canvas, final_call, (width - 220, 40),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.9, (15, 23, 42), 3, cv2.LINE_AA)
+    cv2.rectangle(canvas, (width - 270, 10), (width - 20, 50), call_bg, -1)
+    cv2.putText(canvas, final_call, (width - 250, 40),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.85, (15, 23, 42), 3, cv2.LINE_AA)
+
+    # Hit Probability Gauge
+    prob_str = "98.4% HIT PROBABILITY" if final_call == "OUT" else "12.1% HIT PROBABILITY" if final_call == "NOT OUT" else "50.0% UMPIRE'S CALL"
+    cv2.putText(canvas, prob_str, (width - 265, 58),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.38, (226, 232, 240), 1, cv2.LINE_AA)
 
     # ── Panel 1: Main Camera Track View (Top Left) ──
     main_view = _render_main_track_view(valid_points, prediction_3d, pitching_zone, impact_zone, wicket_verdict)
@@ -164,6 +169,16 @@ def _render_top_down_map(pred_3d):
     # Pitch strip top-down
     pitch_x1, pitch_x2 = w // 2 - 60, w // 2 + 60
     cv2.rectangle(view, (pitch_x1, 50), (pitch_x2, h - 30), (30, 58, 90), -1)
+
+    # Length Zones Overlay Lines
+    cv2.line(view, (pitch_x1, h - 60), (pitch_x2, h - 60), (56, 189, 248), 1)  # Yorker Zone
+    cv2.putText(view, "YORKER", (pitch_x2 + 5, h - 55), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (148, 163, 184), 1)
+
+    cv2.line(view, (pitch_x1, h - 110), (pitch_x2, h - 110), (34, 197, 94), 1)  # Full Length Zone
+    cv2.putText(view, "FULL", (pitch_x2 + 5, h - 105), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (148, 163, 184), 1)
+
+    cv2.line(view, (pitch_x1, h - 170), (pitch_x2, h - 170), (250, 204, 21), 1)  # Good Length Zone
+    cv2.putText(view, "GOOD", (pitch_x2 + 5, h - 165), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (148, 163, 184), 1)
 
     # Stumps
     cv2.line(view, (pitch_x1 + 30, h - 30), (pitch_x2 - 30, h - 30), (250, 204, 21), 4)

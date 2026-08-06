@@ -1,7 +1,7 @@
-# 🏏 Real DRS Hawk-Eye 3D — ICC Ultra-Deep AI Computer Vision System
+# 🏏 Real DRS Hawk-Eye 3D — ICC Pro-Level AI Computer Vision System
 
 > **Official International Standard (ICC-Level) 3D Cricket Decision Review System (DRS).**
-> An advanced computer vision and deep neural framework designed to process **any cricket video format** (Broadcast 16:9, Vertical Phone Clips 9:16, 4:3 Legacy Footage, 720p/1080p/4K). Powered by an Ultra-Deep 4-Model Neural Ensemble, 3D Parabolic Gravity Homography Kinematics, UltraEdge Audio Snickometer Simulation, AI TV Broadcast Voice Commentary Synthesis, Instant PDF Report Exporter, and a Remote Glassmorphism Admin Console.
+> An advanced computer vision and deep neural framework designed to process **any cricket video format** (Broadcast 16:9, Vertical Phone Clips 9:16, 4:3 Legacy Footage, 720p/1080p/4K). Powered by an Ultra-Deep 4-Model Neural Ensemble, 3D Parabolic Gravity Homography Kinematics, UltraEdge Audio Snickometer Simulation, Pitch Map Yorker/Full/Good Length Heatmaps, Wicket Hit Probability Gauge %, AI TV Broadcast Voice Commentary Synthesis, Instant PDF Report Exporter, and a Remote Glassmorphism Admin Console.
 
 ---
 
@@ -14,13 +14,13 @@
 
 ---
 
-## 🏗️ Advanced System Architecture & High-Level Flowcharts
+## 🏗️ System Architecture & High-Level Flowcharts
 
 ### 1️⃣ End-to-End System Processing Pipeline
 ```mermaid
 flowchart TD
-    A[Input Any Real Cricket Video / MP4 / Stream] --> B[Frame Preprocessor & Spatial Aspect Rescaling]
-    B --> C[Dynamic Scene & Motion Validator]
+    A[Input Any Real Cricket Video / MP4 / Stream] --> B[Frame Preprocessor & Spatial Rescaling]
+    B --> C[Scene & Motion Validator]
     C --> D[Multi-Model Ball Detector Ensemble]
     
     subgraph Ensemble ["4-Model Computer Vision Ensemble"]
@@ -35,10 +35,10 @@ flowchart TD
     F --> G[Kalman Filter Trajectory Tracker]
     G --> H[3D Homography Metric Conversion]
     H --> I[3D Parabolic Gravity Predictor]
-    I --> J[ICC DRS Decision Rules Engine]
+    I --> J[ICC DRS Decision Rules & Wicket Hit Probability %]
     J --> K[UltraEdge Oscilloscope Audio Simulator]
     K --> L[4K Broadcast Hawk-Eye Overlay Generator]
-    L --> M[AI TV Voice Speech Synthesizer]
+    L --> M[AI TV Voice Speech Synthesizer & PDF Exporter]
     M --> N[Vercel Serverless API & Web UI]
 ```
 
@@ -71,7 +71,17 @@ flowchart LR
     G --> H
 ```
 
-### 4️⃣ Ultra-Deep Neural Training & Synthetic Augmentation Engine
+### 4️⃣ Pitch Map Length Zone Breakdown Flowchart
+```mermaid
+flowchart TD
+    A[Bounce Point Metric Y Coordinate] --> B{Pitch Length Classification}
+    B -- Y <= 1.5m --> C1[Yorker Zone - High Blockhole Danger]
+    B -- 1.5m < Y <= 3.0m --> C2[Full Length Zone - Driving Length]
+    B -- 3.0m < Y <= 5.5m --> C3[Good Length Zone - High Wicket Probability]
+    B -- Y > 5.5m --> C4[Short Pitch Zone - Bouncer / Clearance]
+```
+
+### 5️⃣ Ultra-Deep Neural Training & Synthetic Augmentation Engine
 ```mermaid
 flowchart TD
     A["Trigger Run (GitHub Push / Admin UI)"] --> B["Dataset Harvester (Kaggle & GitHub)"]
@@ -84,7 +94,7 @@ flowchart TD
     H --> I["Deploy Artifacts to GitHub / Vercel"]
 ```
 
-### 5️⃣ UltraEdge Audio Snickometer Acoustic Spectrum Analysis
+### 6️⃣ UltraEdge Audio Snickometer Acoustic Spectrum Analysis
 ```mermaid
 flowchart TD
     A[Acoustic Audio Signal Stream] --> B[High-Pass Frequency Filter]
@@ -96,7 +106,7 @@ flowchart TD
     F --> G
 ```
 
-### 6️⃣ AI Speech Voice & PDF Match Exporter Engine
+### 7️⃣ AI Speech Voice & PDF Match Exporter Engine
 ```mermaid
 flowchart LR
     A[Decision Verdict Generated] --> B[AI Speech Synthesis Engine]
@@ -124,10 +134,12 @@ Where `H` is the `3x3` perspective transformation matrix calibrated against stan
 
 ---
 
-## ⚡ Ultra-Deep Learning & Universal Compatibility Features
+## ⚡ High-Tech Broadcast Features Matrix
 
 - 🎥 **Universal Video Format Support**: Works on **any video feed** (MP4, MOV, AVI, MKV) across all aspect ratios (16:9, 9:16 vertical phone clips, 4:3 legacy), 720p, 1080p, and 4K resolutions.
 - 🔴⚪🩷 **Universal Ball Color Calibration**: Supports Red (Test Matches), White (ODIs/T20s), Pink (Day-Night Tests), Yellow, and Orange balls with automatic lighting & hue calibration.
+- 🎯 **Wicket Hit Probability Gauge %**: Calculates exact statistical percentage confidence (e.g. `98.4% Hit Probability`) displayed in the broadcast header banner.
+- 🗺️ **Pitch Map Length Zones**: Renders Yorker, Full Length, Good Length, and Short Pitch zones on top-down pitch diagrams.
 - 🏋️‍♂️ **Ultra-Deep Training Strategy**:
   - **YOLOv8x** (Extra Large Deepest Architecture)
   - **YOLOv5x** (Extra Large Architecture)

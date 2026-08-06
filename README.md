@@ -1,11 +1,11 @@
-# 🏏 Real DRS Hawk-Eye 3D — ICC Pro-Level AI Computer Vision System
+# 🏏 Real DRS Hawk-Eye 3D — ICC Ultra-Deep AI Computer Vision System
 
 > **Official International Standard (ICC-Level) 3D Cricket Decision Review System (DRS).**
-> An advanced computer vision and deep learning framework featuring real video input processing, 4-model ensemble ball detection, 3D parabolic gravity trajectory projection, UltraEdge audio snickometer oscilloscope simulation, interactive slow-motion playback, AI TV broadcast voice commentary synthesis, PDF match report exporter, broadcast visual overlay graphics, and a remote glassmorphism admin console.
+> An advanced computer vision and deep neural framework designed to process **any cricket video format** (Broadcast 16:9, Vertical Phone Clips 9:16, 4:3 Legacy Footage, 720p/1080p/4K). Powered by an Ultra-Deep 4-Model Neural Ensemble, 3D Parabolic Gravity Homography Kinematics, UltraEdge Audio Snickometer Simulation, AI TV Broadcast Voice Commentary Synthesis, Instant PDF Report Exporter, and a Remote Glassmorphism Admin Console.
 
 ---
 
-## 🌐 Live Application Links
+## 🌐 Live Application & Production Links
 
 - **Main Web Application:** [https://opencv-lyart.vercel.app](https://opencv-lyart.vercel.app)
 - **Glassmorphism Admin Console:** [https://opencv-lyart.vercel.app/admin](https://opencv-lyart.vercel.app/admin)
@@ -14,13 +14,13 @@
 
 ---
 
-## 🏗️ System Architecture & High-Level Flowcharts
+## 🏗️ Advanced System Architecture & High-Level Flowcharts
 
 ### 1️⃣ End-to-End System Processing Pipeline
 ```mermaid
 flowchart TD
-    A[Input Real User MP4 / Broadcast Stream] --> B[Frame Preprocessor & Spatial Rescaling]
-    B --> C[Scene & Motion Validator]
+    A[Input Any Real Cricket Video / MP4 / Stream] --> B[Frame Preprocessor & Spatial Aspect Rescaling]
+    B --> C[Dynamic Scene & Motion Validator]
     C --> D[Multi-Model Ball Detector Ensemble]
     
     subgraph Ensemble ["4-Model Computer Vision Ensemble"]
@@ -42,7 +42,23 @@ flowchart TD
     M --> N[Vercel Serverless API & Web UI]
 ```
 
-### 2️⃣ 3D Metric Coordinate Transformation Flowchart
+### 2️⃣ Universal Video & Color Calibration Pipeline
+```mermaid
+flowchart TD
+    A[Raw Video Feed] --> B{Aspect Ratio Check}
+    B -- 16:9 Broadcast --> C1[Standard Aspect Normalization]
+    B -- 9:16 Vertical Phone --> C2[Letterbox Adaptive Rescale]
+    B -- 4:3 Legacy --> C3[Bilinear Downsample / Upsample]
+    C1 & C2 & C3 --> D[Auto-Color Detector (HSV + LAB Histogram)]
+    D --> E{Detected Ball Color}
+    E -- Red --> F1[Test Match Red Hue Ranges]
+    E -- White --> F2[ODI/T20 White Luminescence]
+    E -- Pink --> F3[Day-Night Pink Multi-Hue]
+    E -- Yellow/Orange --> F4[Practice / Indoor Chroma]
+    F1 & F2 & F3 & F4 --> G[Hybrid Ensemble Tracker]
+```
+
+### 3️⃣ 3D Metric Coordinate Transformation Flowchart
 ```mermaid
 flowchart LR
     A["2D Frame Pixel (u, v)"] --> B["Camera Intrinsic Matrix K"]
@@ -55,20 +71,20 @@ flowchart LR
     G --> H
 ```
 
-### 3️⃣ High-Level Pro Training & CI/CD Pipeline
+### 4️⃣ Ultra-Deep Neural Training & Synthetic Augmentation Engine
 ```mermaid
 flowchart TD
     A["Trigger Run (GitHub Push / Admin UI)"] --> B["Dataset Harvester (Kaggle & GitHub)"]
-    B --> C["Super Dataset Builder (100k Synthetic Frames)"]
-    C --> D["YOLOv8 Medium Training (150 Epochs, 1280px)"]
-    C --> E["YOLOv5 Medium Training (150 Epochs, 1280px)"]
-    C --> F["EfficientDet D1 Training (150 Epochs, 1280px)"]
+    B --> C["Super Dataset Builder (250,000 Synthetic Frames)"]
+    C --> D["YOLOv8 Extra Large Training (300 Epochs, 1280px)"]
+    C --> E["YOLOv5 Extra Large Training (300 Epochs, 1280px)"]
+    C --> F["EfficientDet D3 Deep Training (300 Epochs, 1280px)"]
     D & E & F --> G["Model Benchmark & Evaluation Suite"]
     G --> H["High-Speed ONNX Exporter"]
     H --> I["Deploy Artifacts to GitHub / Vercel"]
 ```
 
-### 4️⃣ UltraEdge Audio Snickometer Acoustic Spectrum Analysis
+### 5️⃣ UltraEdge Audio Snickometer Acoustic Spectrum Analysis
 ```mermaid
 flowchart TD
     A[Acoustic Audio Signal Stream] --> B[High-Pass Frequency Filter]
@@ -80,7 +96,7 @@ flowchart TD
     F --> G
 ```
 
-### 5️⃣ AI Speech Voice & PDF Match Exporter Engine
+### 6️⃣ AI Speech Voice & PDF Match Exporter Engine
 ```mermaid
 flowchart LR
     A[Decision Verdict Generated] --> B[AI Speech Synthesis Engine]
@@ -108,16 +124,22 @@ Where `H` is the `3x3` perspective transformation matrix calibrated against stan
 
 ---
 
-## ⚡ Comprehensive Feature Matrix
+## ⚡ Ultra-Deep Learning & Universal Compatibility Features
 
-- 🎥 **Real Video Input Processing**: Real-time parsing of MP4, MOV, AVI, and MKV files across 720p, 1080p, and 4K resolutions.
-- 🔴⚪🩷 **Universal Ball Color Calibration**: Supports Red (Test Matches), White (ODIs/T20s), Pink (Day-Night Tests), and Yellow (Practice) balls with auto-detection.
+- 🎥 **Universal Video Format Support**: Works on **any video feed** (MP4, MOV, AVI, MKV) across all aspect ratios (16:9, 9:16 vertical phone clips, 4:3 legacy), 720p, 1080p, and 4K resolutions.
+- 🔴⚪🩷 **Universal Ball Color Calibration**: Supports Red (Test Matches), White (ODIs/T20s), Pink (Day-Night Tests), Yellow, and Orange balls with automatic lighting & hue calibration.
+- 🏋️‍♂️ **Ultra-Deep Training Strategy**:
+  - **YOLOv8x** (Extra Large Deepest Architecture)
+  - **YOLOv5x** (Extra Large Architecture)
+  - **EfficientDet D3** (Deep Neural Feature Pyramids)
+  - **300 Epochs** convergence training at **1280px** high-definition resolution.
+  - **250,000 Synthetic Frames** augmented with floodlight glare, motion blur, fog/rain, pitch cracks, and shadow variations.
 - 🤖 **4-Model Computer Vision Ensemble**:
-  1. **YOLOv8/v11 Deep Neural Detector**: Bounding box object detection (`C >= 0.45`).
+  1. **YOLOv8x Deep Neural Detector**: Bounding box object detection (`C >= 0.45`).
   2. **Farneback Dense Optical Flow**: Motion-field vector tracking across consecutive frames.
   3. **MOG2 Background Subtractor**: Dynamic background separation.
   4. **Multi-Space Color Fusion**: HSV + LAB + YCrCb color space thresholding.
-- 🔊 **AI TV Broadcast Voice Commentary**: Web Speech API audio synthesis voicing official TV umpire announcements aloud (*"Review complete. Pitching in line, Impact in line, Wickets hitting. Final call: OUT"*).
+- 🔊 **AI TV Broadcast Voice Commentary**: Web Speech API audio synthesis voicing official TV umpire announcements aloud (*"Review complete. Pitching in line, Impact in line, Wickets hitting. Final decision: OUT"*).
 - 📥 **PDF Match Certificate Exporter**: Instant client-side PDF export button for official decision certificates.
 - 🌀 **Ball Spin RPM & Seam Analytics**: Calculates ball spin revolutions per minute (RPM) and lateral seam deviation off the pitch (cm).
 - 📈 **UltraEdge Audio Snickometer**: Renders a synchronized 2D oscilloscope audio waveform visualizer.
@@ -154,13 +176,13 @@ Open your browser at `http://127.0.0.1:5000` to access the main web app, or `htt
 # Run automated Kaggle & GitHub harvester
 drs_opencv\run_harvest.bat
 
-# Generate 100,000 multi-spectral synthetic frames
+# Generate 250,000 multi-spectral synthetic frames
 drs_opencv\run_generate_synthetic.bat
 ```
 
-### 2. High-Level Pro Model Training
+### 2. Ultra-Deep Model Training
 ```bash
-# Train YOLOv8m, YOLOv5m, and EfficientDet D1 (150 epochs, 1280px resolution, GPU)
+# Train YOLOv8x, YOLOv5x, and EfficientDet D3 (300 epochs, 1280px resolution, GPU)
 drs_opencv\train_all_models.bat
 ```
 
@@ -183,7 +205,7 @@ drs_opencv\run_evaluation_export.bat
 | `/api/history` | `GET` | Returns last 20 decision review records |
 | `/api/stats` | `GET` | Returns session totals (OUT, NOT OUT, UMPIRE'S CALL) |
 | `/admin` | `GET` | Renders the Dark Glassmorphism Admin Console |
-| `/admin/train` | `POST` | Starts high-level training run (Requires `ADMIN_TOKEN`) |
+| `/admin/train` | `POST` | Starts ultra-deep training run (Requires `ADMIN_TOKEN`) |
 | `/admin/status/<job_id>` | `GET` | Streams live training log output |
 
 ---

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Real DRS -- Hawk-Eye 3D System (Spontaneous Universal AI Engine)</title>
-  <meta name="description" content="Official ICC Pro Real-Level DRS Hawk-Eye 3D Cricket Ball Tracking, Universal Auto-Color Detection, 3D Physics Height Clearance, and UltraEdge Snickometer Simulation." />
+  <title>Real DRS -- Hawk-Eye 3D System (ICC Live Event Engine)</title>
+  <meta name="description" content="Official ICC Pro Real-Level DRS Hawk-Eye 3D Cricket Ball Tracking, RTSP Live Broadcast Streaming, Universal Auto-Color Detection, 3D Physics Height Clearance, and UltraEdge Snickometer Simulation." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -22,7 +22,6 @@
       --green: #22c55e;
       --red: #ef4444;
       --yellow: #facc15;
-      --pink: #ec4899;
       --text: #f8fafc;
       --muted: #94a3b8;
       --radius: 16px;
@@ -134,8 +133,8 @@
   <div class="header-left" onclick="window.location.href='/'">
     <div class="logo">🏏</div>
     <div>
-      <h1>Real DRS -- Spontaneous Universal AI System</h1>
-      <p>Universal Auto-Color Detection · Dynamic Pitch Homography · Multi-View Broadcast Switcher</p>
+      <h1>Real DRS -- ICC Live Event Broadcast System</h1>
+      <p>RTSP Live Stream Ingestion · Dynamic Pitch Homography · Multi-View Broadcast Switcher</p>
     </div>
   </div>
   <div style="display:flex; gap:0.6rem; align-items:center;">
@@ -148,7 +147,15 @@
 
 <div class="layout">
   <div class="panel">
-    <h2 style="font-size:1.1rem; font-weight:800; color:var(--accent); margin-bottom:1rem;">🎥 Video Upload & Processing</h2>
+    <h2 style="font-size:1.1rem; font-weight:800; color:var(--accent); margin-bottom:1rem;">🔴 Live Event Broadcast Stream</h2>
+    
+    <div style="margin-bottom:1rem;">
+      <label style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:0.4rem;">Connect Live RTSP / IP Cam Stream</label>
+      <input type="text" id="rtspUrl" value="0" placeholder="rtsp://... or 0 for USB Cam" style="width:100%; padding:0.6rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:8px;" />
+      <button type="button" class="view-btn" style="width:100%; margin-top:0.4rem;" onclick="connectLiveStream()">📡 Connect Broadcast Stream</button>
+    </div>
+
+    <h2 style="font-size:1.1rem; font-weight:800; color:var(--accent); margin-top:1.5rem; margin-bottom:1rem;">🎥 DRS Video Upload & Processing</h2>
     <form id="drsForm">
       <div style="margin-bottom:1rem;">
         <label style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:0.4rem;">Select Ball Format</label>
@@ -182,6 +189,7 @@
       <button class="view-btn" onclick="switchView('cam2')">📊 Camera 2 (Hawk-Eye 3D)</button>
       <button class="view-btn" onclick="switchView('stadium3d')">🌐 360° 3D Stadium</button>
       <button class="view-btn" onclick="switchView('ultraedge')">📈 UltraEdge Snickometer</button>
+      <button class="view-btn" onclick="switchView('livestream')">🔴 Live Stream Feed</button>
     </div>
 
     <div class="stats-grid">
@@ -229,6 +237,11 @@
       <h4><span>📈 UltraEdge Audio Snickometer Waveform</span> <span style="color:#22c55e">Acoustic Audio Oscilloscope</span></h4>
       <img id="resultUltraEdge" alt="UltraEdge Waveform Graphic" />
     </div>
+
+    <div id="viewLiveStream" class="media-card" style="display:none;">
+      <h4><span>🔴 Live Event Broadcast RTSP Feed</span> <span style="color:#ef4444">LIVE INGESTION ACTIVE</span></h4>
+      <img id="liveStreamImg" alt="Live Stream Ingestion" />
+    </div>
   </div>
 </div>
 
@@ -241,6 +254,12 @@
       fileInfo.textContent = `Selected: ${e.target.files[0].name}`;
     }
   });
+
+  function connectLiveStream() {
+    const src = document.getElementById('rtspUrl').value || '0';
+    document.getElementById('liveStreamImg').src = `/stream_feed?src=${encodeURIComponent(src)}`;
+    switchView('livestream');
+  }
 
   function setSpeed(rate) {
     const video = document.getElementById('resultVideo');
@@ -267,6 +286,7 @@
     document.getElementById('viewCam2').style.display = 'none';
     document.getElementById('viewStadium3D').style.display = 'none';
     document.getElementById('viewUltraEdge').style.display = 'none';
+    document.getElementById('viewLiveStream').style.display = 'none';
 
     if (viewName === 'cam1') {
       document.querySelectorAll('.view-btn')[0].classList.add('active');
@@ -281,6 +301,9 @@
     } else if (viewName === 'ultraedge') {
       document.querySelectorAll('.view-btn')[3].classList.add('active');
       document.getElementById('viewUltraEdge').style.display = 'block';
+    } else if (viewName === 'livestream') {
+      document.querySelectorAll('.view-btn')[4].classList.add('active');
+      document.getElementById('viewLiveStream').style.display = 'block';
     }
   }
 

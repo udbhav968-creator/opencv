@@ -3,11 +3,12 @@ app.py — OpenCV DRS Web Application
 Flask backend serving the DRS pipeline with AI verdict, 3D Physics metrics, UltraEdge, stats, and health endpoints.
 """
 
-from flask import Flask, request, render_template, send_file, jsonify
+from flask import Flask, request, render_template, send_file, jsonify, Response
 import os
 import uuid
 import sys
 import datetime
+import cv2
 
 # Add drs_opencv to path so imports work
 root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -57,6 +58,27 @@ def analytics_page():
 @app.route('/records')
 def records_page():
     return render_template('records.html')
+
+def generate_live_stream_frames(source_url):
+    src = int(source_url) if str(source_url).isdigit() else source_url
+    cap = cv2.VideoCapture(src)
+    while cap.isOpened():
+        success, frame = cap.read()
+        if not success:
+            break
+        cv2.putText(frame, "LIVE ICC BROADCAST FEED -- HAWK-EYE 3D ACTIVE", (20, 40),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.65, (56, 189, 248), 2, cv2.LINE_AA)
+        ret, buffer = cv2.imencode('.jpg', frame)
+        if not ret:
+            continue
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+    cap.release()
+
+@app.route('/stream_feed')
+def stream_feed():
+    src = request.args.get('src', '0')
+    return Response(generate_live_stream_frames(src), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 # --- Admin Training Endpoints ---
 ADMIN_TOKEN = os.environ.get('ADMIN_TOKEN', 'icc2024')

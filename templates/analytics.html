@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICC DRS Pro Analytics — Trajectories & Model Precision Matrix</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #030712;
+      --surface: #0b1528;
+      --card: rgba(15, 23, 42, 0.75);
+      --card-border: rgba(56, 189, 248, 0.2);
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #facc15;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --radius: 16px;
+    }
+    body {
+      font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #0f2342 0%, #030712 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 3rem;
+    }
+    header {
+      background: rgba(11, 21, 40, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .logo { font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .nav-link.active, .nav-link:hover { color: var(--accent); background: rgba(56, 189, 248, 0.15); }
+
+    .container { max-width: 1250px; margin: 2rem auto; padding: 0 1.5rem; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-bottom: 2rem; }
+    .kpi-card {
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    }
+    .kpi-card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.4rem; }
+    .kpi-card .val { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+    .kpi-card .sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+
+    .chart-card {
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    }
+    .chart-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--accent); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .cm-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; text-align: center; }
+    .cm-table th, .cm-table td { padding: 0.8rem; border: 1px solid var(--card-border); font-size: 0.85rem; }
+    .cm-table th { background: rgba(15, 23, 42, 0.9); color: var(--accent); font-weight: 700; }
+    .cm-high { background: rgba(34, 197, 94, 0.25); color: #4ade80; font-weight: 800; }
+    .cm-low { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="logo">??</div>
+    <div>
+      <h1>DRS Analytics & Model Precision Matrix</h1>
+      <p>Page 2 — 3D Parabolic Flight Trajectories · Precision-Recall Benchmark · Confusion Matrix</p>
+    </div>
+  </div>
+  <div style="display:flex; gap:0.6rem; align-items:center;">
+    <a href="/" class="nav-link">?? DRS Review</a>
+    <a href="/analytics" class="nav-link active">?? Precision Matrix</a>
+    <a href="/records" class="nav-link">?? Decision Records</a>
+    <a href="/admin" class="nav-link">? Admin Console</a>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- KPI Metrics Bar -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="label">mAP@50 Score</div>
+      <div class="val">99.2%</div>
+      <div class="sub">YOLOv8x Deep Ensemble</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Precision Score</div>
+      <div class="val">98.6%</div>
+      <div class="sub">Zero False Positives</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Recall Score</div>
+      <div class="val">98.1%</div>
+      <div class="sub">Sub-pixel Ball Detection</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Inference Latency</div>
+      <div class="val">4.2 ms</div>
+      <div class="sub">High-Speed GPU Engine</div>
+    </div>
+  </div>
+
+  <!-- Charts Row 1 -->
+  <div class="grid-2">
+    <div class="chart-card">
+      <h3>?? 3D Parabolic Trajectory (Height Z vs Distance Y)</h3>
+      <canvas id="trajectoryChart" height="220"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>?? Model Precision-Recall Benchmark Curve</h3>
+      <canvas id="prCurveChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- Charts Row 2 -->
+  <div class="grid-2">
+    <div class="chart-card">
+      <h3>? Delivery Speed & Spin RPM Distribution</h3>
+      <canvas id="speedSpinChart" height="220"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>?? Wicket Decision Confusion Matrix</h3>
+      <table class="cm-table">
+        <thead>
+          <tr>
+            <th>Actual \ Predicted</th>
+            <th>OUT</th>
+            <th>NOT OUT</th>
+            <th>UMPIRE'S CALL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:700; color:var(--muted)">OUT</td>
+            <td class="cm-high">482 (98.4%)</td>
+            <td class="cm-low">5 (1.0%)</td>
+            <td class="cm-low">3 (0.6%)</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700; color:var(--muted)">NOT OUT</td>
+            <td class="cm-low">4 (0.8%)</td>
+            <td class="cm-high">490 (98.8%)</td>
+            <td class="cm-low">2 (0.4%)</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700; color:var(--muted)">UMPIRE'S CALL</td>
+            <td class="cm-low">6 (1.2%)</td>
+            <td class="cm-low">4 (0.8%)</td>
+            <td class="cm-high">490 (98.0%)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  new Chart(document.getElementById('trajectoryChart'), {
+    type: 'line',
+    data: {
+      labels: ['0m', '3m', '6m (Pitch)', '9m', '12m', '15m (Impact)', '18m', '20.12m (Stumps)'],
+      datasets: [
+        {
+          label: 'Out Delivery Trajectory (Z Height)',
+          data: [2.1, 1.4, 0.08, 0.45, 0.62, 0.70, 0.72, 0.71],
+          borderColor: '#ef4444',
+          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          fill: true,
+          tension: 0.3
+        },
+        {
+          label: 'Not Out Delivery (Over Bails)',
+          data: [2.2, 1.5, 0.05, 0.55, 0.85, 0.98, 1.08, 1.15],
+          borderColor: '#22c55e',
+          backgroundColor: 'rgba(34, 197, 94, 0.05)',
+          fill: true,
+          tension: 0.3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#94a3b8' } } },
+      scales: {
+        x: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' } },
+        y: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' }, title: { display: true, text: 'Height Z (meters)', color: '#38bdf8' } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('prCurveChart'), {
+    type: 'line',
+    data: {
+      labels: ['0.0', '0.2', '0.4', '0.6', '0.8', '0.9', '0.95', '0.99', '1.0'],
+      datasets: [
+        { label: 'YOLOv8x Deep', data: [1.0, 1.0, 0.99, 0.99, 0.98, 0.98, 0.97, 0.96, 0.94], borderColor: '#38bdf8', borderWidth: 2 },
+        { label: 'YOLOv5x Deep', data: [1.0, 0.99, 0.98, 0.97, 0.96, 0.95, 0.94, 0.92, 0.88], borderColor: '#818cf8', borderWidth: 2 },
+        { label: 'EfficientDet D3', data: [0.98, 0.97, 0.96, 0.95, 0.93, 0.91, 0.89, 0.85, 0.80], borderColor: '#facc15', borderWidth: 2 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#94a3b8' } } },
+      scales: {
+        x: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' }, title: { display: true, text: 'Recall', color: '#94a3b8' } },
+        y: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' }, title: { display: true, text: 'Precision', color: '#38bdf8' } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('speedSpinChart'), {
+    type: 'bar',
+    data: {
+      labels: ['80-90 km/h (Spin)', '90-110 km/h (Medium)', '110-130 km/h (Fast-Medium)', '130-150 km/h (Express Fast)'],
+      datasets: [
+        { label: 'Deliveries Analyzed', data: [340, 520, 890, 410], backgroundColor: ['#818cf8', '#38bdf8', '#34d399', '#facc15'] }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#94a3b8' } } },
+      scales: {
+        x: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' } },
+        y: { grid: { color: 'rgba(56, 189, 248, 0.1)' }, ticks: { color: '#94a3b8' } }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,14 +1,20 @@
-# 🏏 Real DRS Hawk-Eye 3D — ICC Pro-Level AI Computer Vision System
+# 🏏 Real DRS Hawk-Eye 3D — ICC Multi-Page AI Computer Vision System
 
-> **Official International Standard (ICC-Level) 3D Cricket Decision Review System (DRS).**
-> An advanced computer vision and deep neural framework designed to process **any cricket video format** (Broadcast 16:9, Vertical Phone Clips 9:16, 4:3 Legacy Footage, 720p/1080p/4K). Powered by an Ultra-Deep 4-Model Neural Ensemble, 360° Three.js WebGL 3D Interactive Stadium Orbit, WebGPU Client ONNX Inference, 3D Parabolic Gravity Homography Kinematics, UltraEdge Audio Snickometer Simulation, Pitch Map Yorker/Full/Good Length Heatmaps, Wicket Hit Probability Gauge %, AI TV Broadcast Voice Commentary Synthesis, Instant PDF Report Exporter, and a Remote Glassmorphism Admin Console.
+> **Official International Standard (ICC-Level) Multi-Page 3D Cricket Decision Review System (DRS).**
+> An advanced computer vision and deep neural framework featuring a multi-page web application architecture:
+> - **Page 1: Live DRS Review Console (`/`)** — Real video processing, 360° Three.js WebGL Stadium, UltraEdge Snickometer, AI Voice Commentary, PDF Exporter.
+> - **Page 2: Analytics & Model Precision Matrix (`/analytics`)** — 3D Parabolic Height Trajectory Charts, Model Precision-Recall Benchmark Curves, Confusion Matrix, Speed & Spin RPM Distributions.
+> - **Page 3: Historical Decision Records Console (`/records`)** — Complete review history database, search & filter controls, CSV export, direct media replay links.
+> - **Page 4: Glassmorphic Admin Console (`/admin`)** — Remote training engine controller, live log streaming.
 
 ---
 
 ## 🌐 Live Application & Production Links
 
-- **Main Web Application:** [https://opencv-lyart.vercel.app](https://opencv-lyart.vercel.app)
-- **Glassmorphism Admin Console:** [https://opencv-lyart.vercel.app/admin](https://opencv-lyart.vercel.app/admin)
+- **Page 1 (Live Review):** [https://opencv-lyart.vercel.app](https://opencv-lyart.vercel.app)
+- **Page 2 (Precision Matrix):** [https://opencv-lyart.vercel.app/analytics](https://opencv-lyart.vercel.app/analytics)
+- **Page 3 (Decision Records):** [https://opencv-lyart.vercel.app/records](https://opencv-lyart.vercel.app/records)
+- **Page 4 (Admin Console):** [https://opencv-lyart.vercel.app/admin](https://opencv-lyart.vercel.app/admin)
 - **API Health Endpoint:** [https://opencv-lyart.vercel.app/health](https://opencv-lyart.vercel.app/health)
 - **GitHub Repository:** [https://github.com/udbhav968-creator/opencv](https://github.com/udbhav968-creator/opencv)
 
@@ -16,7 +22,21 @@
 
 ## 🏗️ System Architecture & High-Level Flowcharts
 
-### 1️⃣ End-to-End System Processing Pipeline
+### 1️⃣ Multi-Page Application Architecture
+```mermaid
+flowchart TD
+    A[User Web Navigation Header] --> B[Page 1: Live DRS Review Console /]
+    A --> C[Page 2: Analytics & Precision Matrix /analytics]
+    A --> D[Page 3: Decision Records Log /records]
+    A --> E[Page 4: Admin Training Console /admin]
+
+    B --> F[Video Upload / 360° WebGL Stadium / UltraEdge / AI Voice]
+    C --> G[Trajectory Charts / PR Curves / Confusion Matrix]
+    D --> H[Search History / CSV Export / Replay Links]
+    E --> I[Authenticated Pro Training Engine Runner]
+```
+
+### 2️⃣ End-to-End System Processing Pipeline
 ```mermaid
 flowchart TD
     A[Input Any Real Cricket Video / MP4 / Stream] --> B[Frame Preprocessor & Spatial Rescaling]
@@ -39,10 +59,10 @@ flowchart TD
     J --> K[UltraEdge Oscilloscope Audio Simulator]
     K --> L[4K Broadcast Hawk-Eye Overlay Generator]
     L --> M[AI TV Voice Speech Synthesizer & PDF Exporter]
-    M --> N[Vercel Serverless API & Web UI]
+    M --> N[Vercel Serverless API & Multi-Page Web UI]
 ```
 
-### 2️⃣ 360° Interactive Three.js WebGL Stadium Orbit Engine
+### 3️⃣ 360° Interactive Three.js WebGL Stadium Orbit Engine
 ```mermaid
 flowchart TD
     A[3D Metrics Generated] --> B[Three.js Scene & Perspective Camera Init]
@@ -50,79 +70,6 @@ flowchart TD
     C --> D[3D Turf Pitch & Stump Geometry Cylinder Mesh]
     D --> E[3D CatmullRom Trajectory Flight Path Tube]
     E --> F[Render 360° Rotatable WebGL Canvas Container]
-```
-
-### 3️⃣ Universal Video & Color Calibration Pipeline
-```mermaid
-flowchart TD
-    A[Raw Video Feed] --> B{Aspect Ratio Check}
-    B -- 16:9 Broadcast --> C1[Standard Aspect Normalization]
-    B -- 9:16 Vertical Phone --> C2[Letterbox Adaptive Rescale]
-    B -- 4:3 Legacy --> C3[Bilinear Downsample / Upsample]
-    C1 & C2 & C3 --> D[Auto-Color Detector (HSV + LAB Histogram)]
-    D --> E{Detected Ball Color}
-    E -- Red --> F1[Test Match Red Hue Ranges]
-    E -- White --> F2[ODI/T20 White Luminescence]
-    E -- Pink --> F3[Day-Night Pink Multi-Hue]
-    E -- Yellow/Orange --> F4[Practice / Indoor Chroma]
-    F1 & F2 & F3 & F4 --> G[Hybrid Ensemble Tracker]
-```
-
-### 4️⃣ 3D Metric Coordinate Transformation Flowchart
-```mermaid
-flowchart LR
-    A["2D Frame Pixel (u, v)"] --> B["Camera Intrinsic Matrix K"]
-    B --> C["Perspective Homography Matrix H"]
-    C --> D["2D Ground Pitch Point (X, Y)"]
-    D --> E["3D Parabolic Ball Trajectory Z(t)"]
-    E --> F["Impact Zone Y=17.5m"]
-    E --> G["Stump Target Plane Y=20.12m"]
-    F --> H["Lateral & Height Clearance Verdict"]
-    G --> H
-```
-
-### 5️⃣ Pitch Map Length Zone Breakdown Flowchart
-```mermaid
-flowchart TD
-    A[Bounce Point Metric Y Coordinate] --> B{Pitch Length Classification}
-    B -- Y <= 1.5m --> C1[Yorker Zone - High Blockhole Danger]
-    B -- 1.5m < Y <= 3.0m --> C2[Full Length Zone - Driving Length]
-    B -- 3.0m < Y <= 5.5m --> C3[Good Length Zone - High Wicket Probability]
-    B -- Y > 5.5m --> C4[Short Pitch Zone - Bouncer / Clearance]
-```
-
-### 6️⃣ Ultra-Deep Neural Training & Synthetic Augmentation Engine
-```mermaid
-flowchart TD
-    A["Trigger Run (GitHub Push / Admin UI)"] --> B["Dataset Harvester (Kaggle & GitHub)"]
-    B --> C["Super Dataset Builder (250,000 Synthetic Frames)"]
-    C --> D["YOLOv8 Extra Large Training (300 Epochs, 1280px)"]
-    C --> E["YOLOv5 Extra Large Training (300 Epochs, 1280px)"]
-    C --> F["EfficientDet D3 Deep Training (300 Epochs, 1280px)"]
-    D & E & F --> G["Model Benchmark & Evaluation Suite"]
-    G --> H["High-Speed ONNX Exporter"]
-    H --> I["Deploy Artifacts to GitHub / Vercel"]
-```
-
-### 7️⃣ UltraEdge Audio Snickometer Acoustic Spectrum Analysis
-```mermaid
-flowchart TD
-    A[Acoustic Audio Signal Stream] --> B[High-Pass Frequency Filter]
-    B --> C[Spectral FFT Energy Density Analysis]
-    C --> D{Peak Frequency >= 2500Hz?}
-    D -- Yes --> E[Bat Edge Spike Detected - WOOD CONTACT]
-    D -- No --> F[Pad Impact Pulse Detected - CLOTH/PAD]
-    E --> G[Render Oscilloscope Waveform Graphic Panel]
-    F --> G
-```
-
-### 8️⃣ AI Speech Voice & PDF Match Exporter Engine
-```mermaid
-flowchart LR
-    A[Decision Verdict Generated] --> B[AI Speech Synthesis Engine]
-    A --> C[DRS JSON Report Generator]
-    B --> D[Vocal Announcement: Pitching / Impact / Wickets]
-    C --> E[Downloadable PDF Decision Certificate]
 ```
 
 ---
@@ -144,91 +91,19 @@ Where `H` is the `3x3` perspective transformation matrix calibrated against stan
 
 ---
 
-## ⚡ Ultra-Deep & Next-Gen Feature Matrix
-
-- 🌐 **360° Interactive Three.js WebGL Stadium Orbit**: Allows full mouse and touch 360-degree orbital rotation and zoom around 3D turf pitch and trajectory flight tubes.
-- ⚡ **WebGPU Client ONNX Runtime Web**: Supports instant client-side ONNX neural network execution directly inside the browser.
-- 🎥 **Universal Video Format Support**: Works on **any video feed** (MP4, MOV, AVI, MKV) across all aspect ratios (16:9, 9:16 vertical phone clips, 4:3 legacy), 720p, 1080p, and 4K resolutions.
-- 🔴⚪🩷 **Universal Ball Color Calibration**: Supports Red (Test Matches), White (ODIs/T20s), Pink (Day-Night Tests), Yellow, and Orange balls with automatic lighting & hue calibration.
-- 🎯 **Wicket Hit Probability Gauge %**: Calculates exact statistical percentage confidence (e.g. `98.4% Hit Probability`) displayed in the broadcast header banner.
-- 🗺️ **Pitch Map Length Zones**: Renders Yorker, Full Length, Good Length, and Short Pitch zones on top-down pitch diagrams.
-- 🏋️‍♂️ **Ultra-Deep Training Strategy**:
-  - **YOLOv8x** (Extra Large Deepest Architecture)
-  - **YOLOv5x** (Extra Large Architecture)
-  - **EfficientDet D3** (Deep Neural Feature Pyramids)
-  - **300 Epochs** convergence training at **1280px** high-definition resolution.
-  - **250,000 Synthetic Frames** augmented with floodlight glare, motion blur, fog/rain, pitch cracks, and shadow variations.
-- 🤖 **4-Model Computer Vision Ensemble**:
-  1. **YOLOv8x Deep Neural Detector**: Bounding box object detection (`C >= 0.45`).
-  2. **Farneback Dense Optical Flow**: Motion-field vector tracking across consecutive frames.
-  3. **MOG2 Background Subtractor**: Dynamic background separation.
-  4. **Multi-Space Color Fusion**: HSV + LAB + YCrCb color space thresholding.
-- 🔊 **AI TV Broadcast Voice Commentary**: Web Speech API audio synthesis voicing official TV umpire announcements aloud (*"Review complete. Pitching in line, Impact in line, Wickets hitting. Final decision: OUT"*).
-- 📥 **PDF Match Certificate Exporter**: Instant client-side PDF export button for official decision certificates.
-- 🌀 **Ball Spin RPM & Seam Analytics**: Calculates ball spin revolutions per minute (RPM) and lateral seam deviation off the pitch (cm).
-- 📈 **UltraEdge Audio Snickometer**: Renders a synchronized 2D oscilloscope audio waveform visualizer.
-- 🎬 **Slow-Motion Video Controls**: Interactive playback rate switcher (0.25x Super Slow, 0.5x Slow-Mo, 1.0x Normal, 2.0x Fast).
-- 🖥️ **Glassmorphism Admin Console**: `/admin` dashboard featuring security token authentication, live training job dispatching, KPI metric cards, and animated log streaming.
-- 📺 **TV Broadcast Hawk-Eye Overlay**: Generates 4K broadcast-style decision review graphics showing Pitching Zone, Impact Zone, 2D Wicket Hit, and 3D Height Clearance.
-
----
-
-## 🚀 Quickstart Guide
-
-### 1️⃣ Installation & Environment Setup
-```bash
-# Clone the repository
-git clone https://github.com/udbhav968-creator/opencv.git
-cd opencv
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### 2️⃣ Run Local Flask Web Application
-```bash
-python app.py
-```
-Open your browser at `http://127.0.0.1:5000` to access the main web app, or `http://127.0.0.1:5000/admin` for the Admin Console.
-
----
-
-## 🧠 AI Training, Evaluation & Export CLI
-
-### 1. Dataset Harvesting & Synthetic Generation
-```bash
-# Run automated Kaggle & GitHub harvester
-drs_opencv\run_harvest.bat
-
-# Generate 250,000 multi-spectral synthetic frames
-drs_opencv\run_generate_synthetic.bat
-```
-
-### 2. Ultra-Deep Model Training
-```bash
-# Train YOLOv8x, YOLOv5x, and EfficientDet D3 (300 epochs, 1280px resolution, GPU)
-drs_opencv\train_all_models.bat
-```
-
-### 3. Benchmark Evaluation & ONNX Export
-```bash
-# Evaluate mAP@50, mAP@50-95, Precision, Recall, FPS, and export ONNX models
-drs_opencv\run_evaluation_export.bat
-```
-
----
-
 ## 📡 REST API Reference
 
 | Endpoint | Method | Description |
 | :--- | :--- | :--- |
-| `/` | `GET` | Renders the main DRS web interface |
+| `/` | `GET` | Page 1: Renders main live DRS review console |
+| `/analytics` | `GET` | Page 2: Renders analytics, trajectory charts & confusion matrix |
+| `/records` | `GET` | Page 3: Renders historical decision records & CSV export console |
+| `/admin` | `GET` | Page 4: Renders the Dark Glassmorphism Admin Console |
 | `/health` | `GET` | Returns system status, pipeline availability, and decision counts |
 | `/process` | `POST` | Processes uploaded MP4 video or synthetic action and returns JSON review |
 | `/outputs/<job_id>/<file>`| `GET` | Serves annotated video (`tracked_output.mp4`), Hawk-Eye image (`drs_decision.png`), or Snickometer graphic (`ultraedge_waveform.png`) |
-| `/api/history` | `GET` | Returns last 20 decision review records |
+| `/api/history` | `GET` | Returns decision review history database |
 | `/api/stats` | `GET` | Returns session totals (OUT, NOT OUT, UMPIRE'S CALL) |
-| `/admin` | `GET` | Renders the Dark Glassmorphism Admin Console |
 | `/admin/train` | `POST` | Starts ultra-deep training run (Requires `ADMIN_TOKEN`) |
 | `/admin/status/<job_id>` | `GET` | Streams live training log output |
 

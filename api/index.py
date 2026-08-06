@@ -52,6 +52,14 @@ except Exception as err:
 def index():
     return render_template('index.html')
 
+@app.route('/analytics')
+def analytics_page():
+    return render_template('analytics.html')
+
+@app.route('/records')
+def records_page():
+    return render_template('records.html')
+
 
 @app.route('/health')
 def health():

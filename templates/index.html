@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🏆 ICC World Cup DRS Hawk-Eye 3D -- Grand Level Suite</title>
-  <meta name="description" content="Official Grand-Level ICC World Cup 3D Cricket Decision Review System (DRS). Features 360 Three.js Floodlight Stadium, Live Broadcast Ticker, Audio Chimes, AI TV Commentary, and PDF Reports." />
+  <title>🏆 Real DRS -- Hawk-Eye 3D (Crazy Electric Cyber Pitch)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
@@ -16,7 +15,7 @@
       --bg: #020617;
       --surface: #0b1528;
       --card: rgba(15, 23, 42, 0.85);
-      --card-border: rgba(56, 189, 248, 0.25);
+      --card-border: rgba(56, 189, 248, 0.3);
       --accent: #38bdf8;
       --accent2: #818cf8;
       --gold: #facc15;
@@ -26,7 +25,6 @@
       --text: #f8fafc;
       --muted: #94a3b8;
       --radius: 18px;
-      --shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.6);
     }
     body {
       font-family: 'Outfit', 'Inter', system-ui, sans-serif;
@@ -36,8 +34,8 @@
       display: flex;
       flex-direction: column;
     }
-    
-    /* Grand Match Ticker Bar */
+
+    /* Live Ticker */
     .ticker-bar {
       background: linear-gradient(90deg, #0b1528 0%, #1e1b4b 50%, #0b1528 100%);
       border-bottom: 1px solid var(--card-border);
@@ -48,14 +46,13 @@
       font-size: 0.78rem;
       font-weight: 700;
     }
-    .ticker-item { display: flex; align-items: center; gap: 0.5rem; }
     .gold-badge { background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #030712; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 900; }
 
     header {
       background: rgba(11, 21, 40, 0.9);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--card-border);
-      padding: 1.2rem 2.5rem;
+      padding: 1rem 2.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -64,16 +61,22 @@
       z-index: 100;
     }
     .header-left { display: flex; align-items: center; gap: 1.2rem; cursor: pointer; }
-    .logo { font-size: 2.5rem; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.5)); }
+    
+    /* Graphic Bat & Ball SVG Container */
+    .graphic-logo {
+      width: 54px;
+      height: 54px;
+      position: relative;
+      filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.6));
+    }
+    
     header h1 {
       font-size: 1.5rem;
       font-weight: 900;
       background: linear-gradient(90deg, #facc15, #38bdf8, #818cf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: -0.02em;
     }
-    header p { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
 
     .nav-link {
       color: var(--muted);
@@ -102,7 +105,7 @@
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
       padding: 1.6rem;
-      box-shadow: var(--shadow);
+      box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.6);
     }
     .btn-grand {
       width: 100%;
@@ -147,17 +150,25 @@
 <body>
 
 <div class="ticker-bar">
-  <div class="ticker-item"><span class="gold-badge">🏆 ICC WORLD CUP FINAL</span> IND 284/4 (45.2 Ov) vs AUS</div>
+  <div class="ticker-item"><span class="gold-badge">🏆 PAGE 1: ELECTRIC CYBER PITCH</span> REAL DRS HAWK-EYE 3D SUITE</div>
   <div class="ticker-item"><span style="color:var(--gold)">DRS REVIEWS REMAINING:</span> IND 2 | AUS 1</div>
-  <div class="ticker-item"><span style="color:var(--accent)">SYSTEM:</span> HAWK-EYE 3D PRO SUITE ACTIVE</div>
+  <div class="ticker-item"><span style="color:var(--accent)">SYSTEM:</span> UNIVERSAL AUTO-COLOR + 3D HOMOGRAPHY</div>
 </div>
 
 <header>
   <div class="header-left" onclick="window.location.href='/'">
-    <div class="logo">🏆</div>
+    <!-- SVG Bat and Ball Graphic -->
+    <div class="graphic-logo">
+      <svg viewBox="0 0 100 100" width="54" height="54">
+        <circle cx="70" cy="30" r="22" fill="#ef4444" stroke="#facc15" stroke-width="4"/>
+        <path d="M55 30 Q70 15 85 30" fill="none" stroke="#ffffff" stroke-width="3" stroke-dasharray="3,3"/>
+        <polygon points="15,90 25,90 55,25 45,20" fill="#d97706" stroke="#facc15" stroke-width="2"/>
+        <rect x="12" y="85" width="8" height="12" rx="2" fill="#ef4444"/>
+      </svg>
+    </div>
     <div>
       <h1>ICC World Cup DRS Hawk-Eye 3D System</h1>
-      <p>Grand Level Edition · 360° Three.js Floodlight Stadium · Live RTSP Ingestion · AI Broadcast Voice</p>
+      <p>Page 1 -- Electric Cyber Pitch · 360° Three.js Floodlight Stadium · Live RTSP Ingestion</p>
     </div>
   </div>
   <div style="display:flex; gap:0.6rem; align-items:center;">
@@ -351,25 +362,19 @@
     }
 
     threeScene.add(new THREE.AmbientLight(0xffffff, 0.5));
-    
-    // Grand Stadium Floodlight Towers
     for (let pos of [[-12, 18, -12], [12, 18, -12], [-12, 18, 12], [12, 18, 12]]) {
       const spot = new THREE.SpotLight(0x38bdf8, 1.2);
       spot.position.set(pos[0], pos[1], pos[2]);
       threeScene.add(spot);
-
-      // Tower Cylinder
       const tower = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.3, 18, 16), new THREE.MeshStandardMaterial({ color: 0x334155 }));
       tower.position.set(pos[0], 9, pos[2]);
       threeScene.add(tower);
     }
 
-    // 3D Pitch Turf Mesh
     const pitchGeo = new THREE.BoxGeometry(3.5, 0.1, 20.12);
     const pitchMat = new THREE.MeshStandardMaterial({ color: 0x14532d, roughness: 0.8 });
     threeScene.add(new THREE.Mesh(pitchGeo, pitchMat));
 
-    // Stumps & Bails
     const stumpMat = new THREE.MeshStandardMaterial({ color: 0xfacc15 });
     for (let xOff of [-0.18, 0, 0.18]) {
       const stump = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.71, 16), stumpMat);
@@ -380,7 +385,6 @@
     bail.position.set(0, 0.76, 10);
     threeScene.add(bail);
 
-    // 3D Trajectory Tube with Particle Trail
     const curve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(0.2, 1.8, -10),
       new THREE.Vector3(0.1, 0.05, 3),

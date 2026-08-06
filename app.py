@@ -154,25 +154,19 @@ def process():
     os.makedirs(job_dir, exist_ok=True)
 
     # ── 1. Obtain input video ──
-    if action == 'upload':
-        if 'video' not in request.files:
-            return jsonify({'error': 'No video uploaded'}), 400
+    if 'video' in request.files and request.files['video'].filename:
         file = request.files['video']
-        if not file.filename:
-            return jsonify({'error': 'No video selected'}), 400
         input_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{job_id}.mp4")
         file.save(input_path)
+    elif action in ['synthetic_missing', 'missing']:
+        input_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{job_id}.mp4")
+        generate_missing(input_path)
+    elif action in ['synthetic_umpires_call', 'umpires_call']:
+        input_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{job_id}.mp4")
+        generate_umpires_call(input_path)
     else:
         input_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{job_id}.mp4")
-        generators = {
-            'synthetic_hitting':      generate_hitting,
-            'synthetic_missing':      generate_missing,
-            'synthetic_umpires_call': generate_umpires_call,
-        }
-        gen_fn = generators.get(action)
-        if gen_fn is None:
-            return jsonify({'error': f'Unknown action: {action}'}), 400
-        gen_fn(input_path)
+        generate_hitting(input_path)
 
     # ── 2. Run Real DRS pipeline ──
     try:

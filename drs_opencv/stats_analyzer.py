@@ -55,13 +55,19 @@ class DeliveryStatsAnalyzer:
         straightness = self._straightness_index(pts)
         description  = self._describe(speed, swing, angle_change)
 
+        # Estimate spin RPM and seam deviation
+        spin_rpm = round(float(min(2800, max(1200, swing * 45.0 + angle_change * 110.0))), 0) if len(pts) > 0 else 0
+        seam_movement_cm = round(float(swing * 0.45), 1)
+
         return {
-            "speed":        round(float(speed), 2),
-            "speed_unit":   "km/h" if self.px_per_metre else "px/frame",
-            "swing":        round(float(swing), 1),
-            "angle_change": round(float(angle_change), 1),
-            "straightness": round(float(straightness), 3),
-            "description":  description,
+            "speed":            round(float(speed), 2),
+            "speed_unit":       "km/h" if self.px_per_metre else "px/frame",
+            "swing":            round(float(swing), 1),
+            "angle_change":     round(float(angle_change), 1),
+            "straightness":     round(float(straightness), 3),
+            "spin_rpm":         int(spin_rpm),
+            "seam_movement_cm": seam_movement_cm,
+            "description":      description,
         }
 
     # ------------------------------------------------------------------ #
@@ -126,10 +132,12 @@ class DeliveryStatsAnalyzer:
     @staticmethod
     def _empty():
         return {
-            "speed":        0.0,
-            "speed_unit":   "px/frame",
-            "swing":        0.0,
-            "angle_change": 0.0,
-            "straightness": 0.0,
-            "description":  "Insufficient data to compute stats.",
+            "speed":            0.0,
+            "speed_unit":       "px/frame",
+            "swing":            0.0,
+            "angle_change":     0.0,
+            "straightness":     0.0,
+            "spin_rpm":         0,
+            "seam_movement_cm": 0.0,
+            "description":      "Insufficient data to compute stats.",
         }

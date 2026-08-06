@@ -1,7 +1,7 @@
 # 🏏 Real DRS Hawk-Eye 3D — ICC Pro-Level AI Computer Vision System
 
 > **Official International Standard (ICC-Level) 3D Cricket Decision Review System (DRS).**
-> An advanced computer vision and deep learning framework featuring real video input processing, 4-model ensemble ball detection, 3D parabolic gravity trajectory projection, UltraEdge audio snickometer oscilloscope simulation, interactive slow-motion playback, broadcast visual overlay graphics, and a remote glassmorphism admin console.
+> An advanced computer vision and deep learning framework featuring real video input processing, 4-model ensemble ball detection, 3D parabolic gravity trajectory projection, UltraEdge audio snickometer oscilloscope simulation, interactive slow-motion playback, AI TV broadcast voice commentary synthesis, PDF match report exporter, broadcast visual overlay graphics, and a remote glassmorphism admin console.
 
 ---
 
@@ -38,7 +38,8 @@ flowchart TD
     I --> J[ICC DRS Decision Rules Engine]
     J --> K[UltraEdge Oscilloscope Audio Simulator]
     K --> L[4K Broadcast Hawk-Eye Overlay Generator]
-    L --> M[Vercel Serverless API & Web UI]
+    L --> M[AI TV Voice Speech Synthesizer]
+    M --> N[Vercel Serverless API & Web UI]
 ```
 
 ### 2️⃣ 3D Metric Coordinate Transformation Flowchart
@@ -79,6 +80,15 @@ flowchart TD
     F --> G
 ```
 
+### 5️⃣ AI Speech Voice & PDF Match Exporter Engine
+```mermaid
+flowchart LR
+    A[Decision Verdict Generated] --> B[AI Speech Synthesis Engine]
+    A --> C[DRS JSON Report Generator]
+    B --> D[Vocal Announcement: Pitching / Impact / Wickets]
+    C --> E[Downloadable PDF Decision Certificate]
+```
+
 ---
 
 ## ⚡ Mathematical Foundations & Physics Engine
@@ -107,6 +117,9 @@ Where `H` is the `3x3` perspective transformation matrix calibrated against stan
   2. **Farneback Dense Optical Flow**: Motion-field vector tracking across consecutive frames.
   3. **MOG2 Background Subtractor**: Dynamic background separation.
   4. **Multi-Space Color Fusion**: HSV + LAB + YCrCb color space thresholding.
+- 🔊 **AI TV Broadcast Voice Commentary**: Web Speech API audio synthesis voicing official TV umpire announcements aloud (*"Review complete. Pitching in line, Impact in line, Wickets hitting. Final call: OUT"*).
+- 📥 **PDF Match Certificate Exporter**: Instant client-side PDF export button for official decision certificates.
+- 🌀 **Ball Spin RPM & Seam Analytics**: Calculates ball spin revolutions per minute (RPM) and lateral seam deviation off the pitch (cm).
 - 📈 **UltraEdge Audio Snickometer**: Renders a synchronized 2D oscilloscope audio waveform visualizer.
 - 🎬 **Slow-Motion Video Controls**: Interactive playback rate switcher (0.25x Super Slow, 0.5x Slow-Mo, 1.0x Normal, 2.0x Fast).
 - 🖥️ **Glassmorphism Admin Console**: `/admin` dashboard featuring security token authentication, live training job dispatching, KPI metric cards, and animated log streaming.

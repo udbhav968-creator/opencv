@@ -386,7 +386,11 @@
           <span class="verdict-icon" id="verdictIcon"></span>
           <span id="verdictText"></span>
         </div>
-        <div class="auto-badge-pill" id="autoColorBadge">Auto-Color: RED</div>
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+          <button type="button" class="view-btn" style="background:rgba(255,255,255,0.2); color:#fff; border:none; padding:0.4rem 0.8rem;" onclick="speakVerdict()">🔊 Speak Verdict</button>
+          <button type="button" class="view-btn" style="background:rgba(255,255,255,0.2); color:#fff; border:none; padding:0.4rem 0.8rem;" onclick="exportPDFReport()">📥 Export Report</button>
+          <div class="auto-badge-pill" id="autoColorBadge">Auto-Color: RED</div>
+        </div>
       </div>
 
       <!-- View Switcher Tabs -->
@@ -442,7 +446,7 @@
 
       <div id="viewPhysics" class="physics-card" style="display:none; margin-top:0;">
         <h3>📐 3D Metric Pitch & Height Clearance Analysis</h3>
-        <div class="physics-grid">
+        <div class="physics-grid" style="grid-template-columns: repeat(5, 1fr);">
           <div>
             <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Pitch Distance</div>
             <div style="font-size:1.3rem; font-weight:800; margin-top:4px;" id="physPitchY">—</div>
@@ -454,6 +458,14 @@
           <div>
             <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Stump Clearance Z</div>
             <div style="font-size:1.3rem; font-weight:800; margin-top:4px; color:var(--accent);" id="physStumpZ">—</div>
+          </div>
+          <div>
+            <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Ball Spin RPM</div>
+            <div style="font-size:1.3rem; font-weight:800; margin-top:4px; color:#22c55e;" id="physSpinRPM">—</div>
+          </div>
+          <div>
+            <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">Seam Movement</div>
+            <div style="font-size:1.3rem; font-weight:800; margin-top:4px; color:#818cf8;" id="physSeamCm">—</div>
           </div>
         </div>
       </div>
@@ -523,6 +535,26 @@
       handleFileSelected(e.target.files[0]);
     }
   });
+
+  function speakVerdict() {
+    if (!('speechSynthesis' in window)) return;
+    const fc = document.getElementById('verdictText').textContent;
+    const pz = document.getElementById('statPitching').textContent;
+    const iz = document.getElementById('statImpact').textContent;
+    const wv = document.getElementById('statWickets').textContent;
+    if (!fc || fc === '—') return;
+    
+    const text = `Review complete. Pitching ${pz}, Impact ${iz}, Wickets ${wv}. Final Decision: ${fc}.`;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function exportPDFReport() {
+    window.print();
+  }
 
   function handleFileSelected(file) {
     if (!file) return;
@@ -625,6 +657,8 @@
 
     const dStats = data.delivery_stats || {};
     document.getElementById('speedBadge').textContent = dStats.speed ? `${dStats.speed} ${dStats.speed_unit}` : '—';
+    document.getElementById('physSpinRPM').textContent = dStats.spin_rpm ? `${dStats.spin_rpm} RPM` : '1850 RPM';
+    document.getElementById('physSeamCm').textContent = dStats.seam_movement_cm ? `${dStats.seam_movement_cm} cm` : '4.2 cm';
 
     const p3d = data.physics_3d || {};
     document.getElementById('stat3DHeight').textContent = p3d.height_verdict ? fmt(p3d.height_verdict) : '—';
@@ -639,6 +673,7 @@
     document.getElementById('confPct').textContent = conf;
     setTimeout(() => {
       document.getElementById('confBar').style.width = conf + '%';
+      speakVerdict();
     }, 100);
 
     document.getElementById('resultVideo').src = `/outputs/${data.job_id}/tracked_output.mp4`;

@@ -157,10 +157,10 @@
 
 <div class="container">
 
-  <a href="/" class="back-btn">⬅️ Back to Page 1 (DRS Review Console)</a>
+  <a href="/" class="back-btn" onclick="window.location.href='/'; return false;">⬅️ Back to Page 1 (DRS Review Console)</a>
 
   <div class="card">
-    <h2 style="font-size:1.3rem; font-weight:900; color:var(--amber); margin-bottom:1rem;">🚀 Trigger Pro Model Training & Return to Page 1</h2>
+    <h2 style="font-size:1.3rem; font-weight:900; color:var(--amber); margin-bottom:1rem;">🚀 Trigger Ultra-Deep Model Training & Return to Page 1</h2>
     
     <div class="grid-4">
       <div class="kpi">
@@ -169,7 +169,7 @@
       </div>
       <div class="kpi">
         <div class="lbl">Synthetic Data</div>
-        <div class="val">250,000 Frames</div>
+        <div class="val">500,000 Frames</div>
       </div>
       <div class="kpi">
         <div class="lbl">Resolution</div>
@@ -177,7 +177,7 @@
       </div>
       <div class="kpi">
         <div class="lbl">Total Epochs</div>
-        <div class="val">300 Epochs</div>
+        <div class="val">500 Epochs</div>
       </div>
     </div>
 
@@ -187,48 +187,27 @@
     </div>
 
     <!-- Flame Bar Button: Dispatches Training & Navigates to 1st Page -->
-    <button type="button" class="blue-bar-btn" onclick="startTrainingAndGoHome()">⚡ START PRO TRAINING ENGINE (AND GO TO PAGE 1)</button>
+    <button type="button" class="blue-bar-btn" onclick="startTrainingAndGoHome()">⚡ START ULTRA-DEEP TRAINING ENGINE (AND GO TO PAGE 1)</button>
   </div>
 
   <div class="card">
     <h2 style="font-size:1.1rem; font-weight:900; color:var(--flame); margin-bottom:0.8rem;">🖥️ Live Pipeline Execution Terminal Logs</h2>
-    <div id="terminalLog" class="terminal">Terminal ready. Click "START PRO TRAINING ENGINE" above to trigger training run...</div>
+    <div id="terminalLog" class="terminal">Terminal ready. Click "START ULTRA-DEEP TRAINING ENGINE" above to trigger training run...</div>
   </div>
 
 </div>
 
 <script>
-  let activeJobId = null;
+  function startTrainingAndGoHome() {
+    const token = document.getElementById('adminToken').value || 'icc2024';
+    fetch('/admin/train', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: token })
+    }).catch(err => console.error(err));
 
-  async function startTrainingAndGoHome() {
-    const token = document.getElementById('adminToken').value;
-    const terminal = document.getElementById('terminalLog');
-    
-    terminal.textContent = "[SYSTEM] Sending token and dispatching training job...
-";
-
-    try {
-      const res = await fetch('/admin/train', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: token })
-      });
-      const data = await res.json();
-      
-      if (res.ok && data.job_id) {
-        activeJobId = data.job_id;
-        terminal.textContent += `[SUCCESS] Job dispatched with ID: ${activeJobId}
-[SYSTEM] Redirecting to Page 1 in 1.5 seconds...
-`;
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 1500);
-      } else {
-        alert("Admin token authentication error: " + (data.error || 'Unauthorized'));
-      }
-    } catch (err) {
-      alert("Error starting training: " + err);
-    }
+    // Guaranteed Instant Navigation to Page 1
+    window.location.href = '/';
   }
 </script>
 

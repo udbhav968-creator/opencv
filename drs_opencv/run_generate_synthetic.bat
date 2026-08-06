@@ -1,4 +1,3 @@
 @echo off
-echo Checking free space...
-dir C:\
-python %~dp0super_dataset_builder.py --count 250000
+echo Generating 500,000 ultra-deep synthetic frames...
+python %~dp0super_dataset_builder.py --count 500000

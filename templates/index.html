@@ -7,6 +7,9 @@
   <meta name="description" content="Official ICC Pro Real-Level DRS Hawk-Eye 3D Cricket Ball Tracking, Universal Auto-Color Detection, 3D Physics Height Clearance, and UltraEdge Snickometer Simulation." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
   <style>
     /* ── Reset & Modern Glassmorphism Cyber Tokens ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -397,6 +400,7 @@
       <div class="view-switcher">
         <button class="view-btn active" onclick="switchView('cam1')">📹 Camera 1 (Live Tracking)</button>
         <button class="view-btn" onclick="switchView('cam2')">📊 Camera 2 (Hawk-Eye 3D)</button>
+        <button class="view-btn" onclick="switchView('stadium3d')">🌐 360° 3D Stadium</button>
         <button class="view-btn" onclick="switchView('ultraedge')">📈 UltraEdge Snickometer</button>
         <button class="view-btn" onclick="switchView('physics')">📐 3D Height Clearance</button>
       </div>
@@ -437,6 +441,11 @@
       <div id="viewCam2" class="media-card" style="display:none;">
         <h4><span>📊 Camera 2 — Hawk-Eye 3D Broadcast Graphic</span> <span style="color:var(--accent2)">4K Render</span></h4>
         <img id="resultImage" alt="Hawk-Eye 3D DRS Decision Graphic" />
+      </div>
+
+      <div id="viewStadium3D" class="media-card" style="display:none;">
+        <h4><span>🌐 360° Interactive Three.js WebGL Stadium Orbit</span> <span style="color:#38bdf8">Drag Mouse to Orbit 360° / Zoom</span></h4>
+        <div id="threeCanvasContainer" style="width:100%; height:420px; background:#020617;"></div>
       </div>
 
       <div id="viewUltraEdge" class="media-card" style="display:none;">
@@ -576,6 +585,7 @@
     document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById('viewCam1').style.display = 'none';
     document.getElementById('viewCam2').style.display = 'none';
+    document.getElementById('viewStadium3D').style.display = 'none';
     document.getElementById('viewUltraEdge').style.display = 'none';
     document.getElementById('viewPhysics').style.display = 'none';
 
@@ -585,13 +595,93 @@
     } else if (viewName === 'cam2') {
       document.querySelectorAll('.view-btn')[1].classList.add('active');
       document.getElementById('viewCam2').style.display = 'block';
-    } else if (viewName === 'ultraedge') {
+    } else if (viewName === 'stadium3d') {
       document.querySelectorAll('.view-btn')[2].classList.add('active');
+      document.getElementById('viewStadium3D').style.display = 'block';
+      init3DStadium();
+    } else if (viewName === 'ultraedge') {
+      document.querySelectorAll('.view-btn')[3].classList.add('active');
       document.getElementById('viewUltraEdge').style.display = 'block';
     } else if (viewName === 'physics') {
-      document.querySelectorAll('.view-btn')[3].classList.add('active');
+      document.querySelectorAll('.view-btn')[4].classList.add('active');
       document.getElementById('viewPhysics').style.display = 'block';
     }
+  }
+
+  let threeScene, threeCamera, threeRenderer, threeControls;
+  let isThreeInitialized = false;
+
+  function init3DStadium() {
+    const container = document.getElementById('threeCanvasContainer');
+    if (!container || isThreeInitialized || typeof THREE === 'undefined') return;
+
+    threeScene = new THREE.Scene();
+    threeScene.background = new THREE.Color(0x030712);
+
+    const aspect = container.clientWidth / container.clientHeight;
+    threeCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
+    threeCamera.position.set(0, 8, 18);
+
+    threeRenderer = new THREE.WebGLRenderer({ antialias: true });
+    threeRenderer.setSize(container.clientWidth, container.clientHeight);
+    threeRenderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(threeRenderer.domElement);
+
+    if (typeof THREE.OrbitControls !== 'undefined') {
+      threeControls = new THREE.OrbitControls(threeCamera, threeRenderer.domElement);
+      threeControls.enableDamping = true;
+    }
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    threeScene.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0x38bdf8, 0.8);
+    dirLight.position.set(10, 20, 10);
+    threeScene.add(dirLight);
+
+    const pitchGeo = new THREE.BoxGeometry(3.5, 0.1, 20.12);
+    const pitchMat = new THREE.MeshStandardMaterial({ color: 0x14532d, roughness: 0.8 });
+    const pitchMesh = new THREE.Mesh(pitchGeo, pitchMat);
+    threeScene.add(pitchMesh);
+
+    const stumpMat = new THREE.MeshStandardMaterial({ color: 0xfacc15 });
+    for (let xOff of [-0.18, 0, 0.18]) {
+      const stumpGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.71, 16);
+      const stump = new THREE.Mesh(stumpGeo, stumpMat);
+      stump.position.set(xOff, 0.4, 10);
+      threeScene.add(stump);
+    }
+    const bailGeo = new THREE.BoxGeometry(0.44, 0.02, 0.02);
+    const bail = new THREE.Mesh(bailGeo, stumpMat);
+    bail.position.set(0, 0.76, 10);
+    threeScene.add(bail);
+
+    const curvePoints = [
+      new THREE.Vector3(0.2, 1.8, -10),
+      new THREE.Vector3(0.1, 0.05, 3),
+      new THREE.Vector3(0.05, 0.6, 6),
+      new THREE.Vector3(0.0, 0.72, 10)
+    ];
+    const curve = new THREE.CatmullRomCurve3(curvePoints);
+    const tubeGeo = new THREE.TubeGeometry(curve, 64, 0.04, 16, false);
+    const tubeMat = new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xef4444, emissiveIntensity: 0.5 });
+    const tubeMesh = new THREE.Mesh(tubeGeo, tubeMat);
+    threeScene.add(tubeMesh);
+
+    const ballGeo = new THREE.SphereGeometry(0.07, 32, 32);
+    const ballMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.3 });
+    const ballMesh = new THREE.Mesh(ballGeo, ballMat);
+    ballMesh.position.set(0, 0.72, 10);
+    threeScene.add(ballMesh);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (threeControls) threeControls.update();
+      threeRenderer.render(threeScene, threeCamera);
+    }
+    animate();
+
+    isThreeInitialized = true;
   }
 
   const form      = document.getElementById('drsForm');

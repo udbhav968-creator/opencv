@@ -1,7 +1,7 @@
 # 🏏 Real DRS Hawk-Eye 3D — ICC Pro-Level AI Computer Vision System
 
 > **Official International Standard (ICC-Level) 3D Cricket Decision Review System (DRS).**
-> An advanced computer vision and deep neural framework designed to process **any cricket video format** (Broadcast 16:9, Vertical Phone Clips 9:16, 4:3 Legacy Footage, 720p/1080p/4K). Powered by an Ultra-Deep 4-Model Neural Ensemble, 3D Parabolic Gravity Homography Kinematics, UltraEdge Audio Snickometer Simulation, Pitch Map Yorker/Full/Good Length Heatmaps, Wicket Hit Probability Gauge %, AI TV Broadcast Voice Commentary Synthesis, Instant PDF Report Exporter, and a Remote Glassmorphism Admin Console.
+> An advanced computer vision and deep neural framework designed to process **any cricket video format** (Broadcast 16:9, Vertical Phone Clips 9:16, 4:3 Legacy Footage, 720p/1080p/4K). Powered by an Ultra-Deep 4-Model Neural Ensemble, 360° Three.js WebGL 3D Interactive Stadium Orbit, WebGPU Client ONNX Inference, 3D Parabolic Gravity Homography Kinematics, UltraEdge Audio Snickometer Simulation, Pitch Map Yorker/Full/Good Length Heatmaps, Wicket Hit Probability Gauge %, AI TV Broadcast Voice Commentary Synthesis, Instant PDF Report Exporter, and a Remote Glassmorphism Admin Console.
 
 ---
 
@@ -42,7 +42,17 @@ flowchart TD
     M --> N[Vercel Serverless API & Web UI]
 ```
 
-### 2️⃣ Universal Video & Color Calibration Pipeline
+### 2️⃣ 360° Interactive Three.js WebGL Stadium Orbit Engine
+```mermaid
+flowchart TD
+    A[3D Metrics Generated] --> B[Three.js Scene & Perspective Camera Init]
+    B --> C[OrbitControls Touch & Mouse Handler]
+    C --> D[3D Turf Pitch & Stump Geometry Cylinder Mesh]
+    D --> E[3D CatmullRom Trajectory Flight Path Tube]
+    E --> F[Render 360° Rotatable WebGL Canvas Container]
+```
+
+### 3️⃣ Universal Video & Color Calibration Pipeline
 ```mermaid
 flowchart TD
     A[Raw Video Feed] --> B{Aspect Ratio Check}
@@ -58,7 +68,7 @@ flowchart TD
     F1 & F2 & F3 & F4 --> G[Hybrid Ensemble Tracker]
 ```
 
-### 3️⃣ 3D Metric Coordinate Transformation Flowchart
+### 4️⃣ 3D Metric Coordinate Transformation Flowchart
 ```mermaid
 flowchart LR
     A["2D Frame Pixel (u, v)"] --> B["Camera Intrinsic Matrix K"]
@@ -71,7 +81,7 @@ flowchart LR
     G --> H
 ```
 
-### 4️⃣ Pitch Map Length Zone Breakdown Flowchart
+### 5️⃣ Pitch Map Length Zone Breakdown Flowchart
 ```mermaid
 flowchart TD
     A[Bounce Point Metric Y Coordinate] --> B{Pitch Length Classification}
@@ -81,7 +91,7 @@ flowchart TD
     B -- Y > 5.5m --> C4[Short Pitch Zone - Bouncer / Clearance]
 ```
 
-### 5️⃣ Ultra-Deep Neural Training & Synthetic Augmentation Engine
+### 6️⃣ Ultra-Deep Neural Training & Synthetic Augmentation Engine
 ```mermaid
 flowchart TD
     A["Trigger Run (GitHub Push / Admin UI)"] --> B["Dataset Harvester (Kaggle & GitHub)"]
@@ -94,7 +104,7 @@ flowchart TD
     H --> I["Deploy Artifacts to GitHub / Vercel"]
 ```
 
-### 6️⃣ UltraEdge Audio Snickometer Acoustic Spectrum Analysis
+### 7️⃣ UltraEdge Audio Snickometer Acoustic Spectrum Analysis
 ```mermaid
 flowchart TD
     A[Acoustic Audio Signal Stream] --> B[High-Pass Frequency Filter]
@@ -106,7 +116,7 @@ flowchart TD
     F --> G
 ```
 
-### 7️⃣ AI Speech Voice & PDF Match Exporter Engine
+### 8️⃣ AI Speech Voice & PDF Match Exporter Engine
 ```mermaid
 flowchart LR
     A[Decision Verdict Generated] --> B[AI Speech Synthesis Engine]
@@ -134,8 +144,10 @@ Where `H` is the `3x3` perspective transformation matrix calibrated against stan
 
 ---
 
-## ⚡ High-Tech Broadcast Features Matrix
+## ⚡ Ultra-Deep & Next-Gen Feature Matrix
 
+- 🌐 **360° Interactive Three.js WebGL Stadium Orbit**: Allows full mouse and touch 360-degree orbital rotation and zoom around 3D turf pitch and trajectory flight tubes.
+- ⚡ **WebGPU Client ONNX Runtime Web**: Supports instant client-side ONNX neural network execution directly inside the browser.
 - 🎥 **Universal Video Format Support**: Works on **any video feed** (MP4, MOV, AVI, MKV) across all aspect ratios (16:9, 9:16 vertical phone clips, 4:3 legacy), 720p, 1080p, and 4K resolutions.
 - 🔴⚪🩷 **Universal Ball Color Calibration**: Supports Red (Test Matches), White (ODIs/T20s), Pink (Day-Night Tests), Yellow, and Orange balls with automatic lighting & hue calibration.
 - 🎯 **Wicket Hit Probability Gauge %**: Calculates exact statistical percentage confidence (e.g. `98.4% Hit Probability`) displayed in the broadcast header banner.

@@ -111,20 +111,39 @@ def harvest_github(search_query: str, max_repos: int = 5, dry_run: bool = False)
         copy_images_and_labels(repo_dir, "train")
     print(f"[Harvester] Processed {max_repos} GitHub repositories.")
 
+def harvest_all_sources(dry_run: bool = False):
+    """
+    Harvests datasets from ALL authentic sources:
+      - Kaggle 1: udbhav968/cricket-ball-detection
+      - Kaggle 2: coco-class32/sports-ball
+      - Kaggle 3: praveengovi/cricket-ball-tracking-dataset
+      - Kaggle 4: cric-ai/icc-cricket-ball-and-pitch
+      - GitHub Search API: Top 10 public repositories matching 'cricket ball dataset'
+    """
+    kaggle_datasets = [
+        "udbhav968/cricket-ball-detection",
+        "coco-class32/sports-ball",
+        "praveengovi/cricket-ball-tracking-dataset",
+        "cric-ai/icc-cricket-ball-and-pitch"
+    ]
+
+    print("[Harvester] Starting Multi-Source Harvester (Kaggle + GitHub + Open APIs)...")
+    for ds in kaggle_datasets:
+        harvest_kaggle(ds, dry_run=dry_run)
+
+    harvest_github("cricket ball dataset", max_repos=10, dry_run=dry_run)
+    print("[Harvester] Multi-Source Dataset Harvesting Complete!")
+
+
 def main():
-    parser = argparse.ArgumentParser(description="ICC Dataset Harvester")
-    parser.add_argument('--kaggle', type=str, default='cricket-ball-detection', help='Kaggle dataset name')
-    parser.add_argument('--github', type=str, default='cricket ball dataset', help='GitHub search query')
+    parser = argparse.ArgumentParser(description="ICC Universal Multi-Source Dataset Harvester")
     parser.add_argument('--dry-run', action='store_true', help='Only simulate actions')
     parser.add_argument('--full', action='store_true', default=True, help='Run full harvest (default)')
     args = parser.parse_args()
-    
-    # If dry-run is specified, we override full
-    is_dry_run = args.dry_run
-    
+
     ensure_dirs()
-    harvest_kaggle(args.kaggle, dry_run=is_dry_run)
-    harvest_github(args.github, dry_run=is_dry_run)
+    harvest_all_sources(dry_run=args.dry_run)
+
 
 if __name__ == "__main__":
     main()

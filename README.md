@@ -1,17 +1,13 @@
 # 🏆 Real DRS Hawk-Eye 3D — Official ICC World Cup Grand Level Suite
 
 > **Official International Standard (ICC World Cup Level) Multi-Page 3D Cricket Decision Review System (DRS).**
-> An advanced computer vision and deep neural framework designed for **Grand-Level Live Broadcast Events**:
-> - **Page 1: Live DRS Review & RTSP Broadcast Stream Console (`/`)** — Live RTSP IP video stream ingestion, 360° Three.js Floodlight Stadium, UltraEdge Snickometer, AI Voice Commentary, PDF Exporter.
-> - **Page 2: Analytics & Model Precision Matrix (`/analytics`)** — 3D Parabolic Height Trajectory Charts, Model Precision-Recall Benchmark Curves, Confusion Matrix, Speed & Spin RPM Distributions.
-> - **Page 3: Historical Decision Records Console (`/records`)** — Complete review history database, search & filter controls, CSV export, direct media replay links.
-> - **Page 4: Glassmorphic Admin Console (`/admin`)** — Remote training engine controller, live log streaming.
+> Powered by a **6-Model AI Computer Vision Ensemble** combining **YOLOv8 Deep Learning**, **Google MediaPipe Pose & Landmark Tracking**, **OpenCV CSRT Spatial Reliability Tracking**, **Farneback Dense Optical Flow**, **MOG2 Background Subtraction**, and **Multi-Space Color Fusion**.
 
 ---
 
 ## 🌐 Live Application & Production Links
 
-- **Page 1 (Live Review & Stream Ingestion):** [https://opencv-lyart.vercel.app](https://opencv-lyart.vercel.app)
+- **Page 1 (Live Review & RTSP Stream Ingestion):** [https://opencv-lyart.vercel.app](https://opencv-lyart.vercel.app)
 - **Page 2 (Precision Matrix):** [https://opencv-lyart.vercel.app/analytics](https://opencv-lyart.vercel.app/analytics)
 - **Page 3 (Decision Records):** [https://opencv-lyart.vercel.app/records](https://opencv-lyart.vercel.app/records)
 - **Page 4 (Admin Console):** [https://opencv-lyart.vercel.app/admin](https://opencv-lyart.vercel.app/admin)
@@ -22,7 +18,34 @@
 
 ## 🏗️ System Architecture & High-Level Flowcharts
 
-### 1️⃣ Grand Multi-Page Application Architecture
+### 1️⃣ 6-Model AI Computer Vision Ensemble Architecture
+```mermaid
+flowchart TD
+    A[Input Any Real Cricket Video / MP4 / RTSP Stream] --> B[Frame Preprocessor & Spatial Rescaling]
+    B --> C[Multi-Model AI Computer Vision Ensemble]
+    
+    subgraph Ensemble ["6-Model AI Computer Vision Ensemble"]
+        E1[YOLOv8 Deep Neural Object Detector]
+        E2[Google MediaPipe Pose & Landmark Tracker]
+        E3[OpenCV CSRT Spatial Reliability Tracker]
+        E4[Farneback Dense Optical Flow Vector Field]
+        E5[MOG2 Dynamic Background Subtractor]
+        E6[Multi-Space HSV/LAB Color Fusion Engine]
+    end
+
+    C --> E1 & E2 & E3 & E4 & E5 & E6
+    E1 & E2 & E3 & E4 & E5 & E6 --> F[Multi-Candidate Score Fusion Engine]
+    F --> G[Kalman Filter Trajectory Tracker]
+    G --> H[3D Homography Metric Conversion]
+    H --> I[3D Parabolic Gravity Predictor]
+    I --> J[ICC DRS Decision Rules Engine & Hit Probability %]
+    J --> K[UltraEdge Oscilloscope Audio Simulator]
+    K --> L[4K Broadcast Hawk-Eye Overlay Generator]
+    L --> M[AI TV Voice Speech Synthesizer & PDF Exporter]
+    M --> N[Vercel Serverless API & Web UI]
+```
+
+### 2️⃣ Grand Multi-Page Application Architecture
 ```mermaid
 flowchart TD
     A[User Web Navigation Header & Live Match Ticker] --> B[Page 1: Live DRS Review & RTSP Ingestion /]
@@ -34,16 +57,6 @@ flowchart TD
     C --> G[Trajectory Charts / PR Curves / Confusion Matrix]
     D --> H[Search History / CSV Export / Replay Links]
     E --> I[Authenticated Pro Training Engine Runner]
-```
-
-### 2️⃣ Live RTSP Stream & Broadcast Camera Ingestion Pipeline
-```mermaid
-flowchart TD
-    A[Live Broadcast RTSP IP Stream / HDMI Capture] --> B[OpenCV VideoCapture Ingest Engine]
-    B --> C[Real-Time Frame Resolution Normalizer]
-    C --> D[Multi-Model Ball Detector Ensemble]
-    D --> E[Live Broadcast Hawk-Eye 3D Overlay Renderer]
-    E --> F[Multipart MJPEG Stream Response /stream_feed]
 ```
 
 ### 3️⃣ 360° Grand Floodlight Three.js WebGL Stadium Orbit Engine

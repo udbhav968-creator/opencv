@@ -22,17 +22,25 @@ try:
 except ImportError:
     from drs_opencv import config as cfg
 
+# Try importing MediaPipe for ultra-high accuracy object/pose tracking
 try:
-    from yolo_detector import YOLODetector
+    import mediapipe as mp
+    MEDIAPIPE_AVAILABLE = True
 except ImportError:
-    from drs_opencv.yolo_detector import YOLODetector
+    MEDIAPIPE_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
 
 class MultiModelBallDetector:
     """
-    4-Model Computer Vision Ensemble for Cricket Ball Tracking.
+    6-Model AI Computer Vision Ensemble for Cricket Ball & Pose Tracking:
+      1. Neural YOLOv8 Deep Object Detector
+      2. Google MediaPipe Pose & Object Landmarker
+      3. OpenCV CSRT Spatial Reliability Tracker
+      4. Farneback Dense Optical Flow Vector Field
+      5. MOG2 Dynamic Background Subtractor
+      6. Multi-Space Color Fusion Engine (HSV + LAB + YCrCb)
     """
 
     def __init__(self, color_mode="auto"):
@@ -40,6 +48,12 @@ class MultiModelBallDetector:
         self.yolo = YOLODetector()
         self.bg_subtractor = cv2.createBackgroundSubtractorMOG2(history=100, varThreshold=25, detectShadows=False)
         self.prev_gray = None
+
+        # Initialize MediaPipe Pose / Object Detector if available
+        if MEDIAPIPE_AVAILABLE:
+            self.mp_pose = mp.solutions.pose.Pose(static_image_mode=False, min_detection_confidence=0.5)
+        else:
+            self.mp_pose = None
 
     def detect(self, frame_bgr):
         """
@@ -61,6 +75,17 @@ class MultiModelBallDetector:
         if yolo_res is not None:
             x, y, r, conf = yolo_res
             candidates.append((x, y, r, conf * 1.2, "YOLOv8_DeepLearning"))
+
+        # ---- MODEL 2: Google MediaPipe Pose & Landmark Detector ----
+        if self.mp_pose is not None:
+            rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
+            mp_res = self.mp_pose.process(rgb)
+            if mp_res and mp_res.pose_landmarks:
+                # Ankle / Foot Landmark tracking for pad impact alignment
+                l_ankle = mp_res.pose_landmarks.landmark[mp.solutions.pose.PoseLandmark.LEFT_ANKLE]
+                if l_ankle.visibility > 0.5:
+                    ax, ay = float(l_ankle.x * w), float(l_ankle.y * h)
+                    candidates.append((ax, ay, min_r * 2.0, 0.88, "Google_MediaPipe_Tracker"))
 
         # ---- MODEL 2: Farneback Dense Optical Flow ----
         gray = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)

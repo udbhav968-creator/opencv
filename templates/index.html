@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🏆 Real DRS -- Hawk-Eye 3D (Crazy Electric Cyber Pitch)</title>
+  <title>🏆 Real DRS -- Hawk-Eye 3D (Electric Cyber Pitch + Quad Split)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -145,6 +145,41 @@
     .media-card { background: rgba(15, 23, 42, 0.95); border: 1px solid var(--card-border); border-radius: 14px; overflow: hidden; }
     .media-card h4 { padding: 0.9rem 1.2rem; font-size: 0.9rem; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; font-weight: 800; }
     .media-card video, .media-card img { width: 100%; display: block; max-height: 460px; object-fit: contain; background: #000; }
+
+    /* Quad Split Grid Layout */
+    .quad-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 240px 240px;
+      gap: 8px;
+      background: #020617;
+      padding: 8px;
+    }
+    .quad-cell {
+      position: relative;
+      background: #0b1528;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .quad-cell .quad-label {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(2, 6, 23, 0.85);
+      color: var(--gold);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      z-index: 10;
+    }
+    .quad-cell video, .quad-cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
   </style>
 </head>
 <body>
@@ -224,6 +259,7 @@
       <button class="view-btn" onclick="switchView('stadium3d')">🏟️ 360° 3D Floodlight Stadium</button>
       <button class="view-btn" onclick="switchView('ultraedge')">📈 UltraEdge Snickometer</button>
       <button class="view-btn" onclick="switchView('livestream')">🔴 Live Broadcast Feed</button>
+      <button class="view-btn" onclick="switchView('quad')">📺 Multi-Cam Quad Split</button>
     </div>
 
     <div class="stats-grid">
@@ -276,6 +312,30 @@
       <h4><span>🔴 Live Event Broadcast RTSP Feed</span> <span style="color:#ef4444">LIVE INGESTION ACTIVE</span></h4>
       <img id="liveStreamImg" alt="Live Stream Ingestion" />
     </div>
+
+    <!-- Multi-Camera Quad Split Broadcast View -->
+    <div id="viewQuad" class="media-card" style="display:none;">
+      <h4><span>📺 Multi-Camera Quad-Split Broadcast View</span> <span style="color:var(--gold)">SYNCHRONIZED 4-CAM FEED</span></h4>
+      <div class="quad-grid">
+        <div class="quad-cell">
+          <div class="quad-label">CAM 1: BOWLER'S END (LIVE TRACK)</div>
+          <video id="quadVideo" controls autoplay loop muted playsinline></video>
+        </div>
+        <div class="quad-cell">
+          <div class="quad-label">CAM 2: HAWK-EYE 3D GRAPHIC</div>
+          <img id="quadImage" alt="Hawk-Eye 3D" />
+        </div>
+        <div class="quad-cell">
+          <div class="quad-label">CAM 3: ULTRAEDGE AUDIO SNICKOMETER</div>
+          <img id="quadUltraEdge" alt="UltraEdge" />
+        </div>
+        <div class="quad-cell">
+          <div class="quad-label">CAM 4: LIVE BROADCAST RTSP FEED</div>
+          <img id="quadLiveStream" alt="Live Feed" />
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -291,13 +351,17 @@
 
   function connectLiveStream() {
     const src = document.getElementById('rtspUrl').value || '0';
-    document.getElementById('liveStreamImg').src = `/stream_feed?src=${encodeURIComponent(src)}`;
+    const url = `/stream_feed?src=${encodeURIComponent(src)}`;
+    document.getElementById('liveStreamImg').src = url;
+    document.getElementById('quadLiveStream').src = url;
     switchView('livestream');
   }
 
   function setSpeed(rate) {
     const video = document.getElementById('resultVideo');
+    const quadVid = document.getElementById('quadVideo');
     if (video) video.playbackRate = rate;
+    if (quadVid) quadVid.playbackRate = rate;
   }
 
   function speakVerdict() {
@@ -321,6 +385,7 @@
     document.getElementById('viewStadium3D').style.display = 'none';
     document.getElementById('viewUltraEdge').style.display = 'none';
     document.getElementById('viewLiveStream').style.display = 'none';
+    document.getElementById('viewQuad').style.display = 'none';
 
     if (viewName === 'cam1') {
       document.querySelectorAll('.view-btn')[0].classList.add('active');
@@ -338,6 +403,9 @@
     } else if (viewName === 'livestream') {
       document.querySelectorAll('.view-btn')[4].classList.add('active');
       document.getElementById('viewLiveStream').style.display = 'block';
+    } else if (viewName === 'quad') {
+      document.querySelectorAll('.view-btn')[5].classList.add('active');
+      document.getElementById('viewQuad').style.display = 'block';
     }
   }
 
@@ -426,9 +494,18 @@
         document.getElementById('statPitching').textContent = data.pitching_zone || 'IN LINE';
         document.getElementById('statImpact').textContent = data.impact_zone || 'IN LINE';
         document.getElementById('statWickets').textContent = data.wicket_verdict || 'HITTING';
-        if (data.annotated_video) document.getElementById('resultVideo').src = data.annotated_video;
-        if (data.drs_image) document.getElementById('resultImage').src = data.drs_image;
-        if (data.ultraedge_image) document.getElementById('resultUltraEdge').src = data.ultraedge_image;
+        if (data.annotated_video) {
+          document.getElementById('resultVideo').src = data.annotated_video;
+          document.getElementById('quadVideo').src = data.annotated_video;
+        }
+        if (data.drs_image) {
+          document.getElementById('resultImage').src = data.drs_image;
+          document.getElementById('quadImage').src = data.drs_image;
+        }
+        if (data.ultraedge_image) {
+          document.getElementById('resultUltraEdge').src = data.ultraedge_image;
+          document.getElementById('quadUltraEdge').src = data.ultraedge_image;
+        }
         speakVerdict();
       }
     } catch (err) {

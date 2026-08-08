@@ -2,13 +2,13 @@
 
 > **Official International Standard (ICC World Cup Level) Multi-Page 3D Cricket Decision Review System (DRS).**
 > Powered by a **6-Model AI Computer Vision Ensemble** combining **YOLOv8 Deep Neural Object Detection**, **Google MediaPipe Pose & Landmark Tracking**, **OpenCV CSRT Spatial Reliability Tracking**, **Farneback Dense Optical Flow Field Vectors**, **MOG2 Background Subtraction**, and **Multi-Space Color Fusion Engine**.
-> Features **Live RTSP IP Stream Broadcast Ingestion**, **360° Three.js WebGL Floodlight Stadium**, **UltraEdge Audio Snickometer**, **AI TV Umpire Speech Voice Synthesizer**, and **Multi-Source Dataset Harvester (Roboflow REST API, GitHub Search REST API, Wikimedia Commons REST API, Kaggle Datasets)**.
+> Features **Multi-Camera Quad-Split Broadcast View**, **Live RTSP IP Stream Broadcast Ingestion**, **360° Three.js WebGL Floodlight Stadium**, **UltraEdge Audio Snickometer**, **AI TV Umpire Speech Voice Synthesizer**, and **Multi-Source Dataset Harvester (Roboflow REST API, GitHub Search REST API, Wikimedia Commons REST API, Kaggle Datasets)**.
 
 ---
 
 ## 🌐 Live Production & Deployment Links
 
-- **Page 1: Live DRS Review & RTSP Broadcast Stream Console (`/`):** [https://opencv-lyart.vercel.app](https://opencv-lyart.vercel.app)
+- **Page 1: Live DRS Review & Quad-Split Stream Console (`/`):** [https://opencv-lyart.vercel.app](https://opencv-lyart.vercel.app)
 - **Page 2: Analytics & Model Precision Matrix (`/analytics`):** [https://opencv-lyart.vercel.app/analytics](https://opencv-lyart.vercel.app/analytics)
 - **Page 3: Historical Decision Records Database (`/records`):** [https://opencv-lyart.vercel.app/records](https://opencv-lyart.vercel.app/records)
 - **Page 4: Glassmorphic Admin Console (`/admin`):** [https://opencv-lyart.vercel.app/admin](https://opencv-lyart.vercel.app/admin)
@@ -17,7 +17,7 @@
 
 ---
 
-## 🏗️ System Architecture & 12 Detailed Flowcharts
+## 🏗️ System Architecture & 13 Detailed Flowcharts
 
 ### 1️⃣ High-Level System Architecture & End-to-End DRS Review Pipeline
 ```mermaid
@@ -65,7 +65,7 @@ flowchart TD
     A --> D["Page 3: Decision Records (/records)"]
     A --> E["Page 4: Admin Console (/admin)"]
 
-    B --> F["Live RTSP Feed / MP4 Upload / 360° Stadium / UltraEdge / Speech"]
+    B --> F["Live RTSP Feed / MP4 Upload / 360° Stadium / UltraEdge / Speech / Quad-Split"]
     C --> G["Chart.js 3D Height Trajectories / PR Curves / Confusion Matrix"]
     D --> H["Live Session History Table / Search Filter / CSV Export"]
     E --> I["Remote Training Engine / Instant Page 1 Redirect"]
@@ -73,7 +73,20 @@ flowchart TD
 
 ---
 
-### 4️⃣ Live RTSP IP Stream & Broadcast Camera Ingestion Pipeline
+### 4️⃣ Multi-Camera Quad-Split Broadcast View Pipeline
+```mermaid
+flowchart TD
+    A["Review Decision Completed"] --> B["Quad-Split Grid Renderer"]
+    B --> C1["CAM 1: Bowler's End Real-Time Ball Track MP4 Video"]
+    B --> C2["CAM 2: Hawk-Eye 3D Broadcast Decision Image"]
+    B --> C3["CAM 3: UltraEdge Audio Snickometer Oscilloscope"]
+    B --> C4["CAM 4: Live Event Broadcast RTSP Feed"]
+    C1 & C2 & C3 & C4 --> D["Synchronized 2x2 Broadcast Grid Display"]
+```
+
+---
+
+### 5️⃣ Live RTSP IP Stream & Broadcast Camera Ingestion Pipeline
 ```mermaid
 flowchart TD
     A["RTSP Camera URL / USB Capture Card / IP Camera Feed"] --> B["OpenCV VideoCapture Thread"]
@@ -85,7 +98,7 @@ flowchart TD
 
 ---
 
-### 5️⃣ 360° Grand Floodlight Three.js WebGL Stadium Orbit Engine
+### 6️⃣ 360° Grand Floodlight Three.js WebGL Stadium Orbit Engine
 ```mermaid
 flowchart TD
     A["3D Metrics Prediction Data"] --> B["Three.js Scene & Perspective Camera Init"]
@@ -98,7 +111,7 @@ flowchart TD
 
 ---
 
-### 6️⃣ 3D Perspective Homography & Metric Coordinate Transformation Engine
+### 7️⃣ 3D Perspective Homography & Metric Coordinate Transformation Engine
 ```mermaid
 flowchart TD
     A["Pixel Trajectory Coordinates (u, v)"] --> B["4 Pitch Corner Calibration Points"]
@@ -109,7 +122,7 @@ flowchart TD
 
 ---
 
-### 7️⃣ 3D Parabolic Kinematics & Gravity Rebound Predictor
+### 8️⃣ 3D Parabolic Kinematics & Gravity Rebound Predictor
 ```mermaid
 flowchart TD
     A["Pitch Bounce Point (X0, Y0, Z0)"] --> B["Rebound Vertical Velocity Vz0"]
@@ -121,7 +134,7 @@ flowchart TD
 
 ---
 
-### 8️⃣ UltraEdge Audio Snickometer Oscilloscope Waveform Generator
+### 9️⃣ UltraEdge Audio Snickometer Oscilloscope Waveform Generator
 ```mermaid
 flowchart TD
     A["Impact Frame & Edge Event Data"] --> B["Synthesize High-Frequency Audio Signal"]
@@ -132,7 +145,7 @@ flowchart TD
 
 ---
 
-### 9️⃣ Multi-Source Dataset Harvester (Kaggle + GitHub + REST APIs)
+### 🔟 Multi-Source Dataset Harvester (Kaggle + GitHub + REST APIs)
 ```mermaid
 flowchart TD
     A["Dataset Harvester Engine"] --> B["Source 1: Kaggle CLI Datasets Download"]
@@ -147,7 +160,7 @@ flowchart TD
 
 ---
 
-### 🔟 Model Training & 500-Epoch Deep Learning Optimization
+### 11️⃣ Model Training & 500-Epoch Deep Learning Optimization
 ```mermaid
 flowchart TD
     A["Master Dataset Directory"] --> B["YOLOv8x Extra Large Model Initialization"]
@@ -161,7 +174,7 @@ flowchart TD
 
 ---
 
-### 11️⃣ AI TV Umpire Voice Speech Synthesizer & PDF Exporter
+### 12️⃣ AI TV Umpire Voice Speech Synthesizer & PDF Exporter
 ```mermaid
 flowchart TD
     A["Final Decision Verdict Data"] --> B["Synthesize Speech Text: Official Review Complete..."]
@@ -172,7 +185,7 @@ flowchart TD
 
 ---
 
-### 12️⃣ Admin Console & Remote Training Runner Pipeline
+### 13️⃣ Admin Console & Remote Training Runner Pipeline
 ```mermaid
 flowchart TD
     A["Admin User Clicks START ULTRA-DEEP TRAINING ENGINE"] --> B["Async Fetch POST /admin/train with Security Token"]
@@ -187,7 +200,7 @@ flowchart TD
 
 ### 🌐 1. Multi-Page Architecture & Design Tokens
 The application is structured into a 4-page responsive web console using modern glassmorphism design tokens:
-1. **Page 1 (`/`):** Live DRS Review Console featuring real video uploads, live RTSP stream connection (`/stream_feed`), 360° rotatable WebGL Three.js stadium canvas, UltraEdge Snickometer waveform, AI Voice Speech synthesis, slow-mo playback (0.25x - 2.0x), and PDF report export.
+1. **Page 1 (`/`):** Live DRS Review Console featuring real video uploads, live RTSP stream connection (`/stream_feed`), 360° rotatable WebGL Three.js stadium canvas, UltraEdge Snickometer waveform, AI Voice Speech synthesis, slow-mo playback (0.25x - 2.0x), Multi-Camera Quad-Split view, and PDF report export.
 2. **Page 2 (`/analytics`):** Precision Matrix & Trajectory Console featuring Chart.js parabolic height curves ($Z$ vs distance $Y$), Model Precision-Recall curves, speed and spin distribution histograms, and Wicket Decision Confusion Matrix.
 3. **Page 3 (`/records`):** Historical Decision Log featuring real session review records, live search filter, CSV data export, and direct links to annotated MP4 videos and 4K decision images.
 4. **Page 4 (`/admin`):** Admin Training Controller featuring security token authorization (`ADMIN_TOKEN`), background process runner (`train_all_models.bat`), and instant home navigation (`window.location.href = '/'`).

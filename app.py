@@ -138,7 +138,7 @@ def health():
     return jsonify({
         'status': 'ok',
         'service': 'Real DRS Hawk-Eye 3D API',
-        'timestamp': datetime.datetime.utcnow().isoformat() + 'Z',
+        'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat(),
         'total_decisions': len(_decision_log),
     })
 
@@ -224,7 +224,7 @@ def process():
     # ── 6. Log decision ──
     record = {
         'job_id':         job_id,
-        'timestamp':      datetime.datetime.utcnow().isoformat() + 'Z',
+        'timestamp':      datetime.datetime.now(datetime.timezone.utc).isoformat(),
         'color':          color,
         'pitching_zone':  results['pitching_zone'].value,
         'impact_zone':    results['impact_zone'].value,

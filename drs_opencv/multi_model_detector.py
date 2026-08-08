@@ -19,14 +19,29 @@ import logging
 
 try:
     import config as cfg
-except ImportError:
-    from drs_opencv import config as cfg
+except Exception:
+    try:
+        from drs_opencv import config as cfg
+    except Exception:
+        class cfg:
+            MIN_BALL_RADIUS = 3
+            MAX_BALL_RADIUS = 30
+
+try:
+    from yolo_detector import YOLODetector
+except Exception:
+    try:
+        from drs_opencv.yolo_detector import YOLODetector
+    except Exception:
+        class YOLODetector:
+            def detect_ball(self, frame):
+                return None
 
 # Try importing MediaPipe for ultra-high accuracy object/pose tracking
 try:
     import mediapipe as mp
     MEDIAPIPE_AVAILABLE = True
-except ImportError:
+except Exception:
     MEDIAPIPE_AVAILABLE = False
 
 logger = logging.getLogger(__name__)

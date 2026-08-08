@@ -88,6 +88,22 @@ def stream_feed():
     src = request.args.get('src', '0')
     return Response(generate_live_stream_frames(src), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/favicon.ico')
+def favicon():
+    svg_icon = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#ef4444"/><circle cx="50" cy="50" r="30" fill="none" stroke="#facc15" stroke-width="6"/></svg>'''
+    return Response(svg_icon, mimetype='image/svg+xml')
+
+@app.route('/manifest.json')
+def manifest():
+    return jsonify({
+        "name": "ICC Real DRS Hawk-Eye 3D",
+        "short_name": "Real DRS 3D",
+        "start_url": "/",
+        "display": "standalone",
+        "background_color": "#020617",
+        "theme_color": "#38bdf8",
+        "icons": [{"src": "/favicon.ico", "sizes": "512x512", "type": "image/svg+xml"}]
+    })
 
 @app.route('/health')
 def health():

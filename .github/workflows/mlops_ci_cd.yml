@@ -35,4 +35,4 @@ jobs:
 
       - name: Verify Web API & Endpoint Health Checks
         run: |
-          python scratch/full_suite_verifier.py
+          python drs_opencv/verify_pipeline.py

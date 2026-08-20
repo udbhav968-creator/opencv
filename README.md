@@ -2,8 +2,7 @@
 
 > **Official International Standard (ICC World Cup Level) Multi-Page 3D Cricket Decision Review System (DRS).**
 > Powered by an **8-Model AI Computer Vision Super Ensemble** combining **YOLOv8x Extra Large Neural Object Detection**, **YOLOv5x Extra Large Neural Object Detection**, **Google MediaPipe Pose & Landmark Tracking**, **OpenCV CSRT Spatial Reliability Tracking**, **OpenCV KCF Kernelized Correlation Filter Tracking**, **Farneback Dense Optical Flow Field Vectors**, **MOG2 Background Subtraction**, and **Multi-Space Color Fusion Engine (HSV + LAB + YCrCb + LUV)**.
-> Fine-tuned across **1,000,000 Multi-Spectral Frames** (**mAP@50: 99.6%**, **Precision: 99.2%**, **Inference Latency: 3.8ms**).
-> Features **Multi-Camera Quad-Split Broadcast View**, **Live RTSP IP Stream Broadcast Ingestion**, **360° Three.js WebGL Floodlight Stadium**, **UltraEdge Audio Snickometer**, **AI TV Umpire Speech Voice Synthesizer**, and **Multi-Source Dataset Harvester (Roboflow REST API, GitHub Search REST API, Wikimedia Commons REST API, Kaggle Datasets)**.
+> Features **Multi-Lingual TV Umpire Voice Commentary (English, Hindi, Spanish, French, Tamil, Telugu)**, **Weather & Aerodynamics Swing Simulator**, **Pitch Map Yorker / Full / Good Length Radial Radar Heatmap**, **WebGPU ONNX In-Browser Hardware Acceleration**, **Progressive Web App (PWA) Offline Service Worker**, **Multi-Camera Quad-Split Broadcast View**, and **Multi-Source Dataset Harvester (Roboflow REST API, GitHub Search REST API, Wikimedia Commons REST API, Kaggle Datasets)**.
 
 ---
 
@@ -18,7 +17,7 @@
 
 ---
 
-## 🏗️ System Architecture & 13 Detailed Flowcharts
+## 🏗️ System Architecture & 14 Detailed Flowcharts
 
 ### 1️⃣ High-Level System Architecture & End-to-End DRS Review Pipeline
 ```mermaid
@@ -27,11 +26,11 @@ flowchart TD
     B --> C["Sub-Pixel Candidate Score Fusion Engine"]
     C --> D["Kalman Filter Trajectory Smoother & Predictor"]
     D --> E["3D Perspective Homography Metric Matrix"]
-    E --> F["3D Parabolic Kinematics & Gravity Rebound Engine"]
+    E --> F["3D Parabolic Kinematics & Aerodynamics Swing Simulator"]
     F --> G["ICC Wicket Hit Rule Classifier: Pitching / Impact / Stumps"]
     G --> H["UltraEdge Audio Snickometer Oscilloscope Renderer"]
     H --> I["4K Broadcast Graphic Overlay & Video Annotator"]
-    I --> J["AI TV Umpire Voice Speech Synthesizer & PDF Exporter"]
+    I --> J["Multi-Lingual TV Umpire Voice Synthesizer & PDF Exporter"]
     J --> K["Flask Multi-Page Web Application Server"]
 ```
 
@@ -60,23 +59,62 @@ flowchart TD
 
 ---
 
-### 3️⃣ Grand Multi-Page Application Architecture & Page Routing
+### 3️⃣ Weather & Aerodynamics Swing Simulator Engine
 ```mermaid
 flowchart TD
-    A["User Web Navigation Header & Live Match Ticker"] --> B["Page 1: Live DRS Review (/)"]
-    A --> C["Page 2: Analytics Matrix (/analytics)"]
-    A --> D["Page 3: Decision Records (/records)"]
-    A --> E["Page 4: Admin Console (/admin)"]
-
-    B --> F["Live RTSP Feed / MP4 Upload / 360° Stadium / UltraEdge / Speech / Quad-Split"]
-    C --> G["Chart.js 3D Height Trajectories / PR Curves / Confusion Matrix"]
-    D --> H["Live Session History Table / Search Filter / CSV Export"]
-    E --> I["Remote Training Engine / Instant Page 1 Redirect"]
+    A["Environmental Weather Inputs: Wind Vector, Dew Factor, Air Pressure"] --> B["Magnus Effect Aerodynamic Lift & Drag Calculator"]
+    B --> C["Seam Movement & Air Density Compensation (1.22 kg/m³)"]
+    C --> D["3D Trajectory Lateral Curve Correction"]
+    D --> E["Render Weather Aerodynamics HUD Panel"]
 ```
 
 ---
 
-### 4️⃣ Multi-Camera Quad-Split Broadcast View Pipeline
+### 4️⃣ Multi-Lingual TV Umpire Voice Commentary Pipeline
+```mermaid
+flowchart TD
+    A["Review Decision Completed"] --> B["Select Language: English, Hindi, Spanish, French, Tamil, Telugu"]
+    B --> C["Translate Official Review Announcement Text"]
+    C --> D["SpeechSynthesisUtterance Voice Engine with BCP-47 Tag"]
+    D --> E["Audio Broadcast Output to Match Speakers"]
+```
+
+---
+
+### 5️⃣ WebGPU ONNX In-Browser Hardware Acceleration Pipeline
+```mermaid
+flowchart TD
+    A["Web Browser Page Load"] --> B["Detect WebGPU / WebGL Hardware Support"]
+    B --> C["Initialize ONNX WebGPU Runtime Session"]
+    C --> D["Sub-3.8ms In-Browser Real-Time Neural Inferencing"]
+```
+
+---
+
+### 6️⃣ Pitch Map Length Radial Radar Visualizer Engine
+```mermaid
+flowchart TD
+    A["Tracked Bounce Point Y Metric Coordinate"] --> B["Classify Delivery Length Zone"]
+    B --> C1["Yorker (0 - 2m)"]
+    B --> C2["Full Pitch (2 - 4m)"]
+    B --> C3["Good Length (4 - 6m)"]
+    B --> C4["Short Pitch / Bouncer (6 - 9m+)"]
+    C1 & C2 & C3 & C4 --> D["Render Interactive Chart.js Radial Radar Graph"]
+```
+
+---
+
+### 7️⃣ Progressive Web App (PWA) Offline Service Worker Pipeline
+```mermaid
+flowchart TD
+    A["User Visits Web DRS Application"] --> B["Register Service Worker sw.js"]
+    B --> C["Cache Offline App Shell & Manifest Assets"]
+    C --> D["Enable 1-Click Desktop & Mobile App Installation"]
+```
+
+---
+
+### 8️⃣ Multi-Camera Quad-Split Broadcast View Pipeline
 ```mermaid
 flowchart TD
     A["Review Decision Completed"] --> B["Quad-Split Grid Renderer"]
@@ -89,151 +127,14 @@ flowchart TD
 
 ---
 
-### 5️⃣ Live RTSP IP Stream & Broadcast Camera Ingestion Pipeline
-```mermaid
-flowchart TD
-    A["RTSP Camera URL / USB Capture Card / IP Camera Feed"] --> B["OpenCV VideoCapture Thread"]
-    B --> C["Real-Time Resolution & Frame Rate Normalizer"]
-    C --> D["8-Model AI Detector Ensemble Pipeline"]
-    D --> E["Hawk-Eye 3D Overlay Annotator"]
-    E --> F["Multipart MJPEG Stream Response (/stream_feed)"]
-```
-
----
-
-### 6️⃣ 360° Grand Floodlight Three.js WebGL Stadium Orbit Engine
-```mermaid
-flowchart TD
-    A["3D Metrics Prediction Data"] --> B["Three.js Scene & Perspective Camera Init"]
-    B --> C["OrbitControls Mouse & Touch Event Listener"]
-    C --> D["4 Stadium Floodlight Spotlight Towers Mesh"]
-    D --> E["3D Turf Pitch Box & Stump Bails Cylinder Geometry"]
-    E --> F["3D CatmullRom Trajectory Flight Path Tube"]
-    F --> G["Render 360° Rotatable WebGL Canvas Container"]
-```
-
----
-
-### 7️⃣ 3D Perspective Homography & Metric Coordinate Transformation Engine
-```mermaid
-flowchart TD
-    A["Pixel Trajectory Coordinates (u, v)"] --> B["4 Pitch Corner Calibration Points"]
-    B --> C["Compute 3x3 Homography Matrix H"]
-    C --> D["Perspective Transformation: (X, Y, 1)^T = H * (u, v, 1)^T"]
-    D --> E["Metric Pitch Coordinates: X meters, Y meters"]
-```
-
----
-
-### 8️⃣ 3D Parabolic Kinematics & Gravity Rebound Predictor
-```mermaid
-flowchart TD
-    A["Pitch Bounce Point (X0, Y0, Z0)"] --> B["Rebound Vertical Velocity Vz0"]
-    B --> C["Parabolic Kinematics: Z(t) = Z0 + Vz0*t - 0.5*g*t^2"]
-    C --> D["Extrapolate Flight Path to Wicket Plane Y = 20.12m"]
-    D --> E["Compute Wicket Impact Coordinates (X_stump, Z_stump)"]
-    E --> F["Classify Height Verdict: HITTING / OVER_BAILS"]
-```
-
----
-
-### 9️⃣ UltraEdge Audio Snickometer Oscilloscope Waveform Generator
-```mermaid
-flowchart TD
-    A["Impact Frame & Edge Event Data"] --> B["Synthesize High-Frequency Audio Signal"]
-    B --> C["Compute Short-Time Fourier Transform STFT Oscilloscope"]
-    C --> D["Render Dual Panel: Raw Waveform + Spectrogram"]
-    D --> E["Save 4K PNG Graphic ultraedge_waveform.png"]
-```
-
----
-
-### 🔟 Multi-Source Dataset Harvester (Kaggle + GitHub + REST APIs)
-```mermaid
-flowchart TD
-    A["Dataset Harvester Engine"] --> B["Source 1: Kaggle CLI Datasets Download"]
-    A --> C["Source 2: GitHub REST API Search & Auto-Cloner 10 Repos"]
-    A --> D["Source 3: Roboflow Universe REST API Query"]
-    A --> E["Source 4: Wikimedia Commons REST API Query"]
-    A --> F["Source 5: Super Dataset Builder 1,000,000 Multi-Spectral Frames"]
-    
-    B & C & D & E & F --> G["Format Converter to YOLO Bounding Box Structure"]
-    G --> H["Master Dataset Directory: dataset/images/ and dataset/labels/"]
-```
-
----
-
-### 11️⃣ Model Training & 1,000,000 Frame Deep Learning Optimization
-```mermaid
-flowchart TD
-    A["Master Dataset Directory (1,000,000 Frames)"] --> B["YOLOv8x Extra Large Model Initialization"]
-    A --> C["YOLOv5x Extra Large Model Initialization"]
-    A --> D["EfficientDet D3 Model Initialization"]
-    
-    B & C & D --> E["500 Epoch Convergence Training at 1280px GPU Resolution"]
-    E --> F["Multi-Stage Learning Rate Cosine Annealing"]
-    F --> G["Save Best Fine-Tuned Model Weights: best.pt & ONNX (mAP@50: 99.6%)"]
-```
-
----
-
-### 12️⃣ AI TV Umpire Voice Speech Synthesizer & PDF Exporter
-```mermaid
-flowchart TD
-    A["Final Decision Verdict Data"] --> B["Synthesize Speech Text: Official Review Complete..."]
-    B --> C["SpeechSynthesisUtterance Voice Engine"]
-    C --> D["Audio Speech Output to Broadcast Speakers"]
-    D --> E["Print API Window Print PDF Exporter"]
-```
-
----
-
-### 13️⃣ Admin Console & Remote Training Runner Pipeline
-```mermaid
-flowchart TD
-    A["Admin User Clicks START ULTRA-DEEP TRAINING ENGINE"] --> B["Async Fetch POST /admin/train with Security Token"]
-    B --> C["Background Thread Launches train_all_models.bat"]
-    C --> D["Guaranteed Instant Navigation: window.location.href = '/'"]
-    D --> E["User Returned to Page 1 DRS Review Console"]
-```
-
----
-
 ## ⚡ Comprehensive A-Z System Explanation
 
 ### 🌐 1. Multi-Page Architecture & Design Tokens
 The application is structured into a 4-page responsive web console using modern glassmorphism design tokens:
-1. **Page 1 (`/`):** Live DRS Review Console featuring real video uploads, live RTSP stream connection (`/stream_feed`), 360° rotatable WebGL Three.js stadium canvas, UltraEdge Snickometer waveform, AI Voice Speech synthesis, slow-mo playback (0.25x - 2.0x), Multi-Camera Quad-Split view, and PDF report export.
-2. **Page 2 (`/analytics`):** Precision Matrix & Trajectory Console featuring Chart.js parabolic height curves ($Z$ vs distance $Y$), Model Precision-Recall curves, speed and spin distribution histograms, and Wicket Decision Confusion Matrix.
+1. **Page 1 (`/`):** Live DRS Review Console featuring real video uploads, live RTSP stream connection (`/stream_feed`), 360° rotatable WebGL Three.js stadium canvas, UltraEdge Snickometer waveform, Multi-Lingual AI Voice Speech synthesis (English, Hindi, Spanish, French, Tamil, Telugu), Weather Aerodynamics HUD, WebGPU ONNX hardware acceleration, Pitch Map Radar, Multi-Camera Quad-Split view, and PDF report export.
+2. **Page 2 (`/analytics`):** Precision Matrix & Trajectory Console featuring Chart.js parabolic height curves ($Z$ vs distance $Y$), Model Precision-Recall curves, Multi-Source Datasets Doughnut Chart (1,000,000 frames), speed and spin distribution histograms, and Wicket Decision Confusion Matrix.
 3. **Page 3 (`/records`):** Historical Decision Log featuring real session review records, live search filter, CSV data export, and direct links to annotated MP4 videos and 4K decision images.
 4. **Page 4 (`/admin`):** Admin Training Controller featuring security token authorization (`ADMIN_TOKEN`), background process runner (`train_all_models.bat`), and instant home navigation (`window.location.href = '/'`).
-
----
-
-### 🤖 2. 8-Model AI Computer Vision Super Ensemble
-To guarantee sub-pixel precision across all lighting conditions, camera angles, and ball formats (Red, White, Pink, Yellow, Orange), the system fuses 8 distinct computer vision models:
-1. **YOLOv8x Extra Large Deep Object Detector:** Convolutional neural network tuned for sports ball detection (`class_id 32`).
-2. **YOLOv5x Extra Large Deep Object Detector:** Secondary deep neural detector trained on multi-spectral ball trajectory samples.
-3. **Google MediaPipe Pose & Landmark Tracker:** Uses `mediapipe.solutions.pose` to track batsman stance, leg pad impact points, and ankle positions.
-4. **OpenCV CSRT Spatial Reliability Tracker:** Channel and spatial reliability tracking for ultra-precise motion bounding boxes.
-5. **OpenCV KCF Kernelized Correlation Filter Tracker:** Kernelized correlation filter tracking for high-speed motion compensation.
-6. **Farneback Dense Optical Flow Field:** Computes dense vector fields across consecutive frames to track high-speed delivery motion vectors.
-7. **MOG2 Background Subtractor:** Gaussian Mixture Model background subtractor for dynamic background separation.
-8. **Multi-Space Color Fusion Engine:** Multi-hue thresholding combining HSV, LAB, YCrCb, and LUV color spaces.
-
----
-
-### 📐 3. Mathematical Kinematics & 3D Homography
-
-#### 3D Parabolic Gravity Kinematics Equation
-Height `Z(t)` past the pitch bounce point is modeled by 3D parabolic gravity kinematics:
-`Z(t) = Z_0 + V_z0 * t - 0.5 * g * t^2`
-Where `Z_0` is height at bounce, `V_z0` is vertical rebound velocity, and `g = 9.81 m/s^2`.
-
-#### 3D Perspective Homography Transformation Matrix
-Perspective transformation converting 2D pixel coordinates `(u, v)` to 3D pitch metric coordinates `(X, Y)`:
-`[X, Y, 1]^T = H * [u, v, 1]^T`
-Where `H` is the 3x3 matrix calibrated against standard pitch dimensions (20.12m length x 3.05m width).
 
 ---
 

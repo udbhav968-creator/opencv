@@ -120,6 +120,10 @@ def favicon():
     svg_icon = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#ef4444"/><circle cx="50" cy="50" r="30" fill="none" stroke="#facc15" stroke-width="6"/></svg>'''
     return Response(svg_icon, mimetype='image/svg+xml')
 
+@app.route('/sw.js')
+def service_worker():
+    return send_file(os.path.join(app.root_path, 'static', 'sw.js'), mimetype='application/javascript')
+
 @app.route('/manifest.json')
 def manifest():
     return jsonify({

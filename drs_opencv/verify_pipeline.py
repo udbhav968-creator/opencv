@@ -28,7 +28,7 @@ if __name__ == "__main__":
     # Start Flask server in background thread
     server_thread = threading.Thread(target=run_flask_app, daemon=True)
     server_thread.start()
-    time.sleep(3)  # Allow server to start up
+    time.sleep(5)  # Allow server to complete startup and bind to port
 
     BASE_URL = "http://127.0.0.1:5000"
     endpoints_to_test = [

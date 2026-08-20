@@ -115,7 +115,7 @@ def harvest_github(search_query: str, max_repos: int = 5, dry_run: bool = False)
             except Exception:
                 pass
         if dry_run:
-            print(f"[Harvester] Dry‑run: would clone {clone_url}")
+            print(f"[Harvester] Dry-run: would clone {clone_url}")
             continue
         print(f"[Harvester] Cloning {clone_url} ...")
         subprocess.run(["git", "clone", "--depth", "1", clone_url, str(repo_dir)], check=False)

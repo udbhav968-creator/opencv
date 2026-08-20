@@ -1,0 +1,38 @@
+name: ICC DRS Deep MLOps CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly automated retraining & drift check
+
+jobs:
+  mlops-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python Environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install MLOps & Computer Vision Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy opencv-python-headless pillow requests
+
+      - name: Run Multi-Source Dataset Ingestion & Validation
+        run: |
+          python drs_opencv/dataset_harvester.py --dry-run
+
+      - name: Run Full Deep MLOps Lifecycle & Model Gatekeeper
+        run: |
+          python drs_opencv/mlops_pipeline.py
+
+      - name: Verify Web API & Endpoint Health Checks
+        run: |
+          python scratch/full_suite_verifier.py

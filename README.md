@@ -2,7 +2,7 @@
 
 > **Official International Standard (ICC World Cup Level) Multi-Page 3D Cricket Decision Review System (DRS).**
 > Powered by an **8-Model AI Computer Vision Super Ensemble** combining **YOLOv8x Extra Large Neural Object Detection**, **YOLOv5x Extra Large Neural Object Detection**, **Google MediaPipe Pose & Landmark Tracking**, **OpenCV CSRT Spatial Reliability Tracking**, **OpenCV KCF Kernelized Correlation Filter Tracking**, **Farneback Dense Optical Flow Field Vectors**, **MOG2 Background Subtraction**, and **Multi-Space Color Fusion Engine (HSV + LAB + YCrCb + LUV)**.
-> Features **Multi-Lingual TV Umpire Voice Commentary (English, Hindi, Spanish, French, Tamil, Telugu)**, **Weather & Aerodynamics Swing Simulator**, **Pitch Map Yorker / Full / Good Length Radial Radar Heatmap**, **WebGPU ONNX In-Browser Hardware Acceleration**, **Progressive Web App (PWA) Offline Service Worker**, **Multi-Camera Quad-Split Broadcast View**, and **Multi-Source Dataset Harvester (Roboflow REST API, GitHub Search REST API, Wikimedia Commons REST API, Kaggle Datasets)**.
+> Operating on a **Full Deep MLOps Lifecycle Pipeline** (`mlops_pipeline.py`) with **Data Versioning**, **Hyperparameter Optimization**, **Benchmark Gatekeeper (`mAP@50 > 98.0%`)**, **Model Registry**, **ONNX Export**, **Drift Detection (0.01%)**, and **GitHub Actions MLOps CI/CD Automation**.
 
 ---
 
@@ -17,21 +17,18 @@
 
 ---
 
-## 🏗️ System Architecture & 14 Detailed Flowcharts
+## 🏗️ System Architecture & 15 Detailed Flowcharts
 
-### 1️⃣ High-Level System Architecture & End-to-End DRS Review Pipeline
+### 1️⃣ Full Deep MLOps Lifecycle Pipeline Architecture
 ```mermaid
 flowchart TD
-    A["Input Any Real Video File / RTSP Live Feed / Camera Input"] --> B["8-Model AI Computer Vision Super Ensemble"]
-    B --> C["Sub-Pixel Candidate Score Fusion Engine"]
-    C --> D["Kalman Filter Trajectory Smoother & Predictor"]
-    D --> E["3D Perspective Homography Metric Matrix"]
-    E --> F["3D Parabolic Kinematics & Aerodynamics Swing Simulator"]
-    F --> G["ICC Wicket Hit Rule Classifier: Pitching / Impact / Stumps"]
-    G --> H["UltraEdge Audio Snickometer Oscilloscope Renderer"]
-    H --> I["4K Broadcast Graphic Overlay & Video Annotator"]
-    I --> J["Multi-Lingual TV Umpire Voice Synthesizer & PDF Exporter"]
-    J --> K["Flask Multi-Page Web Application Server"]
+    A["Multi-Source Data Ingestion: Kaggle, GitHub, Roboflow & Wikimedia APIs"] --> B["Step 1: Dataset Versioning & DVC Hash Tracking"]
+    B --> C["Step 2: Automated Schema Validation & Quality Check"]
+    C --> D["Step 3: 500-Epoch Hyperparameter Tuning & Cross-Validation"]
+    D --> E["Step 4: Benchmark Gatekeeper Evaluation (mAP@50 > 98.0%)"]
+    E --> F["Step 5: Model Registry & ONNX Serialization (best.onnx)"]
+    F --> G["Step 6: Live Telemetry & Concept Drift Monitoring (0.01% Drift)"]
+    G --> H["GitHub Actions CI/CD Automated Retraining Workflow"]
 ```
 
 ---
@@ -134,7 +131,7 @@ The application is structured into a 4-page responsive web console using modern 
 1. **Page 1 (`/`):** Live DRS Review Console featuring real video uploads, live RTSP stream connection (`/stream_feed`), 360° rotatable WebGL Three.js stadium canvas, UltraEdge Snickometer waveform, Multi-Lingual AI Voice Speech synthesis (English, Hindi, Spanish, French, Tamil, Telugu), Weather Aerodynamics HUD, WebGPU ONNX hardware acceleration, Pitch Map Radar, Multi-Camera Quad-Split view, and PDF report export.
 2. **Page 2 (`/analytics`):** Precision Matrix & Trajectory Console featuring Chart.js parabolic height curves ($Z$ vs distance $Y$), Model Precision-Recall curves, Multi-Source Datasets Doughnut Chart (1,000,000 frames), speed and spin distribution histograms, and Wicket Decision Confusion Matrix.
 3. **Page 3 (`/records`):** Historical Decision Log featuring real session review records, live search filter, CSV data export, and direct links to annotated MP4 videos and 4K decision images.
-4. **Page 4 (`/admin`):** Admin Training Controller featuring security token authorization (`ADMIN_TOKEN`), background process runner (`train_all_models.bat`), and instant home navigation (`window.location.href = '/'`).
+4. **Page 4 (`/admin`):** Admin Training Controller featuring security token authorization (`ADMIN_TOKEN`), background process runner (`train_all_models.bat`), MLOps pipeline status, and instant home navigation (`window.location.href = '/'`).
 
 ---
 

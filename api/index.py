@@ -105,12 +105,43 @@ def manifest():
         "icons": [{"src": "/favicon.ico", "sizes": "512x512", "type": "image/svg+xml"}]
     })
 
+@app.route('/sw.js')
+def service_worker():
+    return send_file(os.path.join(root_dir, 'static', 'sw.js'), mimetype='application/javascript')
+
+@app.route('/api/biomechanics')
+def api_biomechanics():
+    try:
+        from biomechanics_analyzer import BiomechanicsAnalyzer
+        analyzer = BiomechanicsAnalyzer()
+        return jsonify(analyzer.analyze_pose_keypoints())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/win_probability')
+def api_win_probability():
+    try:
+        from win_probability_engine import WinProbabilityEngine
+        engine = WinProbabilityEngine()
+        return jsonify(engine.simulate_win_probability())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/export_certificate')
+def api_export_certificate():
+    try:
+        from export_suite import DRSExportSuite
+        suite = DRSExportSuite()
+        return jsonify(suite.generate_certificate_json("JOB12345", {"final_call": "NOT OUT"}))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/health')
 def health():
     return jsonify({
         'status': 'ok',
         'service': 'Real DRS Hawk-Eye 3D API',
-        'timestamp': datetime.datetime.utcnow().isoformat() + 'Z',
+        'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat(),
         'pipeline_available': pipeline_available,
         'import_error': import_error_message,
         'total_decisions': len(_decision_log),
@@ -234,7 +265,7 @@ def process():
 
         record = {
             'job_id':         job_id,
-            'timestamp':      datetime.datetime.utcnow().isoformat() + 'Z',
+            'timestamp':      datetime.datetime.now(datetime.timezone.utc).isoformat(),
             'color':          color,
             'pitching_zone':  pz_str,
             'impact_zone':    iz_str,
@@ -253,10 +284,11 @@ def process():
             'ai_verdict':      ai_info,
             'delivery_stats':  stats,
             'physics_3d':      physics_info,
-            'timestamp':  datetime.datetime.utcnow().isoformat() + 'Z',
+            'annotated_video': f"/outputs/{job_id}/tracked_output.mp4",
+            'drs_image':       f"/outputs/{job_id}/drs_decision.png",
+            'ultraedge_image': f"/outputs/{job_id}/ultraedge_waveform.png",
+            'timestamp':       datetime.datetime.now(datetime.timezone.utc).isoformat(),
         })
-
-        return jsonify(response_payload)
 
     except Exception as exc:
         traceback.print_exc()

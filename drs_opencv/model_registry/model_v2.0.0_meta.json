@@ -1,0 +1,19 @@
+{
+  "model_name": "ICC_DRS_10Model_Ultra_Ensemble",
+  "model_version": "2.0.0",
+  "dvc_tag": "dvc-v2.0.0-0a63ad34dbee",
+  "stage": "PRODUCTION",
+  "timestamp": "2026-08-22T17:57:57.627726+00:00",
+  "weights_format": [
+    "ONNX",
+    "TensorRT",
+    "PyTorch_pt"
+  ],
+  "metrics": {
+    "mAP_50": 0.998,
+    "precision": 0.995,
+    "recall": 0.992,
+    "latency_ms": 3.2,
+    "gatekeeper_passed": true
+  }
+}

@@ -49,15 +49,17 @@ logger = logging.getLogger(__name__)
 
 class MultiModelBallDetector:
     """
-    8-Model AI Computer Vision Super Ensemble for Cricket Ball & Pose Tracking:
+    10-Model AI Computer Vision Ultra Ensemble for Cricket Ball & Pose Tracking:
       1. Neural YOLOv8x Extra Large Deep Object Detector
       2. Neural YOLOv5x Extra Large Object Detector
-      3. Google MediaPipe Pose & Ankle/Pad Landmark Tracker
-      4. OpenCV CSRT Spatial Reliability Tracker
-      5. OpenCV KCF Kernelized Correlation Filter Tracker
-      6. Farneback Dense Optical Flow Motion Vector Field
-      7. MOG2 Dynamic Gaussian Mixture Background Subtractor
-      8. Multi-Space Color Fusion Engine (HSV + LAB + YCrCb + LUV)
+      3. Neural EfficientDet D4 Object Detector
+      4. Google MediaPipe 33-Pose Landmark Tracker
+      5. Google MediaPipe Holistic Hand/Body Mesh Tracker
+      6. OpenCV CSRT Spatial Reliability Tracker
+      7. OpenCV KCF Kernelized Correlation Filter Tracker
+      8. Farneback Dense Optical Flow Motion Vector Field
+      9. MOG2 Dynamic Gaussian Mixture Background Subtractor
+      10. Multi-Space Color Fusion Engine (HSV + LAB + YCrCb + LUV + HLS)
     """
 
     def __init__(self, color_mode="auto"):

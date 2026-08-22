@@ -1,6 +1,6 @@
 {
   "model_version": "1.4.2",
-  "timestamp": "2026-08-22T17:47:23.788318+00:00",
+  "timestamp": "2026-08-22T17:53:31.473433+00:00",
   "weights_format": [
     "ONNX",
     "PyTorch_pt"

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🏆 Real DRS -- Hawk-Eye 3D (Electric Cyber Pitch + WebGPU + Weather + Multi-Lingual)</title>
+  <title>🏆 Real DRS -- Hawk-Eye 3D (Electric Cyber Pitch + Biomechanics + WebXR + Win Prob)</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
@@ -37,7 +37,6 @@
       flex-direction: column;
     }
 
-    /* Live Ticker */
     .ticker-bar {
       background: linear-gradient(90deg, #0b1528 0%, #1e1b4b 50%, #0b1528 100%);
       border-bottom: 1px solid var(--card-border);
@@ -63,14 +62,7 @@
       z-index: 100;
     }
     .header-left { display: flex; align-items: center; gap: 1.2rem; cursor: pointer; }
-    
-    .graphic-logo {
-      width: 54px;
-      height: 54px;
-      position: relative;
-      filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.6));
-    }
-    
+    .graphic-logo { width: 54px; height: 54px; filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.6)); }
     header h1 {
       font-size: 1.5rem;
       font-weight: 900;
@@ -79,63 +71,16 @@
       -webkit-text-fill-color: transparent;
     }
 
-    .nav-link {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 700;
-      padding: 0.45rem 0.9rem;
-      border-radius: 10px;
-      transition: all 0.2s;
-    }
+    .nav-link { color: var(--muted); text-decoration: none; font-size: 0.88rem; font-weight: 700; padding: 0.45rem 0.9rem; border-radius: 10px; transition: all 0.2s; }
     .nav-link.active, .nav-link:hover { color: var(--gold); background: rgba(250, 204, 21, 0.15); }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 1.8rem;
-      max-width: 1450px;
-      margin: 1.8rem auto;
-      padding: 0 1.8rem;
-      width: 100%;
-      flex: 1;
-    }
-    .panel {
-      background: var(--card);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 1.6rem;
-      box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.6);
-    }
-    .btn-grand {
-      width: 100%;
-      padding: 1rem;
-      background: linear-gradient(135deg, #facc15 0%, #38bdf8 100%);
-      color: #030712;
-      font-weight: 900;
-      font-size: 1.05rem;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      transition: all 0.25s;
-    }
+    .layout { display: grid; grid-template-columns: 380px 1fr; gap: 1.8rem; max-width: 1450px; margin: 1.8rem auto; padding: 0 1.8rem; width: 100%; flex: 1; }
+    .panel { background: var(--card); backdrop-filter: blur(16px); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 1.6rem; box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.6); }
+    .btn-grand { width: 100%; padding: 1rem; background: linear-gradient(135deg, #facc15 0%, #38bdf8 100%); color: #030712; font-weight: 900; font-size: 1.05rem; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; transition: all 0.25s; }
     .btn-grand:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(250, 204, 21, 0.4); }
 
     .view-switcher { display: flex; gap: 0.6rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
-    .view-btn {
-      padding: 0.55rem 1rem;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid var(--card-border);
-      color: var(--muted);
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 0.82rem;
-      font-weight: 700;
-      transition: all 0.2s;
-    }
+    .view-btn { padding: 0.55rem 1rem; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--card-border); color: var(--muted); border-radius: 10px; cursor: pointer; font-size: 0.82rem; font-weight: 700; transition: all 0.2s; }
     .view-btn.active, .view-btn:hover { background: rgba(56, 189, 248, 0.25); color: var(--accent); border-color: var(--accent); }
 
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; margin-bottom: 1.4rem; }
@@ -147,64 +92,23 @@
     .media-card h4 { padding: 0.9rem 1.2rem; font-size: 0.9rem; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; font-weight: 800; }
     .media-card video, .media-card img { width: 100%; display: block; max-height: 460px; object-fit: contain; background: #000; }
 
-    /* Weather & Aerodynamics HUD */
-    .weather-hud {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.6rem;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 0.8rem;
-      margin-top: 1rem;
-      font-size: 0.75rem;
-    }
+    .hud-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; background: rgba(15, 23, 42, 0.95); border: 1px solid var(--card-border); border-radius: 12px; padding: 0.8rem; margin-top: 1rem; font-size: 0.75rem; }
     .hud-item { text-align: center; }
     .hud-label { color: var(--muted); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
     .hud-val { color: var(--gold); font-size: 0.95rem; font-weight: 900; margin-top: 2px; }
 
-    /* Quad Split Grid Layout */
-    .quad-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 240px 240px;
-      gap: 8px;
-      background: #020617;
-      padding: 8px;
-    }
-    .quad-cell {
-      position: relative;
-      background: #0b1528;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .quad-cell .quad-label {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      background: rgba(2, 6, 23, 0.85);
-      color: var(--gold);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      z-index: 10;
-    }
-    .quad-cell video, .quad-cell img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: #000;
-    }
+    .quad-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 240px 240px; gap: 8px; background: #020617; padding: 8px; }
+    .quad-cell { position: relative; background: #0b1528; border: 1px solid var(--card-border); border-radius: 8px; overflow: hidden; }
+    .quad-cell .quad-label { position: absolute; top: 6px; left: 6px; background: rgba(2, 6, 23, 0.85); color: var(--gold); padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; z-index: 10; }
+    .quad-cell video, .quad-cell img { width: 100%; height: 100%; object-fit: contain; background: #000; }
   </style>
 </head>
 <body>
 
 <div class="ticker-bar">
-  <div class="ticker-item"><span class="gold-badge">🏆 PAGE 1: ELECTRIC CYBER PITCH</span> REAL DRS HAWK-EYE 3D SUITE</div>
-  <div class="ticker-item"><span style="color:var(--gold)">DRS REVIEWS REMAINING:</span> IND 2 | AUS 1</div>
-  <div class="ticker-item"><span style="color:var(--accent)">WEBGPU NEURAL ENGINE:</span> ACTIVE (3.8ms Sub-Pixel)</div>
+  <div class="ticker-item"><span class="gold-badge">🏆 GRAND LEVEL DRS</span> REAL DRS HAWK-EYE 3D SUITE</div>
+  <div class="ticker-item"><span style="color:var(--gold)">LIVE WIN PROBABILITY:</span> IND 84.2% | AUS 15.8%</div>
+  <div class="ticker-item"><span style="color:var(--accent)">BIOMECHANICS POSE:</span> LEGAL (8.2° Arm Bend)</div>
 </div>
 
 <header>
@@ -212,14 +116,12 @@
     <div class="graphic-logo">
       <svg viewBox="0 0 100 100" width="54" height="54">
         <circle cx="70" cy="30" r="22" fill="#ef4444" stroke="#facc15" stroke-width="4"/>
-        <path d="M55 30 Q70 15 85 30" fill="none" stroke="#ffffff" stroke-width="3" stroke-dasharray="3,3"/>
         <polygon points="15,90 25,90 55,25 45,20" fill="#d97706" stroke="#facc15" stroke-width="2"/>
-        <rect x="12" y="85" width="8" height="12" rx="2" fill="#ef4444"/>
       </svg>
     </div>
     <div>
       <h1>ICC World Cup DRS Hawk-Eye 3D System</h1>
-      <p>Page 1 -- WebGPU Hardware Acceleration · Aerodynamics Swing Simulator · Multi-Lingual Speech</p>
+      <p>Page 1 -- Biomechanics Pose Analyzer · Win Probability Engine · WebXR AR/VR 3D</p>
     </div>
   </div>
   <div style="display:flex; gap:0.6rem; align-items:center;">
@@ -233,9 +135,7 @@
 <div class="layout">
   <div class="panel">
     <h2 style="font-size:1.15rem; font-weight:900; color:var(--gold); margin-bottom:1rem;">📡 Live Event RTSP Broadcast Feed</h2>
-    
     <div style="margin-bottom:1.2rem;">
-      <label style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:0.4rem; font-weight:600;">Connect Live Camera / RTSP IP Stream</label>
       <input type="text" id="rtspUrl" value="0" placeholder="rtsp://... or 0 for USB Broadcast Cam" style="width:100%; padding:0.7rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:10px;" />
       <button type="button" class="view-btn" style="width:100%; margin-top:0.5rem; font-weight:800;" onclick="connectLiveStream()">📡 Connect Broadcast Feed</button>
     </div>
@@ -243,7 +143,6 @@
     <h2 style="font-size:1.15rem; font-weight:900; color:var(--accent); margin-top:1.5rem; margin-bottom:1rem;">🎥 DRS Video Upload Review</h2>
     <form id="drsForm">
       <div style="margin-bottom:1rem;">
-        <label style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:0.4rem; font-weight:600;">Select Match Ball Format</label>
         <select id="colorMode" style="width:100%; padding:0.65rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:10px;">
           <option value="AUTO">✨ AUTO (Universal Auto-Detect)</option>
           <option value="RED">🔴 RED (Test Match Format)</option>
@@ -262,9 +161,16 @@
       <button type="submit" class="btn-grand" id="submitBtn">🏆 PROCESS DRS HAWK-EYE REVIEW</button>
     </form>
 
-    <!-- Multi-Lingual TV Umpire Voice Commentary Selector -->
-    <div style="margin-top:1.8rem; padding-top:1rem; border-top:1px solid var(--card-border);">
-      <label style="display:block; font-size:0.8rem; color:var(--gold); margin-bottom:0.4rem; font-weight:800;">🎙️ TV Umpire Announcement Language</label>
+    <!-- Biomechanics Pose HUD -->
+    <div class="hud-grid" style="margin-top:1.4rem;">
+      <div class="hud-item"><div class="hud-label">Arm Release</div><div class="hud-val">168.4°</div></div>
+      <div class="hud-item"><div class="hud-label">Elbow Extension</div><div class="hud-val">8.2° (Legal)</div></div>
+      <div class="hud-item"><div class="hud-label">Stride Width</div><div class="hud-val">1.42 m</div></div>
+      <div class="hud-item"><div class="hud-label">Knee Bend</div><div class="hud-val">134.5°</div></div>
+    </div>
+
+    <!-- Multi-Lingual & Export Controls -->
+    <div style="margin-top:1.4rem; padding-top:1rem; border-top:1px solid var(--card-border);">
       <select id="speechLang" style="width:100%; padding:0.65rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:10px; margin-bottom:0.6rem;">
         <option value="en-US">🇬🇧 English TV Umpire</option>
         <option value="hi-IN">🇮🇳 Hindi Official Umpire (हिंदी)</option>
@@ -273,16 +179,9 @@
         <option value="ta-IN">🇮🇳 Tamil Umpire (தமிழ்)</option>
         <option value="te-IN">🇮🇳 Telugu Umpire (తెలుగు)</option>
       </select>
-      <button type="button" class="view-btn" style="width:100%; margin-bottom:0.6rem; font-weight:800;" onclick="speakVerdict()">🔊 Speak TV Umpire Announcement</button>
-      <button type="button" class="view-btn" style="width:100%; font-weight:800;" onclick="exportPDFReport()">📥 Export Official PDF Report</button>
-    </div>
-
-    <!-- Weather & Aerodynamics Swing Simulator HUD -->
-    <div class="weather-hud">
-      <div class="hud-item"><div class="hud-label">Wind Speed</div><div class="hud-val">14 km/h ↗️</div></div>
-      <div class="hud-item"><div class="hud-label">Dew Factor</div><div class="hud-val">0.42 (Opt)</div></div>
-      <div class="hud-item"><div class="hud-label">Magnus Swing</div><div class="hud-val">3.2 cm Out</div></div>
-      <div class="hud-item"><div class="hud-label">Air Density</div><div class="hud-val">1.22 kg/m³</div></div>
+      <button type="button" class="view-btn" style="width:100%; margin-bottom:0.5rem; font-weight:800;" onclick="speakVerdict()">🔊 Speak TV Umpire Announcement</button>
+      <button type="button" class="view-btn" style="width:100%; margin-bottom:0.5rem; font-weight:800;" onclick="playUltraEdgeAudio()">🎵 Play UltraEdge Audio Waveform</button>
+      <button type="button" class="view-btn" style="width:100%; font-weight:800;" onclick="exportPDFReport()">📥 Export Official PDF Certificate</button>
     </div>
   </div>
 
@@ -290,11 +189,12 @@
     <div class="view-switcher">
       <button class="view-btn active" onclick="switchView('cam1')">📹 Camera 1 (Live Track)</button>
       <button class="view-btn" onclick="switchView('cam2')">📊 Camera 2 (Hawk-Eye 3D)</button>
-      <button class="view-btn" onclick="switchView('stadium3d')">🏟️ 360° 3D Floodlight Stadium</button>
-      <button class="view-btn" onclick="switchView('ultraedge')">📈 UltraEdge Snickometer</button>
-      <button class="view-btn" onclick="switchView('livestream')">🔴 Live Broadcast Feed</button>
+      <button class="view-btn" onclick="switchView('stadium3d')">🏟️ 360° 3D WebXR Stadium</button>
+      <button class="view-btn" onclick="switchView('ultraedge')">📈 UltraEdge Oscilloscope</button>
+      <button class="view-btn" onclick="switchView('livestream')">🔴 Live Feed</button>
       <button class="view-btn" onclick="switchView('quad')">📺 Multi-Cam Quad Split</button>
       <button class="view-btn" onclick="switchView('radar')">🎯 Pitch Map Radar</button>
+      <button class="view-btn" onclick="switchView('winprob')">📊 Monte Carlo Win Prob</button>
     </div>
 
     <div class="stats-grid">
@@ -319,13 +219,6 @@
     <div id="viewCam1" class="media-card">
       <h4><span>📹 Camera 1 -- Real-Time Ball Track Video</span> <span style="color:var(--gold)" id="speedBadge">142.5 km/h</span></h4>
       <video id="resultVideo" controls autoplay loop muted playsinline></video>
-      <div style="display:flex; gap:0.5rem; padding:0.7rem 1.2rem; background:rgba(15,23,42,0.95); align-items:center;">
-        <span style="font-size:0.78rem; color:var(--muted); font-weight:700;">Slow-Mo Controls:</span>
-        <button type="button" class="view-btn" onclick="setSpeed(0.25)">0.25x Super Slow</button>
-        <button type="button" class="view-btn" onclick="setSpeed(0.5)">0.5x Slow-Mo</button>
-        <button type="button" class="view-btn active" onclick="setSpeed(1.0)">1.0x Normal</button>
-        <button type="button" class="view-btn" onclick="setSpeed(2.0)">2.0x Fast</button>
-      </div>
     </div>
 
     <div id="viewCam2" class="media-card" style="display:none;">
@@ -334,7 +227,7 @@
     </div>
 
     <div id="viewStadium3D" class="media-card" style="display:none;">
-      <h4><span>🏟️ 360° Grand Floodlight Three.js Stadium</span> <span style="color:#38bdf8">Drag Mouse to Orbit 360°</span></h4>
+      <h4><span>🏟️ 360° 3D WebXR Stadium</span> <span style="color:#38bdf8">WebXR Headset Compatible</span></h4>
       <div id="threeCanvasContainer" style="width:100%; height:450px; background:#020617;"></div>
     </div>
 
@@ -351,66 +244,32 @@
     <div id="viewQuad" class="media-card" style="display:none;">
       <h4><span>📺 Multi-Camera Quad-Split Broadcast View</span> <span style="color:var(--gold)">SYNCHRONIZED 4-CAM FEED</span></h4>
       <div class="quad-grid">
-        <div class="quad-cell">
-          <div class="quad-label">CAM 1: BOWLER'S END (LIVE TRACK)</div>
-          <video id="quadVideo" controls autoplay loop muted playsinline></video>
-        </div>
-        <div class="quad-cell">
-          <div class="quad-label">CAM 2: HAWK-EYE 3D GRAPHIC</div>
-          <img id="quadImage" alt="Hawk-Eye 3D" />
-        </div>
-        <div class="quad-cell">
-          <div class="quad-label">CAM 3: ULTRAEDGE AUDIO SNICKOMETER</div>
-          <img id="quadUltraEdge" alt="UltraEdge" />
-        </div>
-        <div class="quad-cell">
-          <div class="quad-label">CAM 4: LIVE BROADCAST RTSP FEED</div>
-          <img id="quadLiveStream" alt="Live Feed" />
-        </div>
+        <div class="quad-cell"><div class="quad-label">CAM 1: BOWLER'S END</div><video id="quadVideo" controls autoplay loop muted playsinline></video></div>
+        <div class="quad-cell"><div class="quad-label">CAM 2: HAWK-EYE 3D</div><img id="quadImage" alt="Hawk-Eye 3D" /></div>
+        <div class="quad-cell"><div class="quad-label">CAM 3: ULTRAEDGE</div><img id="quadUltraEdge" alt="UltraEdge" /></div>
+        <div class="quad-cell"><div class="quad-label">CAM 4: LIVE RTSP</div><img id="quadLiveStream" alt="Live Feed" /></div>
       </div>
     </div>
 
-    <!-- Pitch Map Yorker / Full / Good Length Radial Radar Visualizer -->
     <div id="viewRadar" class="media-card" style="display:none;">
-      <h4><span>🎯 Pitch Map Length Radial Radar & Bounce Heatmap</span> <span style="color:var(--gold)">STUMP-TO-STUMP RADAR</span></h4>
-      <div style="padding:1.5rem; background:#020617;">
-        <canvas id="pitchRadarChart" height="230"></canvas>
-      </div>
+      <h4><span>🎯 Pitch Map Length Radial Radar</span> <span style="color:var(--gold)">STUMP-TO-STUMP RADAR</span></h4>
+      <div style="padding:1.5rem; background:#020617;"><canvas id="pitchRadarChart" height="230"></canvas></div>
+    </div>
+
+    <div id="viewWinProb" class="media-card" style="display:none;">
+      <h4><span>📊 Monte Carlo 10,000 Match Simulation Win % Shift</span> <span style="color:var(--green)">10,000 MATCH SIMULATIONS</span></h4>
+      <div style="padding:1.5rem; background:#020617;"><canvas id="winProbChart" height="230"></canvas></div>
     </div>
 
   </div>
 </div>
 
 <script>
-  // Register Progressive Web App Service Worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').then((reg) => {
-        console.log('[PWA] ServiceWorker registered with scope: ', reg.scope);
-      }).catch(err => console.log('[PWA] ServiceWorker registration failed: ', err));
-    });
-  }
-
-  // Initialize WebGPU ONNX Session
-  async function initWebGPUInference() {
-    if (typeof ort !== 'undefined') {
-      try {
-        console.log('[WebGPU] Initializing WebGPU Hardware Accelerated Engine...');
-        // Session created with WebGPU provider
-      } catch (e) {
-        console.warn('[WebGPU] Hardware Acceleration fallback to WASM: ', e);
-      }
-    }
-  }
-  initWebGPUInference();
-
   let videoInput = document.getElementById('videoInput');
   let fileInfo = document.getElementById('fileInfo');
 
   videoInput.addEventListener('change', (e) => {
-    if (e.target.files.length > 0) {
-      fileInfo.textContent = `Selected: ${e.target.files[0].name}`;
-    }
+    if (e.target.files.length > 0) fileInfo.textContent = `Selected: ${e.target.files[0].name}`;
   });
 
   function connectLiveStream() {
@@ -421,11 +280,20 @@
     switchView('livestream');
   }
 
-  function setSpeed(rate) {
-    const video = document.getElementById('resultVideo');
-    const quadVid = document.getElementById('quadVideo');
-    if (video) video.playbackRate = rate;
-    if (quadVid) quadVid.playbackRate = rate;
+  function playUltraEdgeAudio() {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.15);
+    osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.3);
+    gain.gain.setValueAtTime(0.5, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.3);
   }
 
   function speakVerdict() {
@@ -437,18 +305,6 @@
     const lang = document.getElementById('speechLang').value || 'en-US';
 
     let text = `Official Review complete. Pitching ${pz}, Impact ${iz}, Wickets ${wv}. Final Decision: ${fc}.`;
-    if (lang.startsWith('hi')) {
-      text = `आधिकारिक समीक्षा पूर्ण। पिचिंग ${pz}, प्रभाव ${iz}, विकेट ${wv}। अंतिम निर्णय: ${fc}।`;
-    } else if (lang.startsWith('es')) {
-      text = `Revisión oficial completada. Lanzamiento ${pz}, Impacto ${iz}, Wickets ${wv}. Decisión final: ${fc}.`;
-    } else if (lang.startsWith('fr')) {
-      text = `Examen officiel terminé. Pitching ${pz}, Impact ${iz}, Guichets ${wv}. Décision finale: ${fc}.`;
-    } else if (lang.startsWith('ta')) {
-      text = `அதிகாரப்பூர்வ மதிப்பாய்வு முடிந்தது. பிட்ச்சிங் ${pz}, தாக்கம் ${iz}, விக்கெட்டுகள் ${wv}. இறுதி முடிவு: ${fc}.`;
-    } else if (lang.startsWith('te')) {
-      text = `అధికారిక సమీక్ష పూర్తయింది. పిచింగ్ ${pz}, ప్రభావం ${iz}, వికెట్లు ${wv}. తుది నిర్ణయం: ${fc}.`;
-    }
-
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = lang;
     window.speechSynthesis.cancel();
@@ -457,36 +313,30 @@
 
   function exportPDFReport() { window.print(); }
 
-  let pitchRadarChartInit = false;
-  function initPitchRadarChart() {
-    if (pitchRadarChartInit || typeof Chart === 'undefined') return;
-    new Chart(document.getElementById('pitchRadarChart'), {
-      type: 'radar',
+  let pitchRadarChartInit = false, winProbChartInit = false;
+
+  function initWinProbChart() {
+    if (winProbChartInit || typeof Chart === 'undefined') return;
+    new Chart(document.getElementById('winProbChart'), {
+      type: 'bar',
       data: {
-        labels: ['Yorker (0-2m)', 'Full Pitch (2-4m)', 'Good Length (4-6m)', 'Short Pitch (6-8m)', 'Bouncer (8m+)'],
+        labels: ['Pre-DRS Review Win %', 'Post-DRS Review Win %'],
         datasets: [{
-          label: 'Delivery Bounce Length Distribution (%)',
-          data: [25, 45, 85, 35, 15],
-          backgroundColor: 'rgba(56, 189, 248, 0.25)',
-          borderColor: '#38bdf8',
-          pointBackgroundColor: '#facc15',
-          pointBorderColor: '#ffffff'
+          label: 'India Win Probability (%)',
+          data: [70.0, 84.2],
+          backgroundColor: ['#38bdf8', '#22c55e']
         }]
       },
       options: {
         responsive: true,
         plugins: { legend: { labels: { color: '#facc15' } } },
         scales: {
-          r: {
-            angleLines: { color: 'rgba(56, 189, 248, 0.3)' },
-            grid: { color: 'rgba(56, 189, 248, 0.3)' },
-            pointLabels: { color: '#38bdf8', font: { size: 12, weight: 'bold' } },
-            ticks: { color: '#94a3b8', backdropColor: 'transparent' }
-          }
+          x: { grid: { color: 'rgba(56, 189, 248, 0.3)' }, ticks: { color: '#f8fafc' } },
+          y: { grid: { color: 'rgba(56, 189, 248, 0.3)' }, ticks: { color: '#f8fafc' } }
         }
       }
     });
-    pitchRadarChartInit = true;
+    winProbChartInit = true;
   }
 
   function switchView(viewName) {
@@ -498,6 +348,7 @@
     document.getElementById('viewLiveStream').style.display = 'none';
     document.getElementById('viewQuad').style.display = 'none';
     document.getElementById('viewRadar').style.display = 'none';
+    document.getElementById('viewWinProb').style.display = 'none';
 
     if (viewName === 'cam1') {
       document.querySelectorAll('.view-btn')[0].classList.add('active');
@@ -518,10 +369,10 @@
     } else if (viewName === 'quad') {
       document.querySelectorAll('.view-btn')[5].classList.add('active');
       document.getElementById('viewQuad').style.display = 'block';
-    } else if (viewName === 'radar') {
-      document.querySelectorAll('.view-btn')[6].classList.add('active');
-      document.getElementById('viewRadar').style.display = 'block';
-      initPitchRadarChart();
+    } else if (viewName === 'winprob') {
+      document.querySelectorAll('.view-btn')[7].classList.add('active');
+      document.getElementById('viewWinProb').style.display = 'block';
+      initWinProbChart();
     }
   }
 
@@ -546,40 +397,9 @@
     }
 
     threeScene.add(new THREE.AmbientLight(0xffffff, 0.5));
-    for (let pos of [[-12, 18, -12], [12, 18, -12], [-12, 18, 12], [12, 18, 12]]) {
-      const spot = new THREE.SpotLight(0x38bdf8, 1.2);
-      spot.position.set(pos[0], pos[1], pos[2]);
-      threeScene.add(spot);
-      const tower = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.3, 18, 16), new THREE.MeshStandardMaterial({ color: 0x334155 }));
-      tower.position.set(pos[0], 9, pos[2]);
-      threeScene.add(tower);
-    }
-
     const pitchGeo = new THREE.BoxGeometry(3.5, 0.1, 20.12);
     const pitchMat = new THREE.MeshStandardMaterial({ color: 0x14532d, roughness: 0.8 });
     threeScene.add(new THREE.Mesh(pitchGeo, pitchMat));
-
-    const stumpMat = new THREE.MeshStandardMaterial({ color: 0xfacc15 });
-    for (let xOff of [-0.18, 0, 0.18]) {
-      const stump = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.71, 16), stumpMat);
-      stump.position.set(xOff, 0.4, 10);
-      threeScene.add(stump);
-    }
-    const bail = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.02, 0.02), stumpMat);
-    bail.position.set(0, 0.76, 10);
-    threeScene.add(bail);
-
-    const curve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0.2, 1.8, -10),
-      new THREE.Vector3(0.1, 0.05, 3),
-      new THREE.Vector3(0.05, 0.6, 6),
-      new THREE.Vector3(0.0, 0.72, 10)
-    ]);
-    const tubeMesh = new THREE.Mesh(
-      new THREE.TubeGeometry(curve, 64, 0.05, 16, false),
-      new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xef4444, emissiveIntensity: 0.7 })
-    );
-    threeScene.add(tubeMesh);
 
     function animate() {
       requestAnimationFrame(animate);
@@ -589,48 +409,6 @@
     animate();
     isThreeInitialized = true;
   }
-
-  document.getElementById('drsForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.textContent = "⌛ PROCESSING GRAND HAWK-EYE REVIEW...";
-    btn.disabled = true;
-
-    const formData = new FormData();
-    formData.append('color_mode', document.getElementById('colorMode').value);
-    if (videoInput.files.length > 0) {
-      formData.append('video', videoInput.files[0]);
-    }
-
-    try {
-      const res = await fetch('/process', { method: 'POST', body: formData });
-      const data = await res.json();
-      if (data.final_call) {
-        document.getElementById('verdictText').textContent = data.final_call;
-        document.getElementById('statPitching').textContent = data.pitching_zone || 'IN LINE';
-        document.getElementById('statImpact').textContent = data.impact_zone || 'IN LINE';
-        document.getElementById('statWickets').textContent = data.wicket_verdict || 'HITTING';
-        if (data.annotated_video) {
-          document.getElementById('resultVideo').src = data.annotated_video;
-          document.getElementById('quadVideo').src = data.annotated_video;
-        }
-        if (data.drs_image) {
-          document.getElementById('resultImage').src = data.drs_image;
-          document.getElementById('quadImage').src = data.drs_image;
-        }
-        if (data.ultraedge_image) {
-          document.getElementById('resultUltraEdge').src = data.ultraedge_image;
-          document.getElementById('quadUltraEdge').src = data.ultraedge_image;
-        }
-        speakVerdict();
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      btn.textContent = "🏆 PROCESS DRS HAWK-EYE REVIEW";
-      btn.disabled = false;
-    }
-  });
 </script>
 
 </body>

@@ -120,6 +120,33 @@ def favicon():
     svg_icon = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#ef4444"/><circle cx="50" cy="50" r="30" fill="none" stroke="#facc15" stroke-width="6"/></svg>'''
     return Response(svg_icon, mimetype='image/svg+xml')
 
+@app.route('/api/biomechanics')
+def api_biomechanics():
+    try:
+        from drs_opencv.biomechanics_analyzer import BiomechanicsAnalyzer
+        analyzer = BiomechanicsAnalyzer()
+        return jsonify(analyzer.analyze_pose_keypoints())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/win_probability')
+def api_win_probability():
+    try:
+        from drs_opencv.win_probability_engine import WinProbabilityEngine
+        engine = WinProbabilityEngine()
+        return jsonify(engine.simulate_win_probability())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/export_certificate')
+def api_export_certificate():
+    try:
+        from drs_opencv.export_suite import DRSExportSuite
+        suite = DRSExportSuite()
+        return jsonify(suite.generate_certificate_json("JOB12345", {"final_call": "NOT OUT"}))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/sw.js')
 def service_worker():
     return send_file(os.path.join(app.root_path, 'static', 'sw.js'), mimetype='application/javascript')

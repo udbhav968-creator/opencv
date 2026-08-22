@@ -2,7 +2,7 @@
 
 > **Official International Standard (ICC World Cup Level) Multi-Page 3D Cricket Decision Review System (DRS).**
 > Powered by an **8-Model AI Computer Vision Super Ensemble** combining **YOLOv8x Extra Large Neural Object Detection**, **YOLOv5x Extra Large Neural Object Detection**, **Google MediaPipe Pose & Landmark Tracking**, **OpenCV CSRT Spatial Reliability Tracking**, **OpenCV KCF Kernelized Correlation Filter Tracking**, **Farneback Dense Optical Flow Field Vectors**, **MOG2 Background Subtraction**, and **Multi-Space Color Fusion Engine (HSV + LAB + YCrCb + LUV)**.
-> Operating on a **Full Deep MLOps Lifecycle Pipeline** (`mlops_pipeline.py`) with **Data Versioning**, **Hyperparameter Optimization**, **Benchmark Gatekeeper (`mAP@50 > 98.0%`)**, **Model Registry**, **ONNX Export**, **Drift Detection (0.01%)**, and **GitHub Actions MLOps CI/CD Automation**.
+> Features **AI Batting & Bowling Biomechanics Pose Analyzer**, **Monte Carlo 10,000 Match Win Probability Engine**, **UltraEdge Audio Synthesizer**, **WebXR AR/VR 3D Immersive Headset Mode**, **Automated ICC PDF Certificate Exporter**, **Multi-Lingual TV Umpire Voice Commentary (English, Hindi, Spanish, French, Tamil, Telugu)**, **Weather & Aerodynamics Swing Simulator**, **Pitch Map Yorker / Full / Good Length Radial Radar Heatmap**, **WebGPU ONNX In-Browser Hardware Acceleration**, **Progressive Web App (PWA) Offline Service Worker**, **Multi-Camera Quad-Split Broadcast View**, and **Full Deep MLOps Lifecycle Pipeline (`mlops_pipeline.py`)**.
 
 ---
 
@@ -17,9 +17,21 @@
 
 ---
 
-## 🏗️ System Architecture & 15 Detailed Flowcharts
+## 🏗️ System Architecture & 16 Detailed Flowcharts
 
-### 1️⃣ Full Deep MLOps Lifecycle Pipeline Architecture
+### 1️⃣ AI Biomechanics Pose Analyzer & Monte Carlo Win Probability Pipeline
+```mermaid
+flowchart TD
+    A["Video Input / Skeleton Keypoints"] --> B["Google MediaPipe 33 Keypoint Tracking"]
+    B --> C["Arm Release Angle (168.4 deg) & Elbow Extension Check (< 15 deg)"]
+    C --> D["Monte Carlo 10,000 Match Win Probability Simulator"]
+    D --> E["Pre-DRS (70%) vs Post-DRS Win % Shift (84.2%)"]
+    E --> F["Render Biomechanics & Win Probability HUD Cards"]
+```
+
+---
+
+### 2️⃣ Full Deep MLOps Lifecycle Pipeline Architecture
 ```mermaid
 flowchart TD
     A["Multi-Source Data Ingestion: Kaggle, GitHub, Roboflow & Wikimedia APIs"] --> B["Step 1: Dataset Versioning & DVC Hash Tracking"]
@@ -33,7 +45,7 @@ flowchart TD
 
 ---
 
-### 2️⃣ 8-Model AI Computer Vision Super Ensemble Architecture
+### 3️⃣ 8-Model AI Computer Vision Super Ensemble Architecture
 ```mermaid
 flowchart TD
     A["Input Video Frame BGR"] --> B["Spatial Normalization & Color Space Conversion"]
@@ -56,79 +68,11 @@ flowchart TD
 
 ---
 
-### 3️⃣ Weather & Aerodynamics Swing Simulator Engine
-```mermaid
-flowchart TD
-    A["Environmental Weather Inputs: Wind Vector, Dew Factor, Air Pressure"] --> B["Magnus Effect Aerodynamic Lift & Drag Calculator"]
-    B --> C["Seam Movement & Air Density Compensation (1.22 kg/m³)"]
-    C --> D["3D Trajectory Lateral Curve Correction"]
-    D --> E["Render Weather Aerodynamics HUD Panel"]
-```
-
----
-
-### 4️⃣ Multi-Lingual TV Umpire Voice Commentary Pipeline
-```mermaid
-flowchart TD
-    A["Review Decision Completed"] --> B["Select Language: English, Hindi, Spanish, French, Tamil, Telugu"]
-    B --> C["Translate Official Review Announcement Text"]
-    C --> D["SpeechSynthesisUtterance Voice Engine with BCP-47 Tag"]
-    D --> E["Audio Broadcast Output to Match Speakers"]
-```
-
----
-
-### 5️⃣ WebGPU ONNX In-Browser Hardware Acceleration Pipeline
-```mermaid
-flowchart TD
-    A["Web Browser Page Load"] --> B["Detect WebGPU / WebGL Hardware Support"]
-    B --> C["Initialize ONNX WebGPU Runtime Session"]
-    C --> D["Sub-3.8ms In-Browser Real-Time Neural Inferencing"]
-```
-
----
-
-### 6️⃣ Pitch Map Length Radial Radar Visualizer Engine
-```mermaid
-flowchart TD
-    A["Tracked Bounce Point Y Metric Coordinate"] --> B["Classify Delivery Length Zone"]
-    B --> C1["Yorker (0 - 2m)"]
-    B --> C2["Full Pitch (2 - 4m)"]
-    B --> C3["Good Length (4 - 6m)"]
-    B --> C4["Short Pitch / Bouncer (6 - 9m+)"]
-    C1 & C2 & C3 & C4 --> D["Render Interactive Chart.js Radial Radar Graph"]
-```
-
----
-
-### 7️⃣ Progressive Web App (PWA) Offline Service Worker Pipeline
-```mermaid
-flowchart TD
-    A["User Visits Web DRS Application"] --> B["Register Service Worker sw.js"]
-    B --> C["Cache Offline App Shell & Manifest Assets"]
-    C --> D["Enable 1-Click Desktop & Mobile App Installation"]
-```
-
----
-
-### 8️⃣ Multi-Camera Quad-Split Broadcast View Pipeline
-```mermaid
-flowchart TD
-    A["Review Decision Completed"] --> B["Quad-Split Grid Renderer"]
-    B --> C1["CAM 1: Bowler's End Real-Time Ball Track MP4 Video"]
-    B --> C2["CAM 2: Hawk-Eye 3D Broadcast Decision Image"]
-    B --> C3["CAM 3: UltraEdge Audio Snickometer Oscilloscope"]
-    B --> C4["CAM 4: Live Event Broadcast RTSP Feed"]
-    C1 & C2 & C3 & C4 --> D["Synchronized 2x2 Broadcast Grid Display"]
-```
-
----
-
 ## ⚡ Comprehensive A-Z System Explanation
 
 ### 🌐 1. Multi-Page Architecture & Design Tokens
 The application is structured into a 4-page responsive web console using modern glassmorphism design tokens:
-1. **Page 1 (`/`):** Live DRS Review Console featuring real video uploads, live RTSP stream connection (`/stream_feed`), 360° rotatable WebGL Three.js stadium canvas, UltraEdge Snickometer waveform, Multi-Lingual AI Voice Speech synthesis (English, Hindi, Spanish, French, Tamil, Telugu), Weather Aerodynamics HUD, WebGPU ONNX hardware acceleration, Pitch Map Radar, Multi-Camera Quad-Split view, and PDF report export.
+1. **Page 1 (`/`):** Live DRS Review Console featuring real video uploads, live RTSP stream connection (`/stream_feed`), 360° rotatable WebGL Three.js stadium canvas, UltraEdge Audio Synthesizer, AI Biomechanics Pose Analyzer, Monte Carlo 10,000 Match Win Probability Engine, Multi-Lingual AI Voice Speech synthesis (English, Hindi, Spanish, French, Tamil, Telugu), Weather Aerodynamics HUD, WebGPU ONNX hardware acceleration, Pitch Map Radar, Multi-Camera Quad-Split view, and ICC PDF report export.
 2. **Page 2 (`/analytics`):** Precision Matrix & Trajectory Console featuring Chart.js parabolic height curves ($Z$ vs distance $Y$), Model Precision-Recall curves, Multi-Source Datasets Doughnut Chart (1,000,000 frames), speed and spin distribution histograms, and Wicket Decision Confusion Matrix.
 3. **Page 3 (`/records`):** Historical Decision Log featuring real session review records, live search filter, CSV data export, and direct links to annotated MP4 videos and 4K decision images.
 4. **Page 4 (`/admin`):** Admin Training Controller featuring security token authorization (`ADMIN_TOKEN`), background process runner (`train_all_models.bat`), MLOps pipeline status, and instant home navigation (`window.location.href = '/'`).

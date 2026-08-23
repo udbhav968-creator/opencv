@@ -284,6 +284,15 @@ def api_int8_npu():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/vision_transformer')
+def api_vision_transformer():
+    try:
+        from drs_opencv.vision_transformer_detector import VisionTransformerBallDetector
+        vit = VisionTransformerBallDetector()
+        return jsonify(vit.detect_attention_ball())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/sw.js')
 def service_worker():
     return send_file(os.path.join(app.root_path, 'static', 'sw.js'), mimetype='application/javascript')

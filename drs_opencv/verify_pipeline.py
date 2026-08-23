@@ -54,6 +54,7 @@ if __name__ == "__main__":
         ("GET", "/api/pinn_trajectory", "PINN Neural Network Trajectory AI API"),
         ("GET", "/api/quantum_sim", "Quantum Match Simulation Engine API"),
         ("GET", "/api/int8_npu", "INT8 NPU Neural Accelerator API"),
+        ("GET", "/api/vision_transformer", "Vision Transformer (ViT-Huge) Attention Detector API"),
     ]
 
     passed = 0

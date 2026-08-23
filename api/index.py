@@ -273,6 +273,15 @@ def api_int8_npu():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/vision_transformer')
+def api_vision_transformer():
+    try:
+        from vision_transformer_detector import VisionTransformerBallDetector
+        vit = VisionTransformerBallDetector()
+        return jsonify(vit.detect_attention_ball())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/health')
 def health():
     return jsonify({

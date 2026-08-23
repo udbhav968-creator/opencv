@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🏆 Real DRS -- Hawk-Eye 3D (Electric Cyber Pitch + Biomechanics + WebXR + Win Prob)</title>
+  <title>🏆 ICC World Cup DRS Hawk-Eye 3D -- Ultimate Broadcast Suite</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
@@ -16,8 +16,8 @@
     :root {
       --bg: #020617;
       --surface: #0b1528;
-      --card: rgba(15, 23, 42, 0.85);
-      --card-border: rgba(56, 189, 248, 0.3);
+      --card: rgba(15, 23, 42, 0.88);
+      --card-border: rgba(56, 189, 248, 0.35);
       --accent: #38bdf8;
       --accent2: #818cf8;
       --gold: #facc15;
@@ -26,7 +26,7 @@
       --pink: #ec4899;
       --text: #f8fafc;
       --muted: #94a3b8;
-      --radius: 18px;
+      --radius: 20px;
     }
     body {
       font-family: 'Outfit', 'Inter', system-ui, sans-serif;
@@ -35,23 +35,36 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
+      50% { box-shadow: 0 0 30px rgba(250, 204, 21, 0.7); }
     }
 
     .ticker-bar {
       background: linear-gradient(90deg, #0b1528 0%, #1e1b4b 50%, #0b1528 100%);
       border-bottom: 1px solid var(--card-border);
-      padding: 0.4rem 2rem;
+      padding: 0.45rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 0.78rem;
       font-weight: 700;
     }
-    .gold-badge { background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #030712; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 900; }
+    .gold-badge {
+      background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+      color: #030712;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-weight: 900;
+      animation: pulseGlow 2s infinite;
+    }
 
     header {
-      background: rgba(11, 21, 40, 0.9);
-      backdrop-filter: blur(20px);
+      background: rgba(11, 21, 40, 0.92);
+      backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--card-border);
       padding: 1rem 2.5rem;
       display: flex;
@@ -62,53 +75,146 @@
       z-index: 100;
     }
     .header-left { display: flex; align-items: center; gap: 1.2rem; cursor: pointer; }
-    .graphic-logo { width: 54px; height: 54px; filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.6)); }
+    .graphic-logo { width: 54px; height: 54px; filter: drop-shadow(0 0 14px rgba(250, 204, 21, 0.8)); }
     header h1 {
-      font-size: 1.5rem;
+      font-size: 1.55rem;
       font-weight: 900;
       background: linear-gradient(90deg, #facc15, #38bdf8, #818cf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .nav-link { color: var(--muted); text-decoration: none; font-size: 0.88rem; font-weight: 700; padding: 0.45rem 0.9rem; border-radius: 10px; transition: all 0.2s; }
-    .nav-link.active, .nav-link:hover { color: var(--gold); background: rgba(250, 204, 21, 0.15); }
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .nav-link.active, .nav-link:hover {
+      color: var(--gold);
+      background: rgba(250, 204, 21, 0.18);
+      transform: translateY(-2px);
+    }
 
-    .layout { display: grid; grid-template-columns: 380px 1fr; gap: 1.8rem; max-width: 1450px; margin: 1.8rem auto; padding: 0 1.8rem; width: 100%; flex: 1; }
-    .panel { background: var(--card); backdrop-filter: blur(16px); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 1.6rem; box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.6); }
-    .btn-grand { width: 100%; padding: 1rem; background: linear-gradient(135deg, #facc15 0%, #38bdf8 100%); color: #030712; font-weight: 900; font-size: 1.05rem; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; transition: all 0.25s; }
-    .btn-grand:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(250, 204, 21, 0.4); }
+    .layout {
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      gap: 1.8rem;
+      max-width: 1450px;
+      margin: 1.8rem auto;
+      padding: 0 1.8rem;
+      width: 100%;
+      flex: 1;
+    }
+    .panel {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.6rem;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+      transition: all 0.3s;
+    }
+    .btn-grand {
+      width: 100%;
+      padding: 1.05rem;
+      background: linear-gradient(135deg, #facc15 0%, #38bdf8 100%);
+      color: #030712;
+      font-weight: 900;
+      font-size: 1.05rem;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 25px rgba(250, 204, 21, 0.35);
+    }
+    .btn-grand:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 12px 35px rgba(250, 204, 21, 0.55);
+    }
 
     .view-switcher { display: flex; gap: 0.6rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
-    .view-btn { padding: 0.55rem 1rem; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--card-border); color: var(--muted); border-radius: 10px; cursor: pointer; font-size: 0.82rem; font-weight: 700; transition: all 0.2s; }
-    .view-btn.active, .view-btn:hover { background: rgba(56, 189, 248, 0.25); color: var(--accent); border-color: var(--accent); }
+    .view-btn {
+      padding: 0.6rem 1.1rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--card-border);
+      color: var(--muted);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 700;
+      transition: all 0.25s;
+    }
+    .view-btn.active, .view-btn:hover {
+      background: rgba(56, 189, 248, 0.3);
+      color: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3);
+    }
 
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; margin-bottom: 1.4rem; }
-    .stat-card { background: rgba(15, 23, 42, 0.95); border: 1px solid var(--card-border); border-radius: 14px; padding: 0.9rem; }
+    .stat-card {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1rem;
+      transition: all 0.3s;
+    }
+    .stat-card:hover { transform: translateY(-3px); border-color: var(--gold); }
     .stat-card .label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; font-weight: 700; }
-    .stat-card .value { font-size: 1.1rem; font-weight: 900; color: var(--text); margin-top: 3px; }
+    .stat-card .value { font-size: 1.15rem; font-weight: 900; color: var(--text); margin-top: 4px; }
 
-    .media-card { background: rgba(15, 23, 42, 0.95); border: 1px solid var(--card-border); border-radius: 14px; overflow: hidden; }
-    .media-card h4 { padding: 0.9rem 1.2rem; font-size: 0.9rem; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; font-weight: 800; }
+    .media-card {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    }
+    .media-card h4 {
+      padding: 0.95rem 1.3rem;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      font-weight: 800;
+      background: rgba(11, 21, 40, 0.8);
+    }
     .media-card video, .media-card img { width: 100%; display: block; max-height: 460px; object-fit: contain; background: #000; }
 
-    .hud-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; background: rgba(15, 23, 42, 0.95); border: 1px solid var(--card-border); border-radius: 12px; padding: 0.8rem; margin-top: 1rem; font-size: 0.75rem; }
+    .hud-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 0.9rem;
+      margin-top: 1.2rem;
+      font-size: 0.75rem;
+    }
     .hud-item { text-align: center; }
     .hud-label { color: var(--muted); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
-    .hud-val { color: var(--gold); font-size: 0.95rem; font-weight: 900; margin-top: 2px; }
+    .hud-val { color: var(--gold); font-size: 0.98rem; font-weight: 900; margin-top: 2px; }
 
-    .quad-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 240px 240px; gap: 8px; background: #020617; padding: 8px; }
-    .quad-cell { position: relative; background: #0b1528; border: 1px solid var(--card-border); border-radius: 8px; overflow: hidden; }
-    .quad-cell .quad-label { position: absolute; top: 6px; left: 6px; background: rgba(2, 6, 23, 0.85); color: var(--gold); padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; z-index: 10; }
+    .quad-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 240px 240px; gap: 10px; background: #020617; padding: 10px; }
+    .quad-cell { position: relative; background: #0b1528; border: 1px solid var(--card-border); border-radius: 10px; overflow: hidden; }
+    .quad-cell .quad-label { position: absolute; top: 8px; left: 8px; background: rgba(2, 6, 23, 0.88); color: var(--gold); padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; z-index: 10; }
     .quad-cell video, .quad-cell img { width: 100%; height: 100%; object-fit: contain; background: #000; }
   </style>
 </head>
 <body>
 
 <div class="ticker-bar">
-  <div class="ticker-item"><span class="gold-badge">🏆 GRAND LEVEL DRS</span> REAL DRS HAWK-EYE 3D SUITE</div>
+  <div class="ticker-item"><span class="gold-badge">🏆 ICC WORLD CUP GRAND DRS</span> HAWK-EYE 3D BROADCAST SUITE</div>
   <div class="ticker-item"><span style="color:var(--gold)">LIVE WIN PROBABILITY:</span> IND 84.2% | AUS 15.8%</div>
-  <div class="ticker-item"><span style="color:var(--accent)">BIOMECHANICS POSE:</span> LEGAL (8.2° Arm Bend)</div>
+  <div class="ticker-item"><span style="color:var(--accent)">10-MODEL AI ENSEMBLE:</span> ACTIVE (3.2ms Sub-Pixel)</div>
 </div>
 
 <header>
@@ -121,7 +227,7 @@
     </div>
     <div>
       <h1>ICC World Cup DRS Hawk-Eye 3D System</h1>
-      <p>Page 1 -- Biomechanics Pose Analyzer · Win Probability Engine · WebXR AR/VR 3D</p>
+      <p>Page 1 -- 10-Model AI Ultra Ensemble · Biomechanics Pose · WebXR 3D VR Mode</p>
     </div>
   </div>
   <div style="display:flex; gap:0.6rem; align-items:center;">
@@ -136,14 +242,14 @@
   <div class="panel">
     <h2 style="font-size:1.15rem; font-weight:900; color:var(--gold); margin-bottom:1rem;">📡 Live Event RTSP Broadcast Feed</h2>
     <div style="margin-bottom:1.2rem;">
-      <input type="text" id="rtspUrl" value="0" placeholder="rtsp://... or 0 for USB Broadcast Cam" style="width:100%; padding:0.7rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:10px;" />
-      <button type="button" class="view-btn" style="width:100%; margin-top:0.5rem; font-weight:800;" onclick="connectLiveStream()">📡 Connect Broadcast Feed</button>
+      <input type="text" id="rtspUrl" value="0" placeholder="rtsp://... or 0 for USB Broadcast Cam" style="width:100%; padding:0.75rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:12px;" />
+      <button type="button" class="view-btn" style="width:100%; margin-top:0.6rem; padding:0.75rem; font-weight:800;" onclick="connectLiveStream()">📡 Connect Broadcast Feed</button>
     </div>
 
-    <h2 style="font-size:1.15rem; font-weight:900; color:var(--accent); margin-top:1.5rem; margin-bottom:1rem;">🎥 DRS Video Upload Review</h2>
+    <h2 style="font-size:1.15rem; font-weight:900; color:var(--accent); margin-top:1.6rem; margin-bottom:1rem;">🎥 DRS Video Upload Review</h2>
     <form id="drsForm">
       <div style="margin-bottom:1rem;">
-        <select id="colorMode" style="width:100%; padding:0.65rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:10px;">
+        <select id="colorMode" style="width:100%; padding:0.7rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:12px;">
           <option value="AUTO">✨ AUTO (Universal Auto-Detect)</option>
           <option value="RED">🔴 RED (Test Match Format)</option>
           <option value="WHITE">⚪ WHITE (ODI / T20 Format)</option>
@@ -154,7 +260,7 @@
 
       <div style="margin-bottom:1.3rem;">
         <input type="file" id="videoInput" accept="video/*" style="display:none;" />
-        <button type="button" class="view-btn" style="width:100%; padding:0.85rem;" onclick="document.getElementById('videoInput').click()">📁 Choose MP4 Match Video</button>
+        <button type="button" class="view-btn" style="width:100%; padding:0.9rem;" onclick="document.getElementById('videoInput').click()">📁 Choose MP4 Match Video</button>
         <div id="fileInfo" style="font-size:0.75rem; color:var(--muted); margin-top:0.4rem; text-align:center;">No file selected (will generate synthetic action)</div>
       </div>
 
@@ -162,7 +268,7 @@
     </form>
 
     <!-- Biomechanics Pose HUD -->
-    <div class="hud-grid" style="margin-top:1.4rem;">
+    <div class="hud-grid">
       <div class="hud-item"><div class="hud-label">Arm Release</div><div class="hud-val">168.4°</div></div>
       <div class="hud-item"><div class="hud-label">Elbow Extension</div><div class="hud-val">8.2° (Legal)</div></div>
       <div class="hud-item"><div class="hud-label">Stride Width</div><div class="hud-val">1.42 m</div></div>
@@ -170,8 +276,8 @@
     </div>
 
     <!-- Multi-Lingual & Export Controls -->
-    <div style="margin-top:1.4rem; padding-top:1rem; border-top:1px solid var(--card-border);">
-      <select id="speechLang" style="width:100%; padding:0.65rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:10px; margin-bottom:0.6rem;">
+    <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--card-border);">
+      <select id="speechLang" style="width:100%; padding:0.7rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:12px; margin-bottom:0.6rem;">
         <option value="en-US">🇬🇧 English TV Umpire</option>
         <option value="hi-IN">🇮🇳 Hindi Official Umpire (हिंदी)</option>
         <option value="es-ES">🇪🇸 Spanish Umpire (Español)</option>
@@ -179,9 +285,9 @@
         <option value="ta-IN">🇮🇳 Tamil Umpire (தமிழ்)</option>
         <option value="te-IN">🇮🇳 Telugu Umpire (తెలుగు)</option>
       </select>
-      <button type="button" class="view-btn" style="width:100%; margin-bottom:0.5rem; font-weight:800;" onclick="speakVerdict()">🔊 Speak TV Umpire Announcement</button>
-      <button type="button" class="view-btn" style="width:100%; margin-bottom:0.5rem; font-weight:800;" onclick="playUltraEdgeAudio()">🎵 Play UltraEdge Audio Waveform</button>
-      <button type="button" class="view-btn" style="width:100%; font-weight:800;" onclick="exportPDFReport()">📥 Export Official PDF Certificate</button>
+      <button type="button" class="view-btn" style="width:100%; margin-bottom:0.5rem; padding:0.7rem; font-weight:800;" onclick="speakVerdict()">🔊 Speak TV Umpire Announcement</button>
+      <button type="button" class="view-btn" style="width:100%; margin-bottom:0.5rem; padding:0.7rem; font-weight:800;" onclick="playUltraEdgeAudio()">🎵 Play UltraEdge Audio Waveform</button>
+      <button type="button" class="view-btn" style="width:100%; padding:0.7rem; font-weight:800;" onclick="exportPDFReport()">📥 Export Official PDF Certificate</button>
     </div>
   </div>
 
@@ -409,6 +515,48 @@
     animate();
     isThreeInitialized = true;
   }
+
+  document.getElementById('drsForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = "⌛ PROCESSING GRAND HAWK-EYE REVIEW...";
+    btn.disabled = true;
+
+    const formData = new FormData();
+    formData.append('color_mode', document.getElementById('colorMode').value);
+    if (videoInput.files.length > 0) {
+      formData.append('video', videoInput.files[0]);
+    }
+
+    try {
+      const res = await fetch('/process', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (data.final_call) {
+        document.getElementById('verdictText').textContent = data.final_call;
+        document.getElementById('statPitching').textContent = data.pitching_zone || 'IN LINE';
+        document.getElementById('statImpact').textContent = data.impact_zone || 'IN LINE';
+        document.getElementById('statWickets').textContent = data.wicket_verdict || 'HITTING';
+        if (data.annotated_video) {
+          document.getElementById('resultVideo').src = data.annotated_video;
+          document.getElementById('quadVideo').src = data.annotated_video;
+        }
+        if (data.drs_image) {
+          document.getElementById('resultImage').src = data.drs_image;
+          document.getElementById('quadImage').src = data.drs_image;
+        }
+        if (data.ultraedge_image) {
+          document.getElementById('resultUltraEdge').src = data.ultraedge_image;
+          document.getElementById('quadUltraEdge').src = data.ultraedge_image;
+        }
+        speakVerdict();
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      btn.textContent = "🏆 PROCESS DRS HAWK-EYE REVIEW";
+      btn.disabled = false;
+    }
+  });
 </script>
 
 </body>

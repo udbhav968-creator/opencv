@@ -38,16 +38,28 @@ try:
 except ImportError:
     from drs_opencv.scene_validator import SceneValidator
 
-from tracker import BallTracker
-from frame_preprocessor import FramePreprocessor
-from confidence_scorer import DetectionConfidenceScorer
-from physics_3d_predictor import Physics3DPredictor
-from ultraedge import UltraEdgeSimulator
-from hawk_eye_visualizer import render_hawk_eye_broadcast_graphic
-from report_generator import generate_report
-import trajectory_predictor as tp
-import stump_zone
-import visualizer
+try:
+    from tracker import BallTracker
+    from frame_preprocessor import FramePreprocessor
+    from confidence_scorer import DetectionConfidenceScorer
+    from physics_3d_predictor import Physics3DPredictor
+    from ultraedge import UltraEdgeSimulator
+    from hawk_eye_visualizer import render_hawk_eye_broadcast_graphic
+    from report_generator import generate_report
+    import trajectory_predictor as tp
+    import stump_zone
+    import visualizer
+except ImportError:
+    from drs_opencv.tracker import BallTracker
+    from drs_opencv.frame_preprocessor import FramePreprocessor
+    from drs_opencv.confidence_scorer import DetectionConfidenceScorer
+    from drs_opencv.physics_3d_predictor import Physics3DPredictor
+    from drs_opencv.ultraedge import UltraEdgeSimulator
+    from drs_opencv.hawk_eye_visualizer import render_hawk_eye_broadcast_graphic
+    from drs_opencv.report_generator import generate_report
+    import drs_opencv.trajectory_predictor as tp
+    import drs_opencv.stump_zone as stump_zone
+    import drs_opencv.visualizer as visualizer
 
 
 def run_pipeline(input_path, output_dir, color_mode="auto"):

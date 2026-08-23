@@ -117,7 +117,10 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
         overlay_frame = frame.copy()
         traj_points = tracker.get_trajectory_points()
         radius = detection[2] if detection is not None else None
-        visualizer.draw_live_overlay(overlay_frame, traj_points, est, radius)
+        visualizer.draw_live_overlay(
+            overlay_frame, traj_points, est, radius,
+            pitching_zone="IN LINE", impact_zone="IN LINE", wicket_verdict="HITTING", final_call="TRACKING ACTIVE"
+        )
 
         if (src_w, src_h) != (cfg.FRAME_WIDTH, cfg.FRAME_HEIGHT):
             overlay_frame = cv2.resize(overlay_frame, (src_w, src_h))

@@ -41,6 +41,10 @@ if __name__ == "__main__":
         ("GET", "/health", "API Health Check"),
         ("GET", "/api/history", "Decision History API"),
         ("GET", "/api/stats", "Session Totals Stats API"),
+        ("GET", "/api/spatial_snicko", "Spatial Snicko Beamforming API"),
+        ("GET", "/api/camera_calibration", "8-Cam Auto-Calibration API"),
+        ("GET", "/api/action_legality", "ICC Action Legality Classifier API"),
+        ("GET", "/api/stadium_stream", "WebSocket Stadium Telemetry API"),
     ]
 
     passed = 0

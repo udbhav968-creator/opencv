@@ -237,6 +237,42 @@ def api_crypto_ledger():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/camera_mesh')
+def api_camera_mesh():
+    try:
+        from camera_mesh_synchronizer import CameraMeshSynchronizer
+        mesh = CameraMeshSynchronizer()
+        return jsonify(mesh.synchronize_mesh())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/pinn_trajectory')
+def api_pinn_trajectory():
+    try:
+        from pinn_trajectory_ai import PhysicsInformedNNTrajectoryAI
+        pinn = PhysicsInformedNNTrajectoryAI()
+        return jsonify(pinn.predict_pinn_trajectory())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/quantum_sim')
+def api_quantum_sim():
+    try:
+        from quantum_match_simulator import QuantumInspiredMatchSimulator
+        qsim = QuantumInspiredMatchSimulator()
+        return jsonify(qsim.run_quantum_simulations())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/int8_npu')
+def api_int8_npu():
+    try:
+        from int8_npu_accelerator import INT8NPUAccelerator
+        npu = INT8NPUAccelerator()
+        return jsonify(npu.run_npu_inference())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/health')
 def health():
     return jsonify({

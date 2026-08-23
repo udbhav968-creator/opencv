@@ -50,6 +50,10 @@ if __name__ == "__main__":
         ("GET", "/api/doppler_speed", "Doppler Effect Ball Speed Audio API"),
         ("GET", "/api/fielder_probability", "Fielder Catch Probability AI API"),
         ("GET", "/api/crypto_ledger", "SHA-256 Merkle Ledger Certificate API"),
+        ("GET", "/api/camera_mesh", "5G Camera Mesh Synchronizer API"),
+        ("GET", "/api/pinn_trajectory", "PINN Neural Network Trajectory AI API"),
+        ("GET", "/api/quantum_sim", "Quantum Match Simulation Engine API"),
+        ("GET", "/api/int8_npu", "INT8 NPU Neural Accelerator API"),
     ]
 
     passed = 0

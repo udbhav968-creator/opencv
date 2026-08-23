@@ -203,6 +203,51 @@ def api_stadium_stream():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/super_slowmo')
+def api_super_slowmo():
+    try:
+        from drs_opencv.frame_interpolator import SuperSlowMoFrameInterpolator
+        interp = SuperSlowMoFrameInterpolator()
+        return jsonify(interp.interpolate_frames())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/nerf_3d')
+def api_nerf_3d():
+    try:
+        from drs_opencv.nerf_3d_reconstruction import GaussianSplatting3DReconstructor
+        recon = GaussianSplatting3DReconstructor()
+        return jsonify(recon.reconstruct_3d_scene())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/doppler_speed')
+def api_doppler_speed():
+    try:
+        from drs_opencv.doppler_speed_calculator import DopplerSpeedCalculator
+        doppler = DopplerSpeedCalculator()
+        return jsonify(doppler.calculate_speed_from_doppler())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/fielder_probability')
+def api_fielder_probability():
+    try:
+        from drs_opencv.fielder_catch_probability import FielderCatchProbabilityAI
+        ai = FielderCatchProbabilityAI()
+        return jsonify(ai.estimate_catch_probability())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/crypto_ledger')
+def api_crypto_ledger():
+    try:
+        from drs_opencv.crypto_merkle_ledger import CryptographicMerkleLedger
+        ledger = CryptographicMerkleLedger()
+        return jsonify(ledger.sign_certificate("JOB12345", {"final_call": "OUT"}))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/sw.js')
 def service_worker():
     return send_file(os.path.join(app.root_path, 'static', 'sw.js'), mimetype='application/javascript')

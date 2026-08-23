@@ -45,6 +45,11 @@ if __name__ == "__main__":
         ("GET", "/api/camera_calibration", "8-Cam Auto-Calibration API"),
         ("GET", "/api/action_legality", "ICC Action Legality Classifier API"),
         ("GET", "/api/stadium_stream", "WebSocket Stadium Telemetry API"),
+        ("GET", "/api/super_slowmo", "2,000 FPS Super Slow-Mo Interpolator API"),
+        ("GET", "/api/nerf_3d", "NeRF 3D Scene Reconstruction API"),
+        ("GET", "/api/doppler_speed", "Doppler Effect Ball Speed Audio API"),
+        ("GET", "/api/fielder_probability", "Fielder Catch Probability AI API"),
+        ("GET", "/api/crypto_ledger", "SHA-256 Merkle Ledger Certificate API"),
     ]
 
     passed = 0

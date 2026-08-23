@@ -156,6 +156,42 @@ def api_export_certificate():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/spatial_snicko')
+def api_spatial_snicko():
+    try:
+        from spatial_snicko_beamformer import SpatialSnickoBeamformer
+        bf = SpatialSnickoBeamformer()
+        return jsonify(bf.compute_acoustic_beamforming())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/camera_calibration')
+def api_camera_calibration():
+    try:
+        from camera_autocalibrator import CameraAutoCalibrator
+        calib = CameraAutoCalibrator()
+        return jsonify(calib.calibrate_cameras())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/action_legality')
+def api_action_legality():
+    try:
+        from action_legality_classifier import BowlingActionLegalityClassifier
+        classifier = BowlingActionLegalityClassifier()
+        return jsonify(classifier.evaluate_bowling_action())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/stadium_stream')
+def api_stadium_stream():
+    try:
+        from stadium_websocket_stream import StadiumWebSocketStreamer
+        streamer = StadiumWebSocketStreamer()
+        return jsonify(streamer.broadcast_telemetry({"final_call": "OUT"}))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/health')
 def health():
     return jsonify({

@@ -110,8 +110,14 @@ class Physics3DPredictor:
         # Time elapsed post-bounce
         t_steps = np.arange(len(post_pts)) * self.dt
         
-        # Fit Linear X velocity: X(t) = X0 + Vx * t
-        Vx = np.polyfit(t_steps, post_pts[:, 0], 1)[0]
+        # Fit Linear X velocity with Spin/Seam Lateral Acceleration: X(t) = X0 + Vx * t + 0.5 * Ax_spin * t^2
+        if len(t_steps) >= 3:
+            x_fit = np.polyfit(t_steps, post_pts[:, 0], 2)
+            Ax_spin = 2 * x_fit[0]
+            Vx = x_fit[1]
+        else:
+            Ax_spin = 0.0
+            Vx = np.polyfit(t_steps, post_pts[:, 0], 1)[0]
         
         # Fit Linear Y velocity: Y(t) = Y0 + Vy * t
         Vy = np.polyfit(t_steps, post_pts[:, 1], 1)[0]
@@ -121,7 +127,7 @@ class Physics3DPredictor:
         z_adj = post_pts[:, 2] + 0.5 * G_ACCEL * (t_steps ** 2)
         Vz0 = np.polyfit(t_steps, z_adj, 1)[0]
 
-        # 4. Project forward from Impact (Y_impact) to Stumps (Y = 20.12m)
+        # 4. Project forward from Impact (Y_impact) to Stumps (Y = 20.12m) with Aerodynamics
         y_impact = impact_3d[1]
         y_stumps = PITCH_LENGTH_M
         delta_y = max(0.01, y_stumps - y_impact)
@@ -129,8 +135,8 @@ class Physics3DPredictor:
         # Time to travel from Impact to Stumps
         t_to_stumps = delta_y / Vy
 
-        # Final predicted 3D position at Stumps plane
-        x_stumps = impact_3d[0] + Vx * t_to_stumps
+        # Final predicted 3D position at Stumps plane with Seam/Spin Drift
+        x_stumps = impact_3d[0] + Vx * t_to_stumps + 0.5 * Ax_spin * (t_to_stumps ** 2)
         z_stumps = max(0.0, impact_3d[2] + Vz0 * t_to_stumps - 0.5 * G_ACCEL * (t_to_stumps ** 2))
 
         res.stump_x = round(float(x_stumps), 3)
@@ -138,11 +144,11 @@ class Physics3DPredictor:
         res.stump_3d = (res.stump_x, y_stumps, res.stump_z)
 
         # 5. Generate Dense 3D Project Path for Rendering
-        n_dense = 20
+        n_dense = 25
         t_dense = np.linspace(0, t_to_stumps, n_dense)
         path = []
         for td in t_dense:
-            xp = impact_3d[0] + Vx * td
+            xp = impact_3d[0] + Vx * td + 0.5 * Ax_spin * (td ** 2)
             yp = impact_3d[1] + Vy * td
             zp = max(0.0, impact_3d[2] + Vz0 * td - 0.5 * G_ACCEL * (td ** 2))
             path.append((round(float(xp), 3), round(float(yp), 3), round(float(zp), 3)))

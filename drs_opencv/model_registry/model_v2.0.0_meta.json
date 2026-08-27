@@ -1,9 +1,9 @@
 {
   "model_name": "ICC_DRS_10Model_Ultra_Ensemble",
   "model_version": "2.0.0",
-  "dvc_tag": "dvc-v2.0.0-c7dc2cbe0059",
+  "dvc_tag": "dvc-v2.0.0-b214d8b23a3d",
   "stage": "PRODUCTION",
-  "timestamp": "2026-08-23T13:28:40.046030+00:00",
+  "timestamp": "2026-08-27T06:14:05.966476+00:00",
   "weights_format": [
     "ONNX",
     "TensorRT",

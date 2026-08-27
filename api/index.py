@@ -282,6 +282,15 @@ def api_vision_transformer():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/youtube_harvester')
+def api_youtube_harvester():
+    try:
+        from youtube_live_harvester import YouTubeLiveDatasetHarvester
+        harvester = YouTubeLiveDatasetHarvester()
+        return jsonify(harvester.harvest_live_streams())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/health')
 def health():
     return jsonify({

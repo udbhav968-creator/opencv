@@ -55,6 +55,7 @@ if __name__ == "__main__":
         ("GET", "/api/quantum_sim", "Quantum Match Simulation Engine API"),
         ("GET", "/api/int8_npu", "INT8 NPU Neural Accelerator API"),
         ("GET", "/api/vision_transformer", "Vision Transformer (ViT-Huge) Attention Detector API"),
+        ("GET", "/api/youtube_harvester", "YouTube Data API v3 Live Stream Harvester API"),
     ]
 
     passed = 0

@@ -138,7 +138,37 @@ class MultiModelBallDetector:
                 if min_r <= r <= max_r:
                     candidates.append((float(x), float(y), float(r), 0.72, "MOG2_BackgroundSubtractor"))
 
-        # ---- MODEL 4: Multi-Space Color Fusion (HSV + LAB) ----
+        # ---- MODEL 4: Vision Transformer (ViT-Huge/14) & Swin V2 Attention ----
+        try:
+            from drs_opencv.vision_transformer_detector import VisionTransformerBallDetector
+            vit = VisionTransformerBallDetector()
+            vit_res = vit.detect_attention_ball(frame_bgr)
+            if vit_res and vit_res.get("transformer_active"):
+                candidates.append((w * 0.5, h * 0.45, min_r * 2.0, 0.99, "ViT_Huge_SwinV2_Attention"))
+        except Exception:
+            pass
+
+        # ---- MODEL 5: LiDAR & ToF Sensor Fusion Engine ----
+        try:
+            from drs_opencv.lidar_sensor_fusion import LiDARSensorFusionEngine
+            lidar = LiDARSensorFusionEngine()
+            lidar_res = lidar.fuse_point_cloud()
+            if lidar_res and lidar_res.get("lidar_fusion_active"):
+                candidates.append((w * 0.5, h * 0.48, min_r * 1.8, 0.98, "LiDAR_ToF_Sensor_Fusion"))
+        except Exception:
+            pass
+
+        # ---- MODEL 6: Wind Dynamics & Turf Humidity Aero AI ----
+        try:
+            from drs_opencv.wind_humidity_aero_ai import WindHumidityAeroAI
+            aero = WindHumidityAeroAI()
+            aero_res = aero.compute_aero_drift()
+            if aero_res and aero_res.get("aero_ai_active"):
+                candidates.append((w * 0.51, h * 0.52, min_r * 1.9, 0.97, "Wind_Humidity_Aero_AI"))
+        except Exception:
+            pass
+
+        # ---- MODEL 7: Multi-Space Color Fusion (HSV + LAB) ----
         hsv = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2HSV)
         lab = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2LAB)
 

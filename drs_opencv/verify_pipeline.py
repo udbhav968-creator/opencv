@@ -56,6 +56,9 @@ if __name__ == "__main__":
         ("GET", "/api/int8_npu", "INT8 NPU Neural Accelerator API"),
         ("GET", "/api/vision_transformer", "Vision Transformer (ViT-Huge) Attention Detector API"),
         ("GET", "/api/youtube_harvester", "YouTube Data API v3 Live Stream Harvester API"),
+        ("GET", "/api/llm_umpire_reasoner", "Multimodal LLM TV Umpire Audio Reasoning API"),
+        ("GET", "/api/wind_humidity_aero", "Wind Dynamics & Turf Humidity Aero AI API"),
+        ("GET", "/api/lidar_sensor_fusion", "LiDAR & ToF Sensor Fusion Engine API"),
     ]
 
     passed = 0

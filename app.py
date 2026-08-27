@@ -302,6 +302,33 @@ def api_youtube_harvester():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/llm_umpire_reasoner')
+def api_llm_umpire_reasoner():
+    try:
+        from drs_opencv.llm_umpire_reasoner import MultimodalLLMUmpireReasoner
+        reasoner = MultimodalLLMUmpireReasoner()
+        return jsonify(reasoner.generate_umpire_reasoning())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/wind_humidity_aero')
+def api_wind_humidity_aero():
+    try:
+        from drs_opencv.wind_humidity_aero_ai import WindHumidityAeroAI
+        aero = WindHumidityAeroAI()
+        return jsonify(aero.compute_aero_drift())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/lidar_sensor_fusion')
+def api_lidar_sensor_fusion():
+    try:
+        from drs_opencv.lidar_sensor_fusion import LiDARSensorFusionEngine
+        fusion = LiDARSensorFusionEngine()
+        return jsonify(fusion.fuse_point_cloud())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/sw.js')
 def service_worker():
     return send_file(os.path.join(app.root_path, 'static', 'sw.js'), mimetype='application/javascript')

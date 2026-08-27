@@ -291,6 +291,33 @@ def api_youtube_harvester():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/llm_umpire_reasoner')
+def api_llm_umpire_reasoner():
+    try:
+        from llm_umpire_reasoner import MultimodalLLMUmpireReasoner
+        reasoner = MultimodalLLMUmpireReasoner()
+        return jsonify(reasoner.generate_umpire_reasoning())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/wind_humidity_aero')
+def api_wind_humidity_aero():
+    try:
+        from wind_humidity_aero_ai import WindHumidityAeroAI
+        aero = WindHumidityAeroAI()
+        return jsonify(aero.compute_aero_drift())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/lidar_sensor_fusion')
+def api_lidar_sensor_fusion():
+    try:
+        from lidar_sensor_fusion import LiDARSensorFusionEngine
+        fusion = LiDARSensorFusionEngine()
+        return jsonify(fusion.fuse_point_cloud())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/health')
 def health():
     return jsonify({

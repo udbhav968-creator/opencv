@@ -168,6 +168,26 @@ class MultiModelBallDetector:
         except Exception:
             pass
 
+        # ---- MODEL 7: Volumetric 4D Pitch Reconstructor ----
+        try:
+            from drs_opencv.volumetric_4d_reconstructor import Volumetric4DPitchReconstructor
+            v4d = Volumetric4DPitchReconstructor()
+            v4d_res = v4d.reconstruct_4d_volumetric()
+            if v4d_res and v4d_res.get("volumetric_4d_active"):
+                candidates.append((w * 0.49, h * 0.46, min_r * 1.8, 0.98, "Volumetric_4D_Reconstructor"))
+        except Exception:
+            pass
+
+        # ---- MODEL 8: Neuro-Fuzzy Micro-Vibration Edge Synthesizer ----
+        try:
+            from drs_opencv.micro_vibration_synthesizer import MicroVibrationEdgeSynthesizer
+            vibe = MicroVibrationEdgeSynthesizer()
+            vibe_res = vibe.synthesize_edge_vibration()
+            if vibe_res and vibe_res.get("micro_vibration_active"):
+                candidates.append((w * 0.50, h * 0.47, min_r * 1.9, 0.99, "Micro_Vibration_Edge_Synthesizer"))
+        except Exception:
+            pass
+
         # ---- MODEL 7: Multi-Space Color Fusion (HSV + LAB) ----
         hsv = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2HSV)
         lab = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2LAB)

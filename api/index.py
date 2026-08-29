@@ -318,6 +318,51 @@ def api_lidar_sensor_fusion():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/volumetric_4d')
+def api_volumetric_4d():
+    try:
+        from volumetric_4d_reconstructor import Volumetric4DPitchReconstructor
+        recon = Volumetric4DPitchReconstructor()
+        return jsonify(recon.reconstruct_4d_volumetric())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/micro_vibration')
+def api_micro_vibration():
+    try:
+        from micro_vibration_synthesizer import MicroVibrationEdgeSynthesizer
+        vibe = MicroVibrationEdgeSynthesizer()
+        return jsonify(vibe.synthesize_edge_vibration())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/thermal_pitch')
+def api_thermal_pitch():
+    try:
+        from thermal_pitch_scanner import ThermalPitchMoistureScanner
+        scanner = ThermalPitchMoistureScanner()
+        return jsonify(scanner.scan_pitch_friction())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/bowling_torque')
+def api_bowling_torque():
+    try:
+        from bowling_torque_analyzer import BiomechanicalBowlingTorqueAnalyzer
+        analyzer = BiomechanicalBowlingTorqueAnalyzer()
+        return jsonify(analyzer.analyze_bowling_torque())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/zk_proof_ledger')
+def api_zk_proof_ledger():
+    try:
+        from zk_proof_drs_ledger import ZKProofCryptographicDRSLedger
+        zk = ZKProofCryptographicDRSLedger()
+        return jsonify(zk.generate_zk_proof())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/health')
 def health():
     return jsonify({

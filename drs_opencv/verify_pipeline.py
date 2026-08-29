@@ -59,6 +59,11 @@ if __name__ == "__main__":
         ("GET", "/api/llm_umpire_reasoner", "Multimodal LLM TV Umpire Audio Reasoning API"),
         ("GET", "/api/wind_humidity_aero", "Wind Dynamics & Turf Humidity Aero AI API"),
         ("GET", "/api/lidar_sensor_fusion", "LiDAR & ToF Sensor Fusion Engine API"),
+        ("GET", "/api/volumetric_4d", "4D Temporal Volumetric Pitch Reconstructor API"),
+        ("GET", "/api/micro_vibration", "Neuro-Fuzzy Micro-Vibration Edge Synthesizer API"),
+        ("GET", "/api/thermal_pitch", "Thermal Pitch Moisture & Friction Scanner API"),
+        ("GET", "/api/bowling_torque", "Biomechanical Bowling Torque & Stress API"),
+        ("GET", "/api/zk_proof_ledger", "ZK-SNARK Zero-Knowledge DRS Audit Ledger API"),
     ]
 
     passed = 0

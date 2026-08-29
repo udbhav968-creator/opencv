@@ -363,6 +363,15 @@ def api_zk_proof_ledger():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/external_apis')
+def api_external_apis():
+    try:
+        from api_integration_suite import ExternalAPIIntegrationSuite
+        suite = ExternalAPIIntegrationSuite()
+        return jsonify(suite.fetch_all_telemetry())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/health')
 def health():
     return jsonify({

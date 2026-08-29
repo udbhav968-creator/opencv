@@ -374,6 +374,15 @@ def api_zk_proof_ledger():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/external_apis')
+def api_external_apis():
+    try:
+        from drs_opencv.api_integration_suite import ExternalAPIIntegrationSuite
+        suite = ExternalAPIIntegrationSuite()
+        return jsonify(suite.fetch_all_telemetry())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/sw.js')
 def service_worker():
     return send_file(os.path.join(app.root_path, 'static', 'sw.js'), mimetype='application/javascript')

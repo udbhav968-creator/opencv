@@ -64,6 +64,7 @@ if __name__ == "__main__":
         ("GET", "/api/thermal_pitch", "Thermal Pitch Moisture & Friction Scanner API"),
         ("GET", "/api/bowling_torque", "Biomechanical Bowling Torque & Stress API"),
         ("GET", "/api/zk_proof_ledger", "ZK-SNARK Zero-Knowledge DRS Audit Ledger API"),
+        ("GET", "/api/external_apis", "Multi-Source REST API Data Telemetry Suite API"),
     ]
 
     passed = 0

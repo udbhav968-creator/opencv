@@ -12,8 +12,8 @@ Generates a broadcast TV card containing:
 
 import cv2
 import numpy as np
-import config as cfg
 try:
+    import config as cfg
     from drs_3d_engine import (
         Perspective3DEngine,
         PITCH_LENGTH_M,
@@ -23,6 +23,15 @@ try:
     )
     from ultraedge import UltraEdgeSimulator
 except ImportError:
+    from drs_opencv import config as cfg
+    from drs_opencv.drs_3d_engine import (
+        Perspective3DEngine,
+        PITCH_LENGTH_M,
+        STUMP_HEIGHT_M,
+        STUMP_WIDTH_M,
+        STUMP_HALF_WIDTH_M
+    )
+    from drs_opencv.ultraedge import UltraEdgeSimulator
     from drs_opencv.drs_3d_engine import (
         Perspective3DEngine,
         PITCH_LENGTH_M,

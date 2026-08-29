@@ -94,7 +94,7 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
 
     tracking_video_path = os.path.join(output_dir, "tracked_output.mp4")
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-    writer = cv2.VideoWriter(tracking_video_path, fourcc, src_fps, (src_w, src_h))
+    writer = cv2.VideoWriter(tracking_video_path, fourcc, src_fps, (cfg.FRAME_WIDTH, cfg.FRAME_HEIGHT))
 
     frame_index = 0
     frames_with_ball = 0
@@ -105,7 +105,7 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
         if not ret:
             break
 
-        # Resize to working resolution
+        # Normalize working resolution to 1280x720 for perfect coordinate scaling
         if (src_w, src_h) != (cfg.FRAME_WIDTH, cfg.FRAME_HEIGHT):
             proc_frame = cv2.resize(frame, (cfg.FRAME_WIDTH, cfg.FRAME_HEIGHT))
         else:
@@ -113,7 +113,7 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
 
         clean_frame = preprocessor.process(proc_frame)
 
-        # 4-Model Ensemble Detection
+        # 12-Model Ensemble Detection
         raw_det = detector.detect(clean_frame)
         detection = None
         if raw_det is not None:
@@ -126,7 +126,7 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
         # Update Kalman tracker
         est = tracker.update(detection, frame_index)
 
-        overlay_frame = frame.copy()
+        overlay_frame = proc_frame.copy()
         traj_points = tracker.get_trajectory_points()
         radius = detection[2] if detection is not None else None
         visualizer.draw_live_overlay(

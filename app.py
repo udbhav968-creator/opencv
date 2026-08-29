@@ -383,6 +383,15 @@ def api_external_apis():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/stadium_presets')
+def api_stadium_presets():
+    try:
+        from drs_opencv.stadium_calibration import StadiumCalibrationManager
+        mgr = StadiumCalibrationManager()
+        return jsonify(mgr.list_all_stadiums())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/sw.js')
 def service_worker():
     return send_file(os.path.join(app.root_path, 'static', 'sw.js'), mimetype='application/javascript')

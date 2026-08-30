@@ -392,6 +392,51 @@ def api_stadium_presets():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/audio_commentary')
+def api_audio_commentary():
+    try:
+        from drs_opencv.audio_commentary_ai import AudioCommentaryAI
+        ai = AudioCommentaryAI()
+        return jsonify(ai.generate_commentary())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/gpr_subsurface')
+def api_gpr_subsurface():
+    try:
+        from drs_opencv.gpr_subsurface_scanner import GPRSubSurfaceScanner
+        scanner = GPRSubSurfaceScanner()
+        return jsonify(scanner.scan_pitch_subsurface())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/spin_wobble')
+def api_spin_wobble():
+    try:
+        from drs_opencv.spin_wobble_predictor import SpinWobblePredictor
+        pred = SpinWobblePredictor()
+        return jsonify(pred.compute_spin_dynamics())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/spatial_hologram')
+def api_spatial_hologram():
+    try:
+        from drs_opencv.spatial_hologram_streamer import SpatialHologramStreamer
+        holo = SpatialHologramStreamer()
+        return jsonify(holo.stream_spatial_hologram())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/pqc_ledger')
+def api_pqc_ledger():
+    try:
+        from drs_opencv.pqc_dilithium_ledger import PQCDilithiumDRSLedger
+        ledger = PQCDilithiumDRSLedger()
+        return jsonify(ledger.sign_drs_decision())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/sw.js')
 def service_worker():
     return send_file(os.path.join(app.root_path, 'static', 'sw.js'), mimetype='application/javascript')

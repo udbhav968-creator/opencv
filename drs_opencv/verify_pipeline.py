@@ -66,6 +66,11 @@ if __name__ == "__main__":
         ("GET", "/api/zk_proof_ledger", "ZK-SNARK Zero-Knowledge DRS Audit Ledger API"),
         ("GET", "/api/external_apis", "Multi-Source REST API Data Telemetry Suite API"),
         ("GET", "/api/stadium_presets", "Real-World International Stadium Calibration Presets API"),
+        ("GET", "/api/audio_commentary", "Multi-Modal DRS Live Commentary & Audio Synthesizer API"),
+        ("GET", "/api/gpr_subsurface", "Ground Penetrating Radar Sub-Surface Pitch Scanner API"),
+        ("GET", "/api/spin_wobble", "Dynamic 3D Spin Aerodynamics & Magnus Wobble API"),
+        ("GET", "/api/spatial_hologram", "WebXR Spatial 3D Volumetric Hologram Streamer API"),
+        ("GET", "/api/pqc_ledger", "Post-Quantum Cryptographic Dilithium DRS Ledger API"),
     ]
 
     passed = 0

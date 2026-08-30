@@ -381,6 +381,51 @@ def api_stadium_presets():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/audio_commentary')
+def api_audio_commentary():
+    try:
+        from audio_commentary_ai import AudioCommentaryAI
+        ai = AudioCommentaryAI()
+        return jsonify(ai.generate_commentary())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/gpr_subsurface')
+def api_gpr_subsurface():
+    try:
+        from gpr_subsurface_scanner import GPRSubSurfaceScanner
+        scanner = GPRSubSurfaceScanner()
+        return jsonify(scanner.scan_pitch_subsurface())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/spin_wobble')
+def api_spin_wobble():
+    try:
+        from spin_wobble_predictor import SpinWobblePredictor
+        pred = SpinWobblePredictor()
+        return jsonify(pred.compute_spin_dynamics())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/spatial_hologram')
+def api_spatial_hologram():
+    try:
+        from spatial_hologram_streamer import SpatialHologramStreamer
+        holo = SpatialHologramStreamer()
+        return jsonify(holo.stream_spatial_hologram())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/pqc_ledger')
+def api_pqc_ledger():
+    try:
+        from pqc_dilithium_ledger import PQCDilithiumDRSLedger
+        ledger = PQCDilithiumDRSLedger()
+        return jsonify(ledger.sign_drs_decision())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/health')
 def health():
     return jsonify({

@@ -199,7 +199,7 @@ def run_pipeline(input_path, output_dir, color_mode="auto"):
 
     pz_str = pitching_zone.value if hasattr(pitching_zone, 'value') else str(pitching_zone)
     iz_str = impact_zone.value if hasattr(impact_zone, 'value') else str(impact_zone)
-    wv_str = wicket_verdict_2d.value if hasattr(wicket_verdict_2d, 'value') else str(wicket_verdict_2d)
+    wv_str = prediction_3d.final_3d_verdict if prediction_3d.has_prediction else (wicket_verdict_2d.value if hasattr(wicket_verdict_2d, 'value') else str(wicket_verdict_2d))
 
     final_call = "OUT" if (wv_str == "HITTING" and iz_str == "IN_LINE" and pz_str != "OUTSIDE_LEG") else "NOT OUT"
     if (wv_str == "UMPIRES_CALL" and iz_str == "IN_LINE" and pz_str != "OUTSIDE_LEG"):

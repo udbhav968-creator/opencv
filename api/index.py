@@ -386,7 +386,13 @@ def api_audio_commentary():
     try:
         from audio_commentary_ai import AudioCommentaryAI
         ai = AudioCommentaryAI()
-        return jsonify(ai.generate_commentary())
+        pitching = request.args.get('pitching', 'IN_LINE')
+        impact = request.args.get('impact', 'IN_LINE')
+        wickets = request.args.get('wickets', 'HITTING')
+        final_call = request.args.get('final_call', 'NOT OUT')
+        speed_kmh = float(request.args.get('speed_kmh', 142.5))
+        spin_rpm = int(request.args.get('spin_rpm', 2240))
+        return jsonify(ai.generate_commentary(pitching=pitching, impact=impact, wickets=wickets, final_call=final_call, speed_kmh=speed_kmh, spin_rpm=spin_rpm))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

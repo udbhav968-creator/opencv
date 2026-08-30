@@ -20,6 +20,47 @@
       }).catch(err => console.log(err));
   }
 
+
+  let currentCommentaryData = null;
+
+  async function fetchLiveCommentary() {
+    const lang = document.getElementById('commentaryLangSelect') ? document.getElementById('commentaryLangSelect').value : 'en-US';
+    const pz = document.getElementById('statPitching').textContent.replace(' ', '_');
+    const iz = document.getElementById('statImpact').textContent.replace(' ', '_');
+    const wv = document.getElementById('statWickets').textContent.replace(' ', '_');
+    const fc = document.getElementById('verdictText').textContent;
+
+    try {
+      const res = await fetch(`/api/audio_commentary?pitching=${pz}&impact=${iz}&wickets=${wv}&final_call=${fc}`);
+      const data = await res.json();
+      currentCommentaryData = data;
+      if (data.commentary_transcripts && data.commentary_transcripts[lang]) {
+        document.getElementById('liveTranscriptBox').textContent = `"${data.commentary_transcripts[lang]}"`;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function playCommentaryAudio() {
+    const lang = document.getElementById('commentaryLangSelect') ? document.getElementById('commentaryLangSelect').value : 'en-US';
+    const text = document.getElementById('liveTranscriptBox').textContent.replace(/^"|"$/g, '');
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  function onLanguageChange() {
+    const selected = document.getElementById('speechLang').value;
+    if (document.getElementById('commentaryLangSelect')) {
+      document.getElementById('commentaryLangSelect').value = selected;
+    }
+    fetchLiveCommentary();
+  }
+
 </script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js">
   function updateStadiumTelemetry() {
@@ -32,6 +73,47 @@
           console.log(`[Stadium Calibrated]: ${stad.name} | Restitution: ${stad.restitution_coefficient}`);
         }
       }).catch(err => console.log(err));
+  }
+
+
+  let currentCommentaryData = null;
+
+  async function fetchLiveCommentary() {
+    const lang = document.getElementById('commentaryLangSelect') ? document.getElementById('commentaryLangSelect').value : 'en-US';
+    const pz = document.getElementById('statPitching').textContent.replace(' ', '_');
+    const iz = document.getElementById('statImpact').textContent.replace(' ', '_');
+    const wv = document.getElementById('statWickets').textContent.replace(' ', '_');
+    const fc = document.getElementById('verdictText').textContent;
+
+    try {
+      const res = await fetch(`/api/audio_commentary?pitching=${pz}&impact=${iz}&wickets=${wv}&final_call=${fc}`);
+      const data = await res.json();
+      currentCommentaryData = data;
+      if (data.commentary_transcripts && data.commentary_transcripts[lang]) {
+        document.getElementById('liveTranscriptBox').textContent = `"${data.commentary_transcripts[lang]}"`;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function playCommentaryAudio() {
+    const lang = document.getElementById('commentaryLangSelect') ? document.getElementById('commentaryLangSelect').value : 'en-US';
+    const text = document.getElementById('liveTranscriptBox').textContent.replace(/^"|"$/g, '');
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  function onLanguageChange() {
+    const selected = document.getElementById('speechLang').value;
+    if (document.getElementById('commentaryLangSelect')) {
+      document.getElementById('commentaryLangSelect').value = selected;
+    }
+    fetchLiveCommentary();
   }
 
 </script>
@@ -48,6 +130,47 @@
       }).catch(err => console.log(err));
   }
 
+
+  let currentCommentaryData = null;
+
+  async function fetchLiveCommentary() {
+    const lang = document.getElementById('commentaryLangSelect') ? document.getElementById('commentaryLangSelect').value : 'en-US';
+    const pz = document.getElementById('statPitching').textContent.replace(' ', '_');
+    const iz = document.getElementById('statImpact').textContent.replace(' ', '_');
+    const wv = document.getElementById('statWickets').textContent.replace(' ', '_');
+    const fc = document.getElementById('verdictText').textContent;
+
+    try {
+      const res = await fetch(`/api/audio_commentary?pitching=${pz}&impact=${iz}&wickets=${wv}&final_call=${fc}`);
+      const data = await res.json();
+      currentCommentaryData = data;
+      if (data.commentary_transcripts && data.commentary_transcripts[lang]) {
+        document.getElementById('liveTranscriptBox').textContent = `"${data.commentary_transcripts[lang]}"`;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function playCommentaryAudio() {
+    const lang = document.getElementById('commentaryLangSelect') ? document.getElementById('commentaryLangSelect').value : 'en-US';
+    const text = document.getElementById('liveTranscriptBox').textContent.replace(/^"|"$/g, '');
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  function onLanguageChange() {
+    const selected = document.getElementById('speechLang').value;
+    if (document.getElementById('commentaryLangSelect')) {
+      document.getElementById('commentaryLangSelect').value = selected;
+    }
+    fetchLiveCommentary();
+  }
+
 </script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js">
   function updateStadiumTelemetry() {
@@ -60,6 +183,47 @@
           console.log(`[Stadium Calibrated]: ${stad.name} | Restitution: ${stad.restitution_coefficient}`);
         }
       }).catch(err => console.log(err));
+  }
+
+
+  let currentCommentaryData = null;
+
+  async function fetchLiveCommentary() {
+    const lang = document.getElementById('commentaryLangSelect') ? document.getElementById('commentaryLangSelect').value : 'en-US';
+    const pz = document.getElementById('statPitching').textContent.replace(' ', '_');
+    const iz = document.getElementById('statImpact').textContent.replace(' ', '_');
+    const wv = document.getElementById('statWickets').textContent.replace(' ', '_');
+    const fc = document.getElementById('verdictText').textContent;
+
+    try {
+      const res = await fetch(`/api/audio_commentary?pitching=${pz}&impact=${iz}&wickets=${wv}&final_call=${fc}`);
+      const data = await res.json();
+      currentCommentaryData = data;
+      if (data.commentary_transcripts && data.commentary_transcripts[lang]) {
+        document.getElementById('liveTranscriptBox').textContent = `"${data.commentary_transcripts[lang]}"`;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function playCommentaryAudio() {
+    const lang = document.getElementById('commentaryLangSelect') ? document.getElementById('commentaryLangSelect').value : 'en-US';
+    const text = document.getElementById('liveTranscriptBox').textContent.replace(/^"|"$/g, '');
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  function onLanguageChange() {
+    const selected = document.getElementById('speechLang').value;
+    if (document.getElementById('commentaryLangSelect')) {
+      document.getElementById('commentaryLangSelect').value = selected;
+    }
+    fetchLiveCommentary();
   }
 
 </script>
@@ -338,13 +502,15 @@
 
     <!-- Multi-Lingual & Export Controls -->
     <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--card-border);">
-      <select id="speechLang" style="width:100%; padding:0.7rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:12px; margin-bottom:0.6rem;">
-        <option value="en-US">🇬🇧 English TV Umpire</option>
+            <select id="speechLang" onchange="onLanguageChange()" style="width:100%; padding:0.7rem; background:#0f172a; border:1px solid var(--card-border); color:var(--text); border-radius:12px; margin-bottom:0.6rem;">
+        <option value="en-US">🇬🇧 English TV Umpire (International)</option>
         <option value="hi-IN">🇮🇳 Hindi Official Umpire (हिंदी)</option>
+        <option value="ta-IN">🇮🇳 Tamil Official Umpire (தமிழ்)</option>
+        <option value="te-IN">🇮🇳 Telugu Official Umpire (తెలుగు)</option>
+        <option value="bn-IN">🇧🇩 Bengali Official Umpire (বাংলা)</option>
+        <option value="ur-PK">🇵🇰 Urdu Official Umpire (اردو)</option>
         <option value="es-ES">🇪🇸 Spanish Umpire (Español)</option>
         <option value="fr-FR">🇫🇷 French Umpire (Français)</option>
-        <option value="ta-IN">🇮🇳 Tamil Umpire (தமிழ்)</option>
-        <option value="te-IN">🇮🇳 Telugu Umpire (తెలుగు)</option>
       </select>
       <button type="button" class="view-btn" style="width:100%; margin-bottom:0.5rem; padding:0.7rem; font-weight:800;" onclick="speakVerdict()">🔊 Speak TV Umpire Announcement</button>
       <button type="button" class="view-btn" style="width:100%; margin-bottom:0.5rem; padding:0.7rem; font-weight:800;" onclick="playUltraEdgeAudio()">🎵 Play UltraEdge Audio Waveform</button>
@@ -364,6 +530,7 @@
       <button class="view-btn" onclick="switchView('winprob')">📊 Monte Carlo Win Prob</button>
       <button class="view-btn" onclick="switchView('v4d')">🌌 4D Volumetric Reconstruct</button>
       <button class="view-btn" onclick="switchView('zkproof')">🛡️ ZK-SNARK Audit Ledger</button>
+      <button class="view-btn" onclick="switchView('commentary')">🎙️ Live Multi-Lang Commentary</button>
     </div>
 
     <div class="stats-grid">
@@ -453,6 +620,36 @@
           <div>Merkle Root: <span style="color:var(--green);">0x8891fcb02938a192837465910283746519283746</span></div>
           <div>Verification Status: <span style="color:var(--green); font-weight:900;">VALID (Zero-Knowledge Audit Verified)</span></div>
           <div style="margin-top:0.6rem; color:var(--muted); font-size:0.75rem;">Cryptographically guarantees decision integrity without revealing proprietary AI weights or neural parameters.</div>
+        </div>
+      </div>
+    </div>
+    <div id="viewCommentary" class="media-card" style="display:none;">
+      <h4><span>🎙️ Multi-Language Live Broadcast Commentary Suite</span> <span style="color:var(--gold)">8 INTERNATIONAL LANGUAGES</span></h4>
+      <div style="padding:1.8rem; background:#020617;">
+        <div style="margin-bottom:1.2rem; display:flex; gap:1rem; align-items:center;">
+          <label style="font-weight:700; color:var(--muted); font-size:0.85rem;">Active Broadcast Language:</label>
+          <select id="commentaryLangSelect" onchange="fetchLiveCommentary()" style="padding:0.6rem 1rem; background:#0f172a; border:1px solid var(--card-border); color:var(--gold); font-weight:800; border-radius:10px;">
+            <option value="en-US">🇬🇧 English International</option>
+            <option value="hi-IN">🇮🇳 Hindi (हिंदी)</option>
+            <option value="ta-IN">🇮🇳 Tamil (தமிழ்)</option>
+            <option value="te-IN">🇮🇳 Telugu (తెలుగు)</option>
+            <option value="bn-IN">🇧🇩 Bengali (বাংলা)</option>
+            <option value="ur-PK">🇵🇰 Urdu (اردو)</option>
+            <option value="es-ES">🇪🇸 Spanish (Español)</option>
+            <option value="fr-FR">🇫🇷 French (Français)</option>
+          </select>
+          <button type="button" class="view-btn" style="padding:0.6rem 1.2rem; font-weight:800;" onclick="playCommentaryAudio()">🔊 Play Commentary Audio</button>
+        </div>
+
+        <div style="background:#0b1528; border:1px solid var(--card-border); border-radius:14px; padding:1.4rem;">
+          <div style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; font-weight:800; margin-bottom:0.6rem;">🔴 Live TV Umpire Broadcast Transcript</div>
+          <div id="liveTranscriptBox" style="font-size:1.15rem; font-weight:700; color:var(--text); line-height:1.6; min-height:60px;">
+            "TV Umpire Review: Delivery tracked at 142.5 km/h with 2240 RPM spin. Pitching is IN LINE, impact is IN LINE, wickets are MISSING. The verdict is NOT OUT."
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding-top:0.8rem; border-top:1px solid rgba(56,189,248,0.2); font-size:0.75rem; color:var(--muted);">
+            <div>Acoustic Spatial Ambience: <span style="color:var(--accent); font-weight:800;">48 kHz Studio Stereo</span></div>
+            <div>Speech Synthesizer: <span style="color:var(--green); font-weight:800;">Neural Multi-Lingual TTS Active</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -548,7 +745,11 @@
     if (document.getElementById('viewV4D')) document.getElementById('viewV4D').style.display = 'none';
     if (document.getElementById('viewZKProof')) document.getElementById('viewZKProof').style.display = 'none';
 
-    if (viewName === 'v4d') {
+    if (document.getElementById('viewCommentary')) document.getElementById('viewCommentary').style.display = 'none';
+    if (viewName === 'commentary') {
+      document.getElementById('viewCommentary').style.display = 'block';
+      fetchLiveCommentary();
+    } else if (viewName === 'v4d') {
       document.getElementById('viewV4D').style.display = 'block';
     } else if (viewName === 'zkproof') {
       document.getElementById('viewZKProof').style.display = 'block';
@@ -664,6 +865,47 @@
           console.log(`[Stadium Calibrated]: ${stad.name} | Restitution: ${stad.restitution_coefficient}`);
         }
       }).catch(err => console.log(err));
+  }
+
+
+  let currentCommentaryData = null;
+
+  async function fetchLiveCommentary() {
+    const lang = document.getElementById('commentaryLangSelect') ? document.getElementById('commentaryLangSelect').value : 'en-US';
+    const pz = document.getElementById('statPitching').textContent.replace(' ', '_');
+    const iz = document.getElementById('statImpact').textContent.replace(' ', '_');
+    const wv = document.getElementById('statWickets').textContent.replace(' ', '_');
+    const fc = document.getElementById('verdictText').textContent;
+
+    try {
+      const res = await fetch(`/api/audio_commentary?pitching=${pz}&impact=${iz}&wickets=${wv}&final_call=${fc}`);
+      const data = await res.json();
+      currentCommentaryData = data;
+      if (data.commentary_transcripts && data.commentary_transcripts[lang]) {
+        document.getElementById('liveTranscriptBox').textContent = `"${data.commentary_transcripts[lang]}"`;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function playCommentaryAudio() {
+    const lang = document.getElementById('commentaryLangSelect') ? document.getElementById('commentaryLangSelect').value : 'en-US';
+    const text = document.getElementById('liveTranscriptBox').textContent.replace(/^"|"$/g, '');
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  function onLanguageChange() {
+    const selected = document.getElementById('speechLang').value;
+    if (document.getElementById('commentaryLangSelect')) {
+      document.getElementById('commentaryLangSelect').value = selected;
+    }
+    fetchLiveCommentary();
   }
 
 </script>

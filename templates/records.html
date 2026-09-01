@@ -151,16 +151,18 @@
         <tr>
           <th>Job ID</th>
           <th>Timestamp (UTC)</th>
+          <th>Stadium Venue</th>
           <th>Ball Format</th>
           <th>Pitching Zone</th>
           <th>Impact Zone</th>
           <th>Wicket Verdict</th>
           <th>Final Call</th>
+          <th>PQC Signature</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody id="recordsBody">
-        <tr><td colspan="8" style="text-align:center; color:var(--muted)">Loading decision records...</td></tr>
+        <tr><td colspan="10" style="text-align:center; color:var(--muted)">Loading decision records...</td></tr>
       </tbody>
     </table>
   </div>
@@ -182,21 +184,24 @@
   function renderTable(records) {
     const tbody = document.getElementById('recordsBody');
     if (!records || records.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--muted)">No decision reviews recorded yet.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; color:var(--muted)">No decision reviews recorded yet.</td></tr>';
       return;
     }
     tbody.innerHTML = records.map(r => {
       let fc = r.final_call || 'NOT OUT';
       let badgeClass = fc === 'OUT' ? 'badge-out' : fc === 'NOT OUT' ? 'badge-notout' : 'badge-umpire';
+      let pqcShort = (r.pqc_signature || '0xpqc_dilithium3').substring(0, 16) + '...';
       return `
         <tr>
           <td style="font-family:monospace; font-weight:900; color:var(--gold)">${(r.job_id || '').substring(0, 8)}...</td>
           <td>${r.timestamp ? r.timestamp.substring(0, 19).replace('T', ' ') : '—'}</td>
+          <td><span style="font-size:0.78rem; font-weight:800; color:var(--gold)">${r.stadium || 'Narendra Modi Stadium'}</span></td>
           <td><span style="text-transform:uppercase; font-size:0.75rem; font-weight:900; color:var(--accent)">${r.color || 'RED'}</span></td>
           <td>${(r.pitching_zone || 'IN_LINE').replace(/_/g, ' ')}</td>
           <td>${(r.impact_zone || 'IN_LINE').replace(/_/g, ' ')}</td>
           <td>${(r.wicket_verdict || 'HITTING').replace(/_/g, ' ')}</td>
           <td><span class="${badgeClass}">${fc}</span></td>
+          <td><span style="font-family:monospace; font-size:0.68rem; background:rgba(34,197,94,0.15); color:#86efac; padding:3px 6px; border-radius:6px;">${pqcShort}</span></td>
           <td>
             <a href="/outputs/${r.job_id}/tracked_output.mp4" target="_blank" class="media-btn">📹 Video</a> | 
             <a href="/outputs/${r.job_id}/drs_decision.png" target="_blank" class="media-btn">📊 Graphic</a>

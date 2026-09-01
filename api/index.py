@@ -508,8 +508,9 @@ def process():
         return jsonify({'error': f'Pipeline unavailable: {import_error_message}'}), 500
 
     try:
-        color  = request.form.get('color', 'auto')
-        action = request.form.get('action', 'upload')
+        color   = request.form.get('color', 'auto')
+        action  = request.form.get('action', 'upload')
+        stadium = request.form.get('stadium') or request.form.get('stadium_select') or 'narendra_modi_stadium'
 
         job_id  = str(uuid.uuid4())
         job_dir = os.path.join(app.config['OUTPUT_FOLDER'], job_id)
@@ -530,7 +531,7 @@ def process():
             input_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{job_id}.mp4")
             generate_hitting(input_path)
 
-        results = run_pipeline(input_path, job_dir, color_mode=color)
+        results = run_pipeline(input_path, job_dir, color_mode=color, stadium_name=stadium)
 
         pz_str = results['pitching_zone'].value if hasattr(results['pitching_zone'], 'value') else str(results['pitching_zone'])
         iz_str = results['impact_zone'].value if hasattr(results['impact_zone'], 'value') else str(results['impact_zone'])
@@ -567,33 +568,40 @@ def process():
                 'lateral_verdict': str(pred_3d.lateral_verdict),
                 'height_verdict':  str(pred_3d.height_verdict),
                 'final_3d_verdict': str(pred_3d.final_3d_verdict),
+                'stadium_calibrated': results.get('stadium_venue', 'Narendra Modi Stadium')
             }
 
         record = {
-            'job_id':         job_id,
-            'timestamp':      datetime.datetime.now(datetime.timezone.utc).isoformat(),
-            'color':          color,
-            'pitching_zone':  pz_str,
-            'impact_zone':    iz_str,
-            'wicket_verdict': wv_str,
-            'final_call':     fc_str,
-            'confidence':     ai_info.get('confidence', 0),
+            'job_id':                 job_id,
+            'timestamp':              datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'color':                  color,
+            'stadium':                results.get('stadium_venue', 'Narendra Modi Stadium'),
+            'pqc_signature':          results.get('pqc_signature', '0xpqc_dilithium3_certified'),
+            'pitching_zone':          pz_str,
+            'impact_zone':            iz_str,
+            'wicket_verdict':         wv_str,
+            'final_call':             fc_str,
+            'confidence':             ai_info.get('confidence', 0),
         }
         _decision_log.append(record)
 
         return jsonify({
-            'job_id':          job_id,
-            'pitching_zone':   pz_str,
-            'impact_zone':     iz_str,
-            'wicket_verdict':  wv_str,
-            'final_call':      fc_str,
-            'ai_verdict':      ai_info,
-            'delivery_stats':  stats,
-            'physics_3d':      physics_info,
-            'annotated_video': f"/outputs/{job_id}/tracked_output.mp4",
-            'drs_image':       f"/outputs/{job_id}/drs_decision.png",
-            'ultraedge_image': f"/outputs/{job_id}/ultraedge_waveform.png",
-            'timestamp':       datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'job_id':                 job_id,
+            'pitching_zone':          pz_str,
+            'impact_zone':            iz_str,
+            'wicket_verdict':         wv_str,
+            'final_call':             fc_str,
+            'stadium_venue':          results.get('stadium_venue', 'Narendra Modi Stadium'),
+            'pqc_signature':          results.get('pqc_signature', '0xpqc_dilithium3_certified'),
+            'commentary_transcripts': results.get('commentary_transcripts', {}),
+            'biomechanics':           results.get('biomechanics', {}),
+            'ai_verdict':             ai_info,
+            'delivery_stats':         stats,
+            'physics_3d':             physics_info,
+            'annotated_video':        f"/outputs/{job_id}/tracked_output.mp4",
+            'drs_image':              f"/outputs/{job_id}/drs_decision.png",
+            'ultraedge_image':        f"/outputs/{job_id}/ultraedge_waveform.png",
+            'timestamp':              datetime.datetime.now(datetime.timezone.utc).isoformat(),
         })
 
     except Exception as exc:

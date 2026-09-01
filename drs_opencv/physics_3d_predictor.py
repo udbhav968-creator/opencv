@@ -1,17 +1,20 @@
+# physics_3d_predictor.py
 """
 physics_3d_predictor.py
 ------------------------
-3D Parabolic Trajectory Predictor & Height Clearance Model.
+3D Parabolic Trajectory Predictor & Multi-Physics Kinematic Model.
 
 Implements true 3D physics equations including:
   - Gravity: Z(t) = Z0 + Vz0 * t - 0.5 * g * t^2
-  - Coefficient of restitution (bounce vertical momentum loss): e_v = 0.65
-  - Friction loss on pitch: e_y = 0.85
+  - Venue-Specific Stadium Restitution (e_z: 0.62 - 0.72)
+  - Turf Compaction & Dielectric Friction (e_y: 0.85 - 0.90)
+  - Seam Magnus Rotational Wobble & Lateral Drift
   - Parabolic Height Projection at the stumps (Y = 20.12m)
   - 3D Wicket Verdict: HITTING / UMPIRES_CALL / MISSING_HIGH / MISSING_WIDE
 """
 
 import numpy as np
+
 try:
     from drs_3d_engine import (
         Perspective3DEngine,
@@ -21,6 +24,9 @@ try:
         STUMP_HALF_WIDTH_M,
         UMPIRES_CALL_MARGIN_M
     )
+    from stadium_calibration import StadiumCalibrationManager
+    from gpr_subsurface_scanner import GPRSubSurfaceScanner
+    from spin_wobble_predictor import SpinWobblePredictor
 except ImportError:
     from drs_opencv.drs_3d_engine import (
         Perspective3DEngine,
@@ -30,10 +36,11 @@ except ImportError:
         STUMP_HALF_WIDTH_M,
         UMPIRES_CALL_MARGIN_M
     )
+    from drs_opencv.stadium_calibration import StadiumCalibrationManager
+    from drs_opencv.gpr_subsurface_scanner import GPRSubSurfaceScanner
+    from drs_opencv.spin_wobble_predictor import SpinWobblePredictor
 
 G_ACCEL = 9.81  # Gravitational acceleration m/s^2
-RESTITUTION_Z = 0.65  # Vertical bounce coefficient
-FRICTION_Y = 0.88     # Forward velocity retention post-pitch
 BAIL_THICKNESS_M = 0.035 # Metric bail height tolerance
 
 
@@ -59,6 +66,7 @@ class Physics3DPrediction:
         
         # Dense projected 3D trajectory path [(X, Y, Z), ...]
         self.projected_path_3d = []
+        self.venue_calibrated = "Universal Default"
 
 
 class Physics3DPredictor:
@@ -66,19 +74,41 @@ class Physics3DPredictor:
     Fits 3D parabolic gravity physics to tracked points and projects post-impact path.
     """
 
-    def __init__(self, fps=25.0):
+    def __init__(self, fps=25.0, stadium_name="narendra_modi_stadium"):
         self.fps = fps
         self.dt = 1.0 / fps
         self.engine3d = Perspective3DEngine()
+        self.stadium_name = stadium_name
+
+        # Load Stadium Calibration Parameters
+        try:
+            mgr = StadiumCalibrationManager()
+            preset = mgr.get_stadium_preset(stadium_name)
+            self.restitution_z = preset.get("restitution_coefficient", 0.68)
+            self.friction_y = preset.get("friction_coefficient", 0.88)
+            self.slope_drift_deg = preset.get("slope_drift_deg", 0.0)
+            self.stadium_title = preset.get("name", "Narendra Modi Stadium")
+        except Exception:
+            self.restitution_z = 0.68
+            self.friction_y = 0.88
+            self.slope_drift_deg = 0.0
+            self.stadium_title = "Universal Standard"
+
+        # Multi-physics scanners
+        try:
+            self.gpr = GPRSubSurfaceScanner()
+            self.spin_pred = SpinWobblePredictor()
+        except Exception:
+            self.gpr = None
+            self.spin_pred = None
 
     def predict_3d(self, valid_pixel_points):
         """
         Converts 2D pixel trajectory to 3D world space and calculates parabolic trajectory.
-        
-        Args:
-            valid_pixel_points: List of (px, py) or (px, py, r) tuples
         """
         res = Physics3DPrediction()
+        res.venue_calibrated = self.stadium_title
+
         if len(valid_pixel_points) < 6:
             return res
 
@@ -118,6 +148,10 @@ class Physics3DPredictor:
         else:
             Ax_spin = 0.0
             Vx = np.polyfit(t_steps, post_pts[:, 0], 1)[0]
+
+        # Add slope drift component for venues like Lord's
+        if abs(self.slope_drift_deg) > 0:
+            Vx += np.tan(np.radians(self.slope_drift_deg)) * 0.5
         
         # Fit Linear Y velocity: Y(t) = Y0 + Vy * t
         Vy = np.polyfit(t_steps, post_pts[:, 1], 1)[0]
@@ -126,6 +160,9 @@ class Physics3DPredictor:
         # Fit Vertical Z velocity with Gravity: Z(t) = Z0 + Vz0 * t - 0.5 * g * t^2
         z_adj = post_pts[:, 2] + 0.5 * G_ACCEL * (t_steps ** 2)
         Vz0 = np.polyfit(t_steps, z_adj, 1)[0]
+
+        # Apply venue bounce restitution scaling
+        Vz0 = Vz0 * (self.restitution_z / 0.65)
 
         # 4. Project forward from Impact (Y_impact) to Stumps (Y = 20.12m) with Aerodynamics
         y_impact = impact_3d[1]

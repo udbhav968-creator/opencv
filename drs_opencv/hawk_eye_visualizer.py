@@ -32,14 +32,6 @@ except ImportError:
         STUMP_HALF_WIDTH_M
     )
     from drs_opencv.ultraedge import UltraEdgeSimulator
-    from drs_opencv.drs_3d_engine import (
-        Perspective3DEngine,
-        PITCH_LENGTH_M,
-        STUMP_HEIGHT_M,
-        STUMP_WIDTH_M,
-        STUMP_HALF_WIDTH_M
-    )
-    from drs_opencv.ultraedge import UltraEdgeSimulator
 
 
 def render_hawk_eye_broadcast_graphic(valid_points, prediction_3d, pitching_zone, impact_zone, wicket_verdict, final_call):

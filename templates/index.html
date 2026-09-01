@@ -701,6 +701,9 @@
 
     const formData = new FormData();
     formData.append('color_mode', document.getElementById('colorMode').value);
+    if (document.getElementById('stadiumSelect')) {
+      formData.append('stadium', document.getElementById('stadiumSelect').value);
+    }
     if (videoInput.files.length > 0) {
       formData.append('video', videoInput.files[0]);
     }

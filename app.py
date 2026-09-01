@@ -443,6 +443,16 @@ def api_pqc_ledger():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/train_model_deep')
+def api_train_model_deep():
+    try:
+        from drs_opencv.ultimate_model_trainer import UltimateDRSModelTrainer
+        trainer = UltimateDRSModelTrainer()
+        res = trainer.train_master_model()
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/sw.js')
 def service_worker():
     return send_file(os.path.join(app.root_path, 'static', 'sw.js'), mimetype='application/javascript')

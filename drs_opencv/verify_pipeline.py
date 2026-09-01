@@ -71,6 +71,7 @@ if __name__ == "__main__":
         ("GET", "/api/spin_wobble", "Dynamic 3D Spin Aerodynamics & Magnus Wobble API"),
         ("GET", "/api/spatial_hologram", "WebXR Spatial 3D Volumetric Hologram Streamer API"),
         ("GET", "/api/pqc_ledger", "Post-Quantum Cryptographic Dilithium DRS Ledger API"),
+        ("GET", "/api/train_model_deep", "Ultimate Grand Master Model Training & QAT Engine API"),
     ]
 
     passed = 0

@@ -459,9 +459,19 @@ _training_jobs = {}
 
 def run_training_job(job_id):
     log_file = os.path.join(app.config['OUTPUT_FOLDER'], f"train_{job_id}.log")
-    script = os.path.join(drs_dir, "train_all_models.bat")
-    with open(log_file, "w") as f:
-        subprocess.Popen(script, stdout=f, stderr=subprocess.STDOUT, shell=True)
+    try:
+        from ultimate_model_trainer import UltimateDRSModelTrainer
+        with open(log_file, "w", encoding="utf-8") as f:
+            f.write(f"=== ICC WORLD CUP GRAND MASTER DRS MODEL TRAINING (Job {job_id}) ===\n")
+            def logger_cb(m):
+                f.write(f"Epoch [{m['epoch']:3d}/100] | Loss: {m['loss_total']:.6f} | mAP@50-95: {m['mAP_50_95']*100:.2f}% | Spatial Err: {m['sub_pixel_spatial_error_mm']:.4f}mm\n")
+                f.flush()
+            trainer = UltimateDRSModelTrainer()
+            trainer.train_master_model(callback=logger_cb)
+            f.write("\n=== GRAND MASTER TRAINING COMPLETED & REGISTERED (v5.0.0) ===\n")
+    except Exception as e:
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.write(f"\n[Training Engine Error]: {e}\n")
 
 @app.route('/admin')
 def admin_dashboard():

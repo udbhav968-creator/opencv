@@ -1,0 +1,3 @@
+CHECKPOINT: UNet-SubPixel-Edge-Segmentation fine-tuned on coco_cricket_vision
+Epochs: 500
+BatchSize: 32

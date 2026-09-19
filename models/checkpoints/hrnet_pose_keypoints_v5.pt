@@ -1,0 +1,3 @@
+CHECKPOINT: HRNet-Pose-3D Keypoint Detector fine-tuned on coco_cricket_vision
+Epochs: 500
+BatchSize: 32

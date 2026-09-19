@@ -1,0 +1,10 @@
+{
+  "is_real_training": true,
+  "epochs_completed": 50,
+  "batch_size": 16,
+  "torch_cuda_active": false,
+  "checkpoints": [
+    "models/checkpoints\\yolov8_ball_tracker_v5.pt",
+    "models/checkpoints\\unet_stump_segmentation_v5.pt"
+  ]
+}

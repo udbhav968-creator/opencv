@@ -1,0 +1,26 @@
+{
+  "report_version": "2.0-ICC-PRO",
+  "generated_at": "2026-08-30T12:33:58.789319+00:00",
+  "job_id": "SAMPLE_JOB_001",
+  "pipeline": {
+    "color_mode": "orange",
+    "success": true,
+    "tracking_video": "tracked_output.mp4",
+    "decision_image": "drs_decision.png"
+  },
+  "drs_decision": {
+    "pitching_zone": "IN_LINE",
+    "impact_zone": "IN_LINE",
+    "wicket_verdict": "MISSING",
+    "final_call": "NOT OUT"
+  },
+  "ai_verdict": {
+    "summary": "ICC DRS Hawk-Eye 3D Analysis",
+    "reasoning": "Parabolic height & lateral trajectory cleared",
+    "confidence_pct": 99.8,
+    "tips": []
+  },
+  "delivery_stats": {
+    "speed_kmh": 142.5
+  }
+}

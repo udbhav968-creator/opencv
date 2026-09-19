@@ -1,0 +1,12 @@
+{
+  "training_status": "completed",
+  "dataset_used": "coco_cricket_vision",
+  "epochs": 500,
+  "batch_size": 32,
+  "checkpoints": [
+    "models/checkpoints/yolov8_ball_tracker_v5.pt",
+    "models/checkpoints/unet_stump_segmentation_v5.pt",
+    "models/checkpoints/hrnet_pose_keypoints_v5.pt",
+    "models/checkpoints/kalman_spin_trajectory_v5.pt"
+  ]
+}

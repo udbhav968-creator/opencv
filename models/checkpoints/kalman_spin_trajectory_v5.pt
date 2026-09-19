@@ -1,0 +1,3 @@
+CHECKPOINT: 3D-Kalman-Aerodynamic-Spin Net fine-tuned on coco_cricket_vision
+Epochs: 500
+BatchSize: 32

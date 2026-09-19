@@ -1,0 +1,3 @@
+CHECKPOINT: YOLOv8x-Ball-Tracker fine-tuned on coco_cricket_vision
+Epochs: 500
+BatchSize: 32

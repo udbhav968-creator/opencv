@@ -95,11 +95,11 @@ def train_real_unet(epochs: int, batch_size: int, output_dir: str) -> str:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Real PyTorch & Ultralytics Computer Vision Trainer")
-    parser.add_argument("--data_config", type=str, default="coco128.yaml", help="YAML dataset annotation file")
+    parser.add_argument("--data_config", "--dataset", type=str, default="coco128.yaml", help="YAML dataset annotation file")
     parser.add_argument("--epochs", type=int, default=50, help="Total training epochs")
     parser.add_argument("--batch_size", type=int, default=32, help="DataLoader batch size")
     parser.add_argument("--output_dir", type=str, default="models/checkpoints", help="Output directory for model weights")
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
 
     start_timestamp = time.time()
     logger.info(f"PyTorch CUDA Status: {torch.cuda.is_available()} | Active Device: {'cuda' if torch.cuda.is_available() else 'cpu'}")

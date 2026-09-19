@@ -73,9 +73,7 @@ def generate_verdict_explanation(pitching_zone, impact_zone, wicket_verdict, fin
     reasoning = " ".join(reasoning_parts)
 
     # --- Summary sentence ---
-    emoji_map = {"OUT": "🔴", "NOT OUT": "🟢", "UMPIRE'S CALL": "🟡"}
-    emoji = emoji_map.get(fc, "⚪")
-    summary = f"{emoji} **{fc}** — {_build_summary(pz, iz, wv, fc)}"
+    summary = f"**{fc}** — {_build_summary(pz, iz, wv, fc)}"
 
     # --- Tips for real footage ---
     tips = _get_tips(pz, iz, wv)

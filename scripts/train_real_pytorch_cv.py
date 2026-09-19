@@ -15,9 +15,9 @@ try:
     import torch.nn as nn
     import torch.optim as optim
     TORCH_AVAILABLE = True
-    logger.info(f"✅ PyTorch Engine Loaded Successfully! (Version: {torch.__version__}, CUDA Available: {torch.cuda.is_available()})")
+    logger.info(f"PyTorch Engine Loaded Successfully (Version: {torch.__version__}, CUDA Available: {torch.cuda.is_available()}).")
 except Exception as e:
-    logger.warning(f"⚠️ PyTorch C++ DLL Warning ({e}). Falling back to Pure NumPy PyTorch Tensor Engine.")
+    logger.warning(f"PyTorch C++ DLL Warning ({e}). Falling back to Pure NumPy PyTorch Tensor Engine.")
 
 # ==============================================================================
 # REAL PYTORCH NEURAL NETWORK ARCHITECTURES
@@ -64,7 +64,7 @@ if TORCH_AVAILABLE:
 # ==============================================================================
 
 def train_real_yolov8(epochs: int, batch_size: int, output_dir: str):
-    logger.info(f"⚽ [1/4] REAL PYTORCH TRAINING: Training YOLOv8 Ball Tracker for {epochs} Epochs...")
+    logger.info(f"[1/4] REAL PYTORCH TRAINING: Training YOLOv8 Ball Tracker for {epochs} Epochs...")
     os.makedirs(output_dir, exist_ok=True)
     checkpoint_path = os.path.join(output_dir, "yolov8_ball_tracker_v5.pt")
 
@@ -91,7 +91,7 @@ def train_real_yolov8(epochs: int, batch_size: int, output_dir: str):
         # Save REAL PyTorch Binary Weight Checkpoint File
         torch.save(model.state_dict(), checkpoint_path)
         file_size_kb = round(os.path.getsize(checkpoint_path) / 1024, 2)
-        logger.info(f"✅ REAL PyTorch Binary Weight File Saved to '{checkpoint_path}' ({file_size_kb} KB).")
+        logger.info(f"REAL PyTorch Binary Weight File Saved to '{checkpoint_path}' ({file_size_kb} KB).")
     else:
         # Fallback Pure NumPy Gradient Step
         import numpy as np
@@ -102,10 +102,10 @@ def train_real_yolov8(epochs: int, batch_size: int, output_dir: str):
             if ep % max(1, epochs // 5) == 0 or ep == epochs:
                 logger.info(f"  --> Real Gradient Step Epoch [{ep}/{epochs}] - Loss: {loss:.6f}")
         np.save(checkpoint_path, weights)
-        logger.info(f"✅ Real Tensor Weights Saved to '{checkpoint_path}.npy'.")
+        logger.info(f"Real Tensor Weights Saved to '{checkpoint_path}.npy'.")
 
 def train_real_unet(epochs: int, batch_size: int, output_dir: str):
-    logger.info(f"🥅 [2/4] REAL PYTORCH TRAINING: Training UNet Stump Segmentation for {epochs} Epochs...")
+    logger.info(f"[2/4] REAL PYTORCH TRAINING: Training UNet Stump Segmentation for {epochs} Epochs...")
     os.makedirs(output_dir, exist_ok=True)
     checkpoint_path = os.path.join(output_dir, "unet_stump_segmentation_v5.pt")
 
@@ -130,12 +130,12 @@ def train_real_unet(epochs: int, batch_size: int, output_dir: str):
 
         torch.save(model.state_dict(), checkpoint_path)
         file_size_kb = round(os.path.getsize(checkpoint_path) / 1024, 2)
-        logger.info(f"✅ REAL PyTorch Binary Weight File Saved to '{checkpoint_path}' ({file_size_kb} KB).")
+        logger.info(f"REAL PyTorch Binary Weight File Saved to '{checkpoint_path}' ({file_size_kb} KB).")
     else:
         import numpy as np
         weights = np.random.randn(32, 16)
         np.save(checkpoint_path, weights)
-        logger.info(f"✅ Real Tensor Weights Saved to '{checkpoint_path}.npy'.")
+        logger.info(f"Real Tensor Weights Saved to '{checkpoint_path}.npy'.")
 
 def main():
     parser = argparse.ArgumentParser(description="Real PyTorch Deep Learning Computer Vision Trainer")
@@ -164,7 +164,7 @@ def main():
     with open(os.path.join(args.output_dir, "real_pytorch_manifest.json"), "w") as f:
         json.dump(manifest, f, indent=2)
 
-    logger.info("🎉 REAL PYTORCH BACKPROPAGATION TRAINING COMPLETE & BINARY WEIGHTS SAVED!")
+    logger.info("REAL PYTORCH BACKPROPAGATION TRAINING COMPLETE & BINARY WEIGHTS SAVED!")
 
 if __name__ == "__main__":
     main()

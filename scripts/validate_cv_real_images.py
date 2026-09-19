@@ -13,7 +13,7 @@ def validate_real_images(dataset_name: str, checkpoint_dir: str) -> dict:
     logger.info("==================================================================")
 
     # 1. Validate YOLOv8 Ball Tracker on Real Images
-    logger.info("🔍 [1/4] Validating YOLOv8 High-Speed Ball Tracker on 5,000 Real COCO/Roboflow Images...")
+    logger.info("[1/4] Validating YOLOv8 High-Speed Ball Tracker on 5,000 Real COCO/Roboflow Images...")
     time.sleep(1)
     yolo_metrics = {
         "mAP_50": 0.984,
@@ -25,7 +25,7 @@ def validate_real_images(dataset_name: str, checkpoint_dir: str) -> dict:
     logger.info(f"  --> mAP@0.5: {yolo_metrics['mAP_50']} | Precision: {yolo_metrics['precision']} | Recall: {yolo_metrics['recall']} | Speed: {yolo_metrics['fps_latency']}")
 
     # 2. Validate UNet Sub-Pixel Stump Segmentation
-    logger.info("🔍 [2/4] Validating UNet Wicket Stump Segmentation on Real Camera Frames...")
+    logger.info("[2/4] Validating UNet Wicket Stump Segmentation on Real Camera Frames...")
     time.sleep(1)
     unet_metrics = {
         "mean_iou": 0.982,
@@ -35,7 +35,7 @@ def validate_real_images(dataset_name: str, checkpoint_dir: str) -> dict:
     logger.info(f"  --> Mean IoU: {unet_metrics['mean_iou']} | Dice Coeff: {unet_metrics['dice_coefficient']} | Pixel Accuracy: {unet_metrics['pixel_accuracy']}")
 
     # 3. Validate HRNet 3D Pose Keypoint Estimator
-    logger.info("🔍 [3/4] Validating HRNet 3D Batsman & Bowler Keypoint Detector on Real Pose Images...")
+    logger.info("[3/4] Validating HRNet 3D Batsman & Bowler Keypoint Detector on Real Pose Images...")
     time.sleep(1)
     pose_metrics = {
         "PCK_50": 0.989,
@@ -45,7 +45,7 @@ def validate_real_images(dataset_name: str, checkpoint_dir: str) -> dict:
     logger.info(f"  --> PCK@0.5: {pose_metrics['PCK_50']} | OKS Score: {pose_metrics['oks_score']} | Joint Error: {pose_metrics['joint_localization_error_mm']}")
 
     # 4. Validate 3D Trajectory Aerodynamic Spin Net
-    logger.info("🔍 [4/4] Validating 3D Aerodynamic Trajectory Net against High-Speed Camera Ground Truth...")
+    logger.info("[4/4] Validating 3D Aerodynamic Trajectory Net against High-Speed Camera Ground Truth...")
     time.sleep(1)
     trajectory_metrics = {
         "trajectory_deviation_error_mm": "0.45 mm",
@@ -69,7 +69,7 @@ def validate_real_images(dataset_name: str, checkpoint_dir: str) -> dict:
     with open(report_path, "w") as f:
         json.dump(validation_report, f, indent=2)
 
-    logger.info(f"✅ REAL IMAGE VALIDATION COMPLETE! Report saved to '{report_path}'.")
+    logger.info(f"REAL IMAGE VALIDATION COMPLETE! Report saved to '{report_path}'.")
     return validation_report
 
 def main():

@@ -52,7 +52,7 @@ class PipelineLogger:
         """
         t0 = time.perf_counter()
         if self.verbose:
-            print(f"[DRS] ▶ {name} …")
+            print(f"[DRS] [START] {name} ...")
         try:
             yield
         finally:
@@ -63,9 +63,9 @@ class PipelineLogger:
                 "duration_ms":     ms,
             }
             if self.verbose:
-                print(f"[DRS] ✓ {name} — {ms:.1f} ms")
+                print(f"[DRS] [DONE] {name} - {ms:.1f} ms")
 
-    # ── Metric / error / warning logging ──────────────────────────────
+    # -- Metric / error / warning logging ------------------------------
 
     def log_metric(self, key: str, value):
         """Record an arbitrary pipeline metric."""
@@ -74,12 +74,12 @@ class PipelineLogger:
     def log_error(self, message: str):
         self._errors.append(message)
         if self.verbose:
-            print(f"[DRS] ✗ ERROR: {message}")
+            print(f"[DRS] [ERROR] {message}")
 
     def log_warning(self, message: str):
         self._warnings.append(message)
         if self.verbose:
-            print(f"[DRS] ⚠ {message}")
+            print(f"[DRS] [WARN] {message}")
 
     # ── Summary ───────────────────────────────────────────────────────
 

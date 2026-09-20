@@ -16,25 +16,35 @@ from typing import Dict, Any
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("RealCVTrainer")
 
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from ultralytics import YOLO
+TORCH_AVAILABLE = False
+try:
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+    from ultralytics import YOLO
+    TORCH_AVAILABLE = True
+except Exception as err:
+    logger.warning(
+        f"PyTorch / Ultralytics import error: {err}.\n"
+        "--> WINDOWS FIX: Install 'Microsoft Visual C++ 2015-2022 Redistributable (x64)' from "
+        "https://aka.ms/vs/17/release/vc_redist.x64.exe, or run training directly in Google Colab (Linux T4 GPU)."
+    )
 
-class RealUNetSegmentationNet(nn.Module):
-    """Real Encoder-Decoder U-Net for Sub-Pixel Image Segmentation"""
-    def __init__(self, in_channels: int = 3, out_channels: int = 1):
-        super().__init__()
-        self.enc1 = nn.Sequential(nn.Conv2d(in_channels, 32, 3, padding=1), nn.BatchNorm2d(32), nn.ReLU())
-        self.enc2 = nn.Sequential(nn.Conv2d(32, 64, 3, padding=1), nn.BatchNorm2d(64), nn.ReLU())
-        self.dec1 = nn.Sequential(nn.Conv2d(64, 32, 3, padding=1), nn.BatchNorm2d(32), nn.ReLU())
-        self.final_layer = nn.Conv2d(32, out_channels, 1)
+if TORCH_AVAILABLE:
+    class RealUNetSegmentationNet(nn.Module):
+        """Real Encoder-Decoder U-Net for Sub-Pixel Image Segmentation"""
+        def __init__(self, in_channels: int = 3, out_channels: int = 1):
+            super().__init__()
+            self.enc1 = nn.Sequential(nn.Conv2d(in_channels, 32, 3, padding=1), nn.BatchNorm2d(32), nn.ReLU())
+            self.enc2 = nn.Sequential(nn.Conv2d(32, 64, 3, padding=1), nn.BatchNorm2d(64), nn.ReLU())
+            self.dec1 = nn.Sequential(nn.Conv2d(64, 32, 3, padding=1), nn.BatchNorm2d(32), nn.ReLU())
+            self.final_layer = nn.Conv2d(32, out_channels, 1)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        e1 = self.enc1(x)
-        e2 = self.enc2(e1)
-        d1 = self.dec1(e2)
-        return self.final_layer(d1)
+        def forward(self, x: torch.Tensor) -> torch.Tensor:
+            e1 = self.enc1(x)
+            e2 = self.enc2(e1)
+            d1 = self.dec1(e2)
+            return self.final_layer(d1)
 
 def train_real_yolo(data_config: str, epochs: int, batch_size: int, output_dir: str) -> str:
     """Executes real Ultralytics YOLOv8 PyTorch CUDA training on image annotations."""
@@ -100,6 +110,10 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, default=32, help="DataLoader batch size")
     parser.add_argument("--output_dir", type=str, default="models/checkpoints", help="Output directory for model weights")
     args, unknown = parser.parse_known_args()
+
+    if not TORCH_AVAILABLE:
+        logger.error("PyTorch environment is not loaded cleanly on this machine (WinError 1114). Please install Visual C++ Redistributable x64 or run in Google Colab.")
+        sys.exit(1)
 
     start_timestamp = time.time()
     logger.info(f"PyTorch CUDA Status: {torch.cuda.is_available()} | Active Device: {'cuda' if torch.cuda.is_available() else 'cpu'}")

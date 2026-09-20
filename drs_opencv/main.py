@@ -140,9 +140,9 @@ def run_pipeline(input_path, output_dir, color_mode="auto", stadium_name="narend
     decision_image_path = os.path.join(output_dir, "drs_decision.png")
     ultraedge_image_path = os.path.join(output_dir, "ultraedge_waveform.png")
 
-    class DummyZone:
+    class DRSZoneResult:
         def __init__(self, val):
-            self.value = val
+            self.value = str(val)
         def __str__(self):
             return self.value
 
@@ -153,9 +153,9 @@ def run_pipeline(input_path, output_dir, color_mode="auto", stadium_name="narend
             "tracking_video": tracking_video_path,
             "decision_image": decision_image_path,
             "ultraedge_image": ultraedge_image_path,
-            "pitching_zone": DummyZone("OUTSIDE_LEG"),
-            "impact_zone": DummyZone("OUTSIDE_LEG"),
-            "wicket_verdict": DummyZone("MISSING"),
+            "pitching_zone": DRSZoneResult("OUTSIDE_LEG"),
+            "impact_zone": DRSZoneResult("OUTSIDE_LEG"),
+            "wicket_verdict": DRSZoneResult("MISSING"),
             "final_call": "NOT OUT",
             "valid_points": [],
             "prediction_3d": None,
@@ -222,9 +222,9 @@ def run_pipeline(input_path, output_dir, color_mode="auto", stadium_name="narend
         "tracking_video": tracking_video_path,
         "decision_image": decision_image_path,
         "ultraedge_image": ultraedge_image_path,
-        "pitching_zone": DummyZone(pz_str),
-        "impact_zone": DummyZone(iz_str),
-        "wicket_verdict": DummyZone(wv_str),
+        "pitching_zone": DRSZoneResult(pz_str),
+        "impact_zone": DRSZoneResult(iz_str),
+        "wicket_verdict": DRSZoneResult(wv_str),
         "final_call": final_call,
         "valid_points": valid_points,
         "prediction_3d": prediction_3d,

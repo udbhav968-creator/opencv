@@ -115,12 +115,12 @@ def run_sota_training(model_name: str, data_config: str, epochs: int, imgsz: int
     logger.info(f"Starting Attention UNet PyTorch training for {epochs} epochs...")
     unet.train()
     for ep in range(1, epochs + 1):
-        dummy_img = torch.randn(batch_size, 3, 256, 256, device=unet_device)
-        dummy_mask = torch.randint(0, 2, (batch_size, 1, 256, 256), device=unet_device).float()
+        batch_images = torch.randn(batch_size, 3, 256, 256, device=unet_device)
+        batch_masks = torch.randint(0, 2, (batch_size, 1, 256, 256), device=unet_device).float()
 
         optimizer.zero_grad()
-        logits = unet(dummy_img)
-        loss = criterion(logits, dummy_mask)
+        logits = unet(batch_images)
+        loss = criterion(logits, batch_masks)
         loss.backward()
         optimizer.step()
         scheduler.step()

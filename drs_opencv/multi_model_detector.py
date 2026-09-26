@@ -110,20 +110,21 @@ class MultiModelBallDetector:
                     ax, ay = float(l_ankle.x * w), float(l_ankle.y * h)
                     candidates.append((ax, ay, min_r * 2.0, 0.88, "Google_MediaPipe_Tracker"))
 
-        # ---- MODEL 2: Farneback Dense Optical Flow ----
+        # ---- MODEL 2: Fast Farneback Dense Optical Flow ----
         gray = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)
         if self.prev_gray is not None and self.prev_gray.shape == gray.shape:
-            flow = cv2.calcOpticalFlowFarneback(self.prev_gray, gray, None, 0.5, 3, 15, 3, 5, 1.2, 0)
+            small_prev = cv2.resize(self.prev_gray, (0, 0), fx=0.5, fy=0.5)
+            small_gray = cv2.resize(gray, (0, 0), fx=0.5, fy=0.5)
+            flow = cv2.calcOpticalFlowFarneback(small_prev, small_gray, None, 0.5, 2, 10, 2, 5, 1.1, 0)
             mag, _ = cv2.cartToPolar(flow[..., 0], flow[..., 1])
-            motion_mask = cv2.threshold(mag, 2.5, 255, cv2.THRESH_BINARY)[1].astype(np.uint8)
+            motion_mask = cv2.threshold(mag, 2.0, 255, cv2.THRESH_BINARY)[1].astype(np.uint8)
 
             cnts, _ = cv2.findContours(motion_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             for c in cnts:
-                area = cv2.contourArea(c)
+                area = cv2.contourArea(c) * 4.0
                 if 5 * scale <= area <= 800 * scale:
                     (x, y), r = cv2.minEnclosingCircle(c)
-                    if min_r <= r <= max_r:
-                        candidates.append((float(x), float(y), float(r), 0.78, "Farneback_OpticalFlow"))
+                    candidates.append((float(x * 2.0), float(y * 2.0), float(r * 2.0), 0.78, "Farneback_OpticalFlow"))
         self.prev_gray = gray
 
         # ---- MODEL 3: MOG2 Background Subtractor ----

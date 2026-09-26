@@ -461,6 +461,27 @@ def api_train_model_deep():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/real_ml_train')
+def api_real_ml_train():
+    try:
+        from drs_opencv.real_dataset_trainer import train_and_save_real_model
+        meta = train_and_save_real_model()
+        return jsonify(meta)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/real_merkle_verify')
+def api_real_merkle_verify():
+    try:
+        from drs_opencv.real_merkle_ledger import RealMerkleDRSLedger
+        ledger = RealMerkleDRSLedger()
+        ledger.add_decision("JOB_LIVE_001", "OUT")
+        ledger.add_decision("JOB_LIVE_002", "NOT OUT")
+        proof = ledger.get_audit_proof(0)
+        return jsonify(proof)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/sw.js')
 def service_worker():
     return send_file(os.path.join(app.root_path, 'static', 'sw.js'), mimetype='application/javascript')

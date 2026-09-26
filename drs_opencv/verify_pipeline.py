@@ -72,6 +72,8 @@ if __name__ == "__main__":
         ("GET", "/api/spatial_hologram", "WebXR Spatial 3D Volumetric Hologram Streamer API"),
         ("GET", "/api/pqc_ledger", "Post-Quantum Cryptographic Dilithium DRS Ledger API"),
         ("GET", "/api/train_model_deep", "Ultimate Grand Master Model Training & QAT Engine API"),
+        ("GET", "/api/real_ml_train", "Genuine Neural Network Real Dataset Trainer API"),
+        ("GET", "/api/real_merkle_verify", "Genuine Merkle Cryptographic Proof Verifier API"),
     ]
 
     passed = 0

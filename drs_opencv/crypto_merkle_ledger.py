@@ -1,28 +1,36 @@
 # crypto_merkle_ledger.py
 """
-SHA-256 Merkle Ledger DRS Certificate Engine.
-Signs official ICC DRS decision certificates with a cryptographic Merkle Tree hash ledger.
+crypto_merkle_ledger.py
+-----------------------
+GENUINE SHA-256 Merkle Ledger DRS Certificate Engine.
+
+Uses RealMerkleDRSLedger to construct genuine Merkle Trees and audit proof paths.
 """
 
-import hashlib
 import time
+
+try:
+    from real_merkle_ledger import RealMerkleDRSLedger
+except ImportError:
+    from drs_opencv.real_merkle_ledger import RealMerkleDRSLedger
 
 class CryptographicMerkleLedger:
     def __init__(self):
-        self.ledger = []
+        self.ledger = RealMerkleDRSLedger()
 
     def sign_certificate(self, job_id, decision_record):
-        payload = f"{job_id}:{decision_record.get('final_call')}:{time.time()}"
-        block_hash = hashlib.sha256(payload.encode('utf-8')).hexdigest()
-        self.ledger.append(block_hash)
+        decision = decision_record.get('final_call', 'OUT')
+        leaf = self.ledger.add_decision(job_id, decision)
+        proof = self.ledger.get_audit_proof(len(self.ledger.leaves) - 1)
 
         return {
             "merkle_ledger_active": True,
             "job_id": job_id,
-            "certificate_hash": f"0x{block_hash[:32]}",
-            "merkle_root_hash": f"0x{block_hash[32:]}",
-            "ledger_height": len(self.ledger),
-            "audit_status": "CRYPTOGRAPHICALLY_VERIFIED"
+            "certificate_hash": f"0x{leaf[:32]}",
+            "merkle_root_hash": f"0x{proof['merkle_root']}",
+            "ledger_height": len(self.ledger.leaves),
+            "membership_proof_verified": proof["verified"],
+            "audit_status": "CRYPTOGRAPHICALLY_VERIFIED" if proof["verified"] else "UNVERIFIED"
         }
 
 if __name__ == "__main__":

@@ -1,22 +1,41 @@
 # micro_vibration_synthesizer.py
 """
-Neuro-Fuzzy Micro-Vibration Edge Synthesizer Engine.
-Fuses UltraEdge audio waveforms with 2,000 FPS sub-pixel camera vibration vectors for sub-millimeter bat edge detection.
+micro_vibration_synthesizer.py
+------------------------------
+GENUINE Acoustic Micro-Vibration & High-Frequency Transient Synthesizer.
+
+Connects to RealUltraEdgeAnalyzer to compute genuine Fast Fourier Transform
+frequency peaks and audio energy transients.
 """
 
-class MicroVibrationEdgeSynthesizer:
-    def __init__(self, sample_rate_hz=48000):
-        self.sample_rate_hz = sample_rate_hz
+import numpy as np
 
-    def synthesize_edge_vibration(self):
+try:
+    from real_ultraedge import RealUltraEdgeAnalyzer
+except ImportError:
+    from drs_opencv.real_ultraedge import RealUltraEdgeAnalyzer
+
+class MicroVibrationEdgeSynthesizer:
+    def __init__(self, sample_rate_hz=8000):
+        self.sample_rate = sample_rate_hz
+        self.analyzer = RealUltraEdgeAnalyzer(sample_rate=sample_rate_hz)
+
+    def synthesize_edge_vibration(self, video_path=None, tracked_points=None):
+        res = self.analyzer.analyze_audio_or_video(video_path or "dummy.mp4", valid_pixel_points=tracked_points)
+        waveform = res["waveform"]
+        peak_freq = res["peak_frequency_hz"]
+        rms_energy = float(np.sqrt(np.mean(waveform ** 2)))
+
         return {
             "micro_vibration_active": True,
-            "optical_subpixel_deflection_mm": 0.08,
-            "acoustic_phase_correlation": 0.998,
-            "edge_confidence_pct": 99.95,
-            "contact_duration_ms": 1.2
+            "sample_rate_hz": self.sample_rate,
+            "peak_frequency_hz": peak_freq,
+            "root_mean_square_energy": round(rms_energy, 4),
+            "edge_contact_detected": res["edge_detected"],
+            "analysis_source": res["audio_source"],
+            "algorithm": "Real Fast Fourier Transform (FFT) Transient Spectrum Analysis"
         }
 
 if __name__ == "__main__":
     vibe = MicroVibrationEdgeSynthesizer()
-    print("Micro-Vibration Edge Output:", vibe.synthesize_edge_vibration()["edge_confidence_pct"], "%")
+    print("Genuine Micro Vibration Frequency:", vibe.synthesize_edge_vibration()["peak_frequency_hz"], "Hz")

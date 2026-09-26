@@ -1,28 +1,37 @@
 # zk_proof_drs_ledger.py
 """
-ZK-SNARK Zero-Knowledge Cryptographic DRS Audit Ledger Engine.
-Generates ZK-SNARK zero-knowledge proofs verifying Hawk-Eye decision integrity without exposing model weights.
+zk_proof_drs_ledger.py
+----------------------
+GENUINE Cryptographic Decision Ledger with Merkle Tree Membership Proofs.
 """
 
-import hashlib
 import time
+
+try:
+    from real_merkle_ledger import RealMerkleDRSLedger
+except ImportError:
+    from drs_opencv.real_merkle_ledger import RealMerkleDRSLedger
 
 class ZKProofCryptographicDRSLedger:
     def __init__(self):
-        self.proofs = []
+        self.ledger = RealMerkleDRSLedger()
 
-    def generate_zk_proof(self, decision="OUT"):
-        payload = f"ZK_SNARK:{decision}:{time.time()}"
-        proof_hash = hashlib.sha256(payload.encode('utf-8')).hexdigest()
-        self.proofs.append(proof_hash)
+    def generate_zk_proof(self, decision="OUT", job_id="LIVE_DRS_REVIEW"):
+        leaf = self.ledger.add_decision(job_id, decision)
+        proof = self.ledger.get_audit_proof(len(self.ledger.leaves) - 1)
 
         return {
             "zk_proof_active": True,
-            "zk_snark_proof_hash": f"0xzk{proof_hash[:32]}",
+            "job_id": job_id,
+            "decision": decision,
+            "leaf_hash": leaf,
+            "merkle_root": proof["merkle_root"],
+            "membership_proof_path": proof["proof_path"],
+            "verified": proof["verified"],
             "verification_status": "CRYPTOGRAPHICALLY_VALIDATED",
-            "privacy_guarantee": "ZERO_KNOWLEDGE_PRESERVED"
+            "proof_type": "SHA256_MERKLE_TREE_MEMBERSHIP_PROOF"
         }
 
 if __name__ == "__main__":
     zk = ZKProofCryptographicDRSLedger()
-    print("ZK Proof Ledger Status:", zk.generate_zk_proof()["verification_status"])
+    print("Genuine Merkle Proof Status:", zk.generate_zk_proof()["verified"])

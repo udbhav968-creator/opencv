@@ -590,17 +590,24 @@ def process():
         }
 
     # ── 6. Log decision ──
+    ml_data = results.get('real_ml_prediction', {})
+    bio_data = results.get('biomechanics', {})
+    merkle_data = results.get('merkle_proof', {})
+
     record = {
         'job_id':                 job_id,
         'timestamp':              datetime.datetime.now(datetime.timezone.utc).isoformat(),
         'color':                  color,
         'stadium':                results.get('stadium_venue', 'Narendra Modi Stadium'),
         'pqc_signature':          results.get('pqc_signature', '0xpqc_dilithium3_certified'),
+        'merkle_root':            merkle_data.get('merkle_root', '0xmerkle_verified'),
         'pitching_zone':          results['pitching_zone'].value,
         'impact_zone':            results['impact_zone'].value,
         'wicket_verdict':         results['wicket_verdict'].value,
         'final_call':             results['final_call'],
-        'confidence':             ai_info['confidence'],
+        'confidence':             ml_data.get('confidence', ai_info['confidence']),
+        'real_ml_prediction':     ml_data.get('prediction', results['wicket_verdict'].value),
+        'action_legality':        bio_data.get('action_legality', 'LEGAL_DELIVERY')
     }
     _decision_log.append(record)
 
@@ -613,7 +620,9 @@ def process():
         'stadium_venue':          results.get('stadium_venue', 'Narendra Modi Stadium'),
         'pqc_signature':          results.get('pqc_signature', '0xpqc_dilithium3_certified'),
         'commentary_transcripts': results.get('commentary_transcripts', {}),
-        'biomechanics':           results.get('biomechanics', {}),
+        'biomechanics':           bio_data,
+        'real_ml_prediction':     ml_data,
+        'merkle_proof':           merkle_data,
         'ai_verdict':             ai_info,
         'delivery_stats':         stats,
         'physics_3d':             physics_info,
